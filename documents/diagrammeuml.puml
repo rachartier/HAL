@@ -1,0 +1,85 @@
+@startuml
+
+together {
+interface IPlugin {
+	+DoWorkWindows()	
+	+DoWorkLinux()	
+}
+
+abstract APlugin {
+	-heartbeat : Integer
+	-name : String 
+	-activated : Boolean	
+
+	+getHearthbeat()
+	+getName()
+	+getActivated()
+	+getOsCompatible()
+}
+
+class PluginExecutor {
+	+{static} async start(pluginName : String) 
+}
+
+enum OSAvailable {
+	WINDOWS
+	LINUX
+}
+
+class PluginManager {
+	+add(plugin : IPlugin)
+	+remove(pluginName : String)
+	+load(dirName : String)
+	+getByName(pluginName : String) : IPlugin
+	+execute(pluginName : String) : async String
+}
+}
+abstract AClient {
+	+connect(ip : String, port : int)
+	+disconnect()
+	+send(json : String)
+}
+
+interface IPluginDownloader {
+	-server : IServer
+	+async download(name : String) : IPlugin
+	+async download(names : List<String>) : List<IPlugin>
+}
+
+interface IPluginChecker {
+	-server : IServer
+	+validatePlugin() : List<String>
+}
+note left: validePlugin renvois une liste de plugin non connus du client
+
+abstract AServer {
+	+receive() : String
+}
+
+interface IEncryptionMethod {
+	+crypt(string : String, key : Integer) : String 
+	+decrypt(string : String, key : Integer) : String
+}
+
+class EncryptionRSA {
+	+crypt(string : String, key : Integer) : String 
+	+decrypt(string : String, key : Integer) : String
+}
+
+IPluginDownloader .. AClient : pluginDownloader
+IEncryptionMethod .. AClient : encryptionMethod 
+
+IPlugin <|.. APlugin
+IPluginChecker <|.. IPluginDownloader 
+
+IEncryptionMethod <|.. EncryptionRSA
+
+PluginManager <|-- AClient
+PluginManager <|-- AServer
+
+PluginManager <-- PluginExecutor
+PluginManager *.. APlugin : -plugins : Dict<String, IPlugin> plugins
+APlugin *.. APlugin : -plugins : Dict<String, IPlugin> 
+
+OSAvailable .. APlugin : osCompatibles
+@enduml
