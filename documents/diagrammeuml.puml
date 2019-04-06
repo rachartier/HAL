@@ -44,7 +44,7 @@ together {
 
 			+async execute() : async String
 		}
-		note left: lastExec correspond au temps en secondes depuis la dernière exécution
+		note bottom: lastExec correspond au temps en secondes depuis la dernière exécution
 
 		class PluginComposite {
 			+async execute() : async String
@@ -59,18 +59,39 @@ together {
 	}	
 }
 
-interface IPluginDownloader {
-	-server : IServer
-	+async download(name : String) : IPlugin
-	+async download(names : List<String>) : List<IPlugin>
-}
 
-interface IPluginChecker {
-	-server : IServer
-	+validatePlugin() : List<String>
-}
-note left: validePlugin renvois une liste de plugin non connus du client
+together {
+	enum PluginDownloadedMark {
+		DELETED
+		UPDATED
+		NEW
+	}
 
+	interface IPluginPersistance {
+		+load() : Dict<IPlugin, String>
+		+save(plugins : Dict<IPlugin, String>)
+
+		+update()
+		+delete()
+	}
+
+	class PluginPersistanceDisk {
+		+load() : Dict<IPlugin, String>
+		+save(plugins : Dict<IPlugin, String>)
+
+		+update()
+		+delete()
+	}
+
+	class PluginChecker {
+		-server : IServer
+		+validatePlugin() : Dict<IPlugin, PluginDownloadedMark>
+	}
+	note right: 	validatePlugin permet de dire si un plugin est nouveau, mit à jour ou effacé sur le serveur
+	interface IPluginDownloader {
+		-server : IServer
+	}
+}
 together {
 	interface IEncryptionMethod {
 		+crypt(string : String, key : Integer) : String 
@@ -86,20 +107,23 @@ together {
 IPluginDownloader .. AClient : pluginDownloader
 IEncryptionMethod .. AClient : encryptionMethod 
 
-IPluginChecker <.. IPluginDownloader : +downloader
+PluginChecker <-- IPluginDownloader : +downloader
 
 IEncryptionMethod <|.. EncryptionRSA
 
 PluginManager <-- AServer
-PluginManager *.. APluginMaster : +List<IPluginMaster> plugins
+PluginManager *-- APluginMaster : +List<IPluginMaster> plugins
 
 IPlugin <.. APluginMaster : +plugin
 IPlugin <|.. PluginComposite
 IPlugin <|.. PluginLeaf
 
-PluginComposite *.. IPlugin : +children
+PluginComposite *-- IPlugin : +children
 
 PluginManager <-- AClient : List<IPluginMaster>
+
+PluginPersistanceDisk <|.. IPluginPersistance
+IPluginPersistance <.. IPluginDownloader
 
 OSAvailable .. APluginMaster : osCompatibles
 @enduml
