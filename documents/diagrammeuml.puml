@@ -1,50 +1,62 @@
 @startuml
 
-together {
-interface IPlugin {
-	+DoWorkWindows()	
-	+DoWorkLinux()	
-}
+	abstract AServer {
+		+receive() : String
+	}
 
-abstract APlugin {
-	-heartbeat : Integer
-	-name : String 
-	-activated : Boolean
-	-lastExec : Integer
-
-	+getHearthbeat()
-	+getName()
-	+getActivated()
-	+getOsCompatible()
-	+getLastExec() : Integer
-}
-note left: lastExec correspond au temps en secondes depuis la dernière exécution
-
-class PluginExecutor {
-	+{static} async start(pluginName : String) 
-}
-
-enum OSAvailable {
-	WINDOWS
-	LINUX
-}
-
-class PluginManager {
-	+add(plugin : IPlugin)
-	+remove(pluginName : String)
-	+load(dirName : String)
-	+getByName(pluginName : String) : IPlugin
-	+checkHeartBeat(plugin: APlugin) : Boolean
-}
-}
 abstract AClient {
 	+connect(ip : String, port : int)
 	+disconnect()
 	+send(json : String)
 }
 
-abstract APluginExec {	
-	+execute(pluginName : String) : async String
+together {
+	class PluginManager {
+		+add(plugin : IPlugin)
+		+remove(pluginName : String)
+		+load(dirName : String)
+		+getByName(pluginName : String) : IPlugin
+		+checkHeartBeat(plugin: APluginMaster) : Boolean
+	}
+
+	together {
+
+	enum OSAvailable {
+		WINDOWS
+		LINUX
+	}
+		interface IPlugin {
+			+DoWorkWindows()	
+			+DoWorkLinux()	
+		}
+
+		abstract APluginMaster {
+			-heartbeat : Integer
+			-name : String 
+			-activated : Boolean
+			-lastExec : Integer
+
+			+getHearthbeat()
+			+getName()
+			+getActivated()
+			+getOsCompatible()
+			+getLastExec() : Integer
+
+			+async execute() : async String
+		}
+		note left: lastExec correspond au temps en secondes depuis la dernière exécution
+
+		class PluginComposite {
+			+async execute() : async String
+			+add(plugin : IPlugin)
+			+remove(pluginName : String)
+			+getChildren()
+		}
+
+		class PluginLeaf {
+			+async execute() : async String
+		}
+	}	
 }
 
 interface IPluginDownloader {
@@ -59,35 +71,35 @@ interface IPluginChecker {
 }
 note left: validePlugin renvois une liste de plugin non connus du client
 
-abstract AServer {
-	+receive() : String
-}
+together {
+	interface IEncryptionMethod {
+		+crypt(string : String, key : Integer) : String 
+		+decrypt(string : String, key : Integer) : String
+	}
 
-interface IEncryptionMethod {
-	+crypt(string : String, key : Integer) : String 
-	+decrypt(string : String, key : Integer) : String
-}
-
-class EncryptionRSA {
-	+crypt(string : String, key : Integer) : String 
-	+decrypt(string : String, key : Integer) : String
+	class EncryptionRSA {
+		+crypt(string : String, key : Integer) : String 
+		+decrypt(string : String, key : Integer) : String
+	}
 }
 
 IPluginDownloader .. AClient : pluginDownloader
 IEncryptionMethod .. AClient : encryptionMethod 
 
-IPlugin <|.. APlugin
-IPluginChecker <|.. IPluginDownloader 
+IPluginChecker <.. IPluginDownloader : +downloader
 
 IEncryptionMethod <|.. EncryptionRSA
 
-PluginManager <|-- AServer
+PluginManager <-- AServer
+PluginManager *.. APluginMaster : +List<IPluginMaster> plugins
 
-PluginManager <-- PluginExecutor
-PluginManager *.. APlugin : -plugins : Dict<String, IPlugin> plugins
+IPlugin <.. APluginMaster : +plugin
+IPlugin <|.. PluginComposite
+IPlugin <|.. PluginLeaf
 
-APluginExec <-- AClient : pluginExec
-PluginManager <-- APluginExec
+PluginComposite *.. IPlugin : +children
 
-OSAvailable .. APlugin : osCompatibles
+PluginManager <-- AClient : List<IPluginMaster>
+
+OSAvailable .. APluginMaster : osCompatibles
 @enduml
