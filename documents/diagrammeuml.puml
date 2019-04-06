@@ -9,13 +9,16 @@ interface IPlugin {
 abstract APlugin {
 	-heartbeat : Integer
 	-name : String 
-	-activated : Boolean	
+	-activated : Boolean
+	-lastExec : Integer
 
 	+getHearthbeat()
 	+getName()
 	+getActivated()
 	+getOsCompatible()
+	+getLastExec() : Integer
 }
+note left: lastExec correspond au temps en secondes depuis la dernière exécution
 
 class PluginExecutor {
 	+{static} async start(pluginName : String) 
@@ -31,13 +34,17 @@ class PluginManager {
 	+remove(pluginName : String)
 	+load(dirName : String)
 	+getByName(pluginName : String) : IPlugin
-	+execute(pluginName : String) : async String
+	+checkHeartBeat(plugin: APlugin) : Boolean
 }
 }
 abstract AClient {
 	+connect(ip : String, port : int)
 	+disconnect()
 	+send(json : String)
+}
+
+abstract APluginExec {	
+	+execute(pluginName : String) : async String
 }
 
 interface IPluginDownloader {
@@ -74,12 +81,13 @@ IPluginChecker <|.. IPluginDownloader
 
 IEncryptionMethod <|.. EncryptionRSA
 
-PluginManager <|-- AClient
 PluginManager <|-- AServer
 
 PluginManager <-- PluginExecutor
 PluginManager *.. APlugin : -plugins : Dict<String, IPlugin> plugins
-APlugin *.. APlugin : -plugins : Dict<String, IPlugin> 
+
+APluginExec <-- AClient : pluginExec
+PluginManager <-- APluginExec
 
 OSAvailable .. APlugin : osCompatibles
 @enduml
