@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace projet_licence
+namespace TestSourcesPlugins 
 {
     class Program
     {
         static void Main(string[] args)
         {
-					List<Plugin> plugins = new List<Plugin>()
+					var plugins = new List<Plugin>()
 					{
 						new Plugin("test/dll.dll"),
 						new Plugin("test/script.py"),

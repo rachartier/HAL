@@ -26,12 +26,12 @@ public class PluginManager
 
 	private static string runFromDLL(Plugin plugin)
 	{
-		Assembly assembly = Assembly.LoadFrom(plugin.FilePath);
-		Type type = assembly.GetType($"{plugin.Name}.{CLASS_NAME}");
+		var assembly = Assembly.LoadFrom(plugin.FilePath);
+		var type = assembly.GetType($"{plugin.Name}.{CLASS_NAME}");
 
 		MethodInfo[] methods = type.GetMethods();
 
-		object instance = Activator.CreateInstance(type);
+		dynamic instance = Activator.CreateInstance(type);
 		object result = null;
 
 		foreach(MethodInfo method in methods)
@@ -47,7 +47,8 @@ public class PluginManager
 
 	private static string runFromScript(Plugin plugin) 
 	{
-		ProcessStartInfo start = new ProcessStartInfo();
+		var start = new ProcessStartInfo();
+
 		start.FileName = plugin.FilePath;
 		start.UseShellExecute = false;
 		start.CreateNoWindow = true;

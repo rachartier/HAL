@@ -40,7 +40,7 @@ public class Plugin
 
 	private FileType getPluginType()
 	{
-		foreach(KeyValuePair<FileType, List<string>> pair in acceptedFilesTypes)
+		foreach(var pair in acceptedFilesTypes)
 		{
 			foreach(string ext in pair.Value)
 			{
