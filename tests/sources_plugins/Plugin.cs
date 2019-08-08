@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Collections.Generic;
 
@@ -12,11 +11,11 @@ public class Plugin
 		SCRIPT
 	}
 
-	private static Dictionary<FileType, List<string>> acceptedFilesTypes = new Dictionary<FileType, List<string>>()
+	private static Dictionary<FileType, string[]> acceptedFilesTypes = new Dictionary<FileType, string[]>()
 	{
-		[FileType.DLL] = new List<string>() {".dll"},
-		[FileType.SHARED_OBJECT] = new List<string>() {".so"},
-		[FileType.SCRIPT] = new List<string>() {".py", ".rb", ".sh"},
+		[FileType.DLL] = new string[] {".dll"},
+		[FileType.SHARED_OBJECT] = new string[] {".so"},
+		[FileType.SCRIPT] = new string[] {".py", ".rb", ".sh"},
 	};
 
 	public string FileName {get;private set;}

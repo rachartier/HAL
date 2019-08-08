@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using System.Text;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using System.Diagnostics;
@@ -9,17 +7,15 @@ using System.Diagnostics;
 public class PluginManager
 {
 	private const string METHOD_RUN_NAME = "Run";
-	private const string CLASS_NAME = "Plugin";
 
 	public static string Run(Plugin plugin) 
 	{
-		if(plugin.Type == Plugin.FileType.DLL)
+		switch(plugin.Type)
 		{
-			return runFromDLL(plugin);
-		}
-		else if(plugin.Type == Plugin.FileType.SCRIPT)
-		{
-			return runFromScript(plugin);
+			case Plugin.FileType.DLL:
+				return runFromDLL(plugin);
+			case Plugin.FileType.SCRIPT:
+				return runFromScript(plugin);
 		}
 		return null;	
 	}
@@ -27,20 +23,17 @@ public class PluginManager
 	private static string runFromDLL(Plugin plugin)
 	{
 		var assembly = Assembly.LoadFrom(plugin.FilePath);
-		var type = assembly.GetType($"{plugin.Name}.{CLASS_NAME}");
+		var type = assembly.GetTypes().FirstOrDefault();
 
-		MethodInfo[] methods = type.GetMethods();
+		if(type == null)
+		{
+			throw new NullReferenceException("Bad assembly type");
+		}
+
+		MethodInfo entryPointMethod = type.GetMethod(METHOD_RUN_NAME);
 
 		dynamic instance = Activator.CreateInstance(type);
-		object result = null;
-
-		foreach(MethodInfo method in methods)
-		{
-			if(method.Name.Equals(METHOD_RUN_NAME))
-			{
-				result = method.Invoke(instance, null);
-			}
-		}
+		dynamic result = entryPointMethod.Invoke(instance, null);
 
 		return result.ToString();
 	}
