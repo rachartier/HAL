@@ -9,6 +9,7 @@ namespace TestSourcesPlugins
         {
 					var plugins = new List<Plugin>()
 					{
+						new Plugin("test/pozsjgtezpojt.ronitzorint"),
 						new Plugin("test/dll.dll"),
 						new Plugin("test/script.py"),
 						new Plugin("test/script.rb"),

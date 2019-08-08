@@ -27,9 +27,6 @@ public class Plugin
 
 	public Plugin(string path)
 	{
-		if(!File.Exists(path))
-			throw new FileNotFoundException();
-
 		FilePath = path;
 		FileName = Path.GetFileName(path);
 		FileExtension = Path.GetExtension(FileName);
