@@ -8,10 +8,16 @@ using System.Threading;
 public class PluginExecutor 
 {
 	public string MethodEntryPointName {get;set;} = "Run";
+	public uint QueueLength = 0u;
 
-	public void runFromDLL(Plugin plugin, IStorage storage)
+	private bool waitForComplete = false;
+	private ManualResetEvent manualResetEvent;
+
+	public void RunFromDLL(Plugin plugin, IStorage storage)
 	{
-		new Thread(() => {
+		QueueLength++;
+
+		ThreadPool.QueueUserWorkItem(new WaitCallback((obj) => {
 			var assembly = Assembly.LoadFrom(plugin.FilePath);
 			var type = assembly.GetTypes().FirstOrDefault();
 
@@ -26,12 +32,16 @@ public class PluginExecutor
 			dynamic result = entryPointMethod.Invoke(instance, null);
 
 			storage.Save(result);
-		}).Start();
+
+			Consume();
+		}));
 	}
 
-	public void runFromScript(Plugin plugin, IStorage storage) 
+	public void RunFromScript(Plugin plugin, IStorage storage) 
 	{
-		new Thread(() => {
+		QueueLength++;
+
+		ThreadPool.QueueUserWorkItem(new WaitCallback((obj) => {
 			var start = new ProcessStartInfo()
 			{
 				FileName = plugin.FilePath,
@@ -48,6 +58,29 @@ public class PluginExecutor
 					storage.Save(reader.ReadToEnd());
 				}
 			}
-	  }).Start();
+
+			Consume();
+		}));
+	}
+
+	public void WaitForEmptyPool()
+	{
+		if(QueueLength == 0)
+			return;
+		
+		manualResetEvent = new ManualResetEvent(false);
+		waitForComplete = true;
+		manualResetEvent.WaitOne();
+	}
+
+	private void Consume()
+	{
+		QueueLength--;
+
+		if(waitForComplete && QueueLength == 0)
+		{
+			waitForComplete = false;
+			manualResetEvent.Set();
+		}
 	}
 }

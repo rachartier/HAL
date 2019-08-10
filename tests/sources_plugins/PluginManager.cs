@@ -1,16 +1,16 @@
 public class PluginManager
 {
-	private PluginExecutor executor = new PluginExecutor();
+	public PluginExecutor Executor {get;private set;} = new PluginExecutor();
 
 	public void Run(Plugin plugin, IStorage storage) 
 	{
 		switch(plugin.Type)
 		{
 			case Plugin.FileType.DLL:
-				executor.runFromDLL(plugin, storage);
+				Executor.RunFromDLL(plugin, storage);
 				break;
 			case Plugin.FileType.SCRIPT:
-				executor.runFromScript(plugin, storage);
+				Executor.RunFromScript(plugin, storage);
 				break;
 		}
 	}

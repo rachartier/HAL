@@ -8,7 +8,7 @@ namespace TestSourcesPlugins
         static void Main(string[] args)
         {
 					var pluginManager = new PluginManager();
-					IStorage textStorage = new TextStorage();
+					IStorage storage = new TextStorage();
 
 					var plugins = new List<Plugin>()
 					{
@@ -26,8 +26,12 @@ namespace TestSourcesPlugins
 					foreach(var plugin in plugins)
 					{
 						Console.WriteLine($"Plugin {plugin.FileName} [{plugin.Type}] va etre execute...");
-						pluginManager.Run(plugin, textStorage);
+						pluginManager.Run(plugin, storage);
 					}
+
+					Console.WriteLine($"\nTaille de la file d'attente: {pluginManager.Executor.QueueLength}\n");
+					pluginManager.Executor.WaitForEmptyPool();
+					Console.WriteLine($"\nTaille de la file d'attente: {pluginManager.Executor.QueueLength}\n");
         }
     }
 }
