@@ -1,17 +1,17 @@
-
 public class PluginManager
 {
-	private static PluginExecutor executor = new PluginExecutor();
+	private PluginExecutor executor = new PluginExecutor();
 
-	public static string Run(Plugin plugin) 
+	public void Run(Plugin plugin, IStorage storage) 
 	{
 		switch(plugin.Type)
 		{
 			case Plugin.FileType.DLL:
-				return executor.runFromDLL(plugin);
+				executor.runFromDLL(plugin, storage);
+				break;
 			case Plugin.FileType.SCRIPT:
-				return executor.runFromScript(plugin);
+				executor.runFromScript(plugin, storage);
+				break;
 		}
-		return null;	
 	}
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System;
 
 namespace TestSourcesPlugins 
 {
@@ -7,10 +7,17 @@ namespace TestSourcesPlugins
     {
         static void Main(string[] args)
         {
+					var pluginManager = new PluginManager();
+					IStorage textStorage = new TextStorage();
+
 					var plugins = new List<Plugin>()
 					{
 						new Plugin("test/pozsjgtezpojt.ronitzorint"),
 						new Plugin("test/dll.dll"),
+						new Plugin("test/script.py"),
+						new Plugin("test/script.py"),
+						new Plugin("test/script.py"),
+						new Plugin("test/script.py"),
 						new Plugin("test/script.py"),
 						new Plugin("test/script.rb"),
 						new Plugin("test/script.sh")
@@ -18,8 +25,8 @@ namespace TestSourcesPlugins
 
 					foreach(var plugin in plugins)
 					{
-						Console.WriteLine($"[{plugin.FileName}, {plugin.Type}]");
-						Console.WriteLine(PluginManager.Run(plugin) + "\n");
+						Console.WriteLine($"Plugin {plugin.FileName} [{plugin.Type}] va etre execute...");
+						pluginManager.Run(plugin, textStorage);
 					}
         }
     }
