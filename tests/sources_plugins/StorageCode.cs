@@ -1,6 +1,6 @@
-public enum StorageCode 
+public enum StorageCode
 {
-	UNKNOWN,
-	FAILED,
-	SUCCESS
+    Uknown,
+    Failed,
+    Success
 }

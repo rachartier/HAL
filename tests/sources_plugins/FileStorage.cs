@@ -1,7 +1,7 @@
 public class FileStorage : IStorage
 {
-	public StorageCode Save<T>(T obj)
-	{
-		return StorageCode.UNKNOWN;	
-	}
+		public StorageCode Save<T>(T obj)
+		{
+				return StorageCode.Uknown;	
+		}
 }
