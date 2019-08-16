@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Reflection;
 using System.Linq;
 using System.Diagnostics;
@@ -8,7 +7,7 @@ using System.Threading;
 public class PluginExecutor
 {
     public string MethodEntryPointName { get; set; } = "Run";
-    public uint QueueLength = 0u;
+    public uint QueueLength {get; private set;} = 0u;
 
     private bool waitForComplete = false;
     private ManualResetEvent manualResetEvent;
@@ -31,10 +30,10 @@ public class PluginExecutor
 
                 storage.Save(result);
             }
-						else 
-						{
-								// si le point d'entrée n'est pas trouvé, rien n'est fait								
-						}
+            else
+            {
+                // si le point d'entrée n'est pas trouvé, rien n'est fait								
+            }
 
             Consume();
         }));

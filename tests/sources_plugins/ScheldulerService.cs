@@ -13,6 +13,7 @@ public class ScheldulerService
     {
     }
 
+	// intervalHours sera le hearthbeat
     public void SchelduleTask(string taskName, double intervalHours, Action task)
     {
         Func<double, int> hoursToMillis = x => (int)(intervalHours * 60 * 60 * 1000);
