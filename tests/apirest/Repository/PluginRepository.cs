@@ -19,5 +19,21 @@ namespace Repository
                 .OrderBy(x => x.Name)
                 .ToList();
         }
+
+        public Plugin GetPluginByName(string name)
+        {
+            return FindByCondition(x => x.Name.Equals(name))
+                .FirstOrDefault();
+        }
+
+        public void CreatePlugin(Plugin plugin)
+        {
+            Create(plugin);
+        }
+
+		public void DeletePlugin(Plugin plugin)
+		{
+			Delete(plugin);
+		}
     }
 }
