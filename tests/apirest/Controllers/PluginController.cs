@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Controllers
 {
-    [Route("api/plugin")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/plugin")]
     [ApiController]
     public class PluginController : ControllerBase
     {
