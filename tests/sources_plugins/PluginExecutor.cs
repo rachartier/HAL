@@ -7,7 +7,7 @@ using System.Threading;
 public class PluginExecutor
 {
     public string MethodEntryPointName { get; set; } = "Run";
-    public uint QueueLength {get; private set;} = 0u;
+    public uint QueueLength { get; private set; } = 0u;
 
     private bool waitForComplete = false;
     private ManualResetEvent manualResetEvent;
