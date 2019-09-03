@@ -6,7 +6,6 @@ namespace json_to_object
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             string jsonSample = @"{
