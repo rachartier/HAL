@@ -1,0 +1,10 @@
+Json To Object:
+	Types supportés:
+		- Date en UTC 		(2019-09-05T16:40:00)
+		- Boolean     		(true, false)
+		- Integer     		(1, 2, 3...)
+		- String		  		('aaa aaa', "bbb bbb")
+		- Float						(3.14...)
+		- Array 					([1, 2.313, 'a', "aaaaaa"])
+		- Object (nested) ({a:1, b:2, c:3, o:{x:1,name:'hello'}})
+

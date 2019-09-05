@@ -60,6 +60,12 @@ namespace Tests
             Assert.IsTrue(isObjectGoodType("[1,2,3,'a']", JTokenType.Array));
         }
 
+        [Test]
+        public void Object_InputIsBoolean_ReturnTrue()
+        {
+            Assert.IsTrue(isObjectGoodType("true", JTokenType.Boolean));
+        }
+
         private bool isObjectGoodType(string val, JTokenType type)
         {
             Json j = new Json();
