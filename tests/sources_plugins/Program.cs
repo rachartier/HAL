@@ -9,7 +9,7 @@ namespace TestSourcesPlugins
         {
 
             JSONConfigFile configFile = new JSONConfigFile();
-            configFile.Load("test.json");
+            configFile.Load("config/config.json");
 
             var pluginManager = new PluginManager();
             IStorage storage = new TextStorage();

@@ -12,7 +12,7 @@ public class JSONConfigFile
     {
         ["linux"] = OSTarget.Linux,
         ["windows"] = OSTarget.Windows,
-        ["macos"] = OSTarget.OSX
+        ["osx"] = OSTarget.OSX
     };
 
     public void Load(string file)

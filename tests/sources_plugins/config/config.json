@@ -1,0 +1,27 @@
+{
+  "interpreter": {
+    "windows": {
+      "python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
+    },
+    "unix": {
+      "python": "/usr/bin/python"
+    }
+  },
+
+	"plugins": {
+    "test.dll": {
+      "activated": true,
+      "hearthbeat": 0.002,
+      "os": [ "windows", "linux" ]
+    },
+		"script.py": {
+			"activated": true,
+      "hearthbeat": 0.002,
+      "os": ["windows", "linux"]
+		},
+		"testso.so": {
+			"activated": true,
+			"hearthbeat": 0.002
+		},
+	}
+}

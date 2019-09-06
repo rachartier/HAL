@@ -102,7 +102,7 @@ public class PluginExecutor
             }
             else
             {
-                throw new MethodAccessException($"Method Run from DLL {plugin.FileName} not found.");
+                throw new MethodAccessException($"Method 'Run' from DLL {plugin.FileName} not found.");
             }
 
             Consume();
