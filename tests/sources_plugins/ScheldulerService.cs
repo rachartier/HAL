@@ -31,9 +31,7 @@ public class ScheldulerService
 
     public bool UnschelduleTask(string taskName)
     {
-        Timer timer;
-
-        if (timers.TryGetValue(taskName, out timer))
+        if (timers.TryGetValue(taskName, out Timer timer))
         {
             timer.Dispose();
 

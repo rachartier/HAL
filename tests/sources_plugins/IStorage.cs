@@ -1,4 +1,4 @@
 public interface IStorage
 {
-		StorageCode Save<T>(T obj);
+	StorageCode Save<T>(T obj);
 }

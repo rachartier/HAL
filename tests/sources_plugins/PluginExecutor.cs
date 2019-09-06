@@ -3,6 +3,9 @@ using System.Reflection;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading;
+using System.Runtime.InteropServices;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 public class PluginExecutor
 {
@@ -11,6 +14,47 @@ public class PluginExecutor
 
     private bool waitForComplete = false;
     private ManualResetEvent manualResetEvent;
+
+    private static Dictionary<string, string> extensionConverterToIntepreterName = new Dictionary<string, string>();
+    private static Dictionary<string, string> defaultExtensionName = new Dictionary<string, string>()
+    {
+        [".py"] = "python",
+        [".rb"] = "ruby",
+        [".pl"] = "perl",
+        [".sh"] = ""
+    };
+
+    public PluginExecutor()
+    {
+        foreach(var fileType in Plugin.AcceptedFilesTypes[Plugin.FileType.Script])
+        {
+            string key = fileType;
+            string val = "";
+
+            var interpreterConfig = JSONConfigFile.Root["interpreter"];
+
+            if(interpreterConfig == null)
+            {
+                throw new NullReferenceException("interpter is not set in the configuration file.");
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                val = interpreterConfig["windows"].Value<string>(defaultExtensionName[fileType]);
+            }
+            else
+            {
+               val = interpreterConfig["unix"].Value<string>(defaultExtensionName[fileType]);
+            }
+
+            if (string.IsNullOrEmpty(val))
+            {
+                val = defaultExtensionName[fileType];
+            }
+
+            extensionConverterToIntepreterName.Add(key, val);
+        }
+    }
 
     public void RunFromDLL(Plugin plugin, IStorage storage)
     {
@@ -32,7 +76,7 @@ public class PluginExecutor
             }
             else
             {
-                // si le point d'entrée n'est pas trouvé, rien n'est fait								
+                throw new MethodAccessException($"Method Run from DLL {plugin.FileName} not found.");
             }
 
             Consume();
@@ -45,9 +89,27 @@ public class PluginExecutor
 
         ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
         {
+            string file = "";
+            string args = plugin.FilePath;
+
+            var fileExtension = plugin.FileExtension;
+
+            if (!extensionConverterToIntepreterName.ContainsKey(plugin.FileExtension))
+            {
+                throw new ArgumentException("Unknown extension.");
+            }
+
+            file = extensionConverterToIntepreterName[fileExtension];
+
+            if(string.IsNullOrEmpty(file))
+            {
+                throw new ArgumentNullException($"Value {defaultExtensionName[fileExtension]} from interpreter object in json file not found.");
+            }
+
             var start = new ProcessStartInfo()
             {
-                FileName = plugin.FilePath,
+                FileName = file,
+                Arguments = args,
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,

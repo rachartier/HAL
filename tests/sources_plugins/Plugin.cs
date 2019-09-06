@@ -10,7 +10,7 @@ public class Plugin
         Script
     }
 
-    private static Dictionary<FileType, string[]> acceptedFilesTypes = new Dictionary<FileType, string[]>()
+    public static Dictionary<FileType, string[]> AcceptedFilesTypes = new Dictionary<FileType, string[]>()
     {
         [FileType.DLL] = new string[] { ".dll" },
         [FileType.Script] = new string[] { ".py", ".rb", ".sh", ".pl" },
@@ -23,6 +23,10 @@ public class Plugin
 
     public FileType Type { get; private set; }
 
+    public OSTarget OsAuthorized = 0;
+    public double Hearthbeat { get; set; } = 1;
+    public bool Activated { get; set; } = false;
+
     public Plugin(string path)
     {
         FilePath = path;
@@ -34,7 +38,7 @@ public class Plugin
 
     private FileType getPluginType()
     {
-        foreach (var pair in acceptedFilesTypes)
+        foreach (var pair in AcceptedFilesTypes)
         {
             foreach (string ext in pair.Value)
             {

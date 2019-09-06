@@ -1,9 +1,24 @@
+
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+
 public class PluginManager
 {
     public PluginExecutor Executor { get; private set; } = new PluginExecutor();
 
     public void Run(Plugin plugin, IStorage storage)
     {
+        if (plugin.Activated == false)
+            return;
+
+        if(!(((plugin.OsAuthorized & OSTarget.Linux) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+        || ((plugin.OsAuthorized & OSTarget.Windows) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+        || ((plugin.OsAuthorized & OSTarget.OSX) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.OSX)))
+        {
+            return;
+        }
+        
+
         switch (plugin.Type)
         {
             case Plugin.FileType.DLL:
@@ -12,6 +27,25 @@ public class PluginManager
             case Plugin.FileType.Script:
                 Executor.RunFromScript(plugin, storage);
                 break;
+        }
+    }
+
+    public void ScheldulePlugin(Plugin plugin, IStorage storage)
+    {
+        if (plugin.Activated == false)
+            return;
+
+        ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}", plugin.Hearthbeat, () =>
+        {
+            Run(plugin, storage);
+        });
+    }
+
+    public void ScheldulePlugins(IEnumerable<Plugin> plugins, IStorage storage)
+    {
+        foreach(var plugin in plugins)
+        {
+            ScheldulePlugin(plugin, storage);
         }
     }
 }
