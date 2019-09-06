@@ -6,6 +6,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Text;
 
 public class PluginExecutor
 {
@@ -24,8 +25,17 @@ public class PluginExecutor
         [".sh"] = ""
     };
 
-    [DllImport("libreadso.so")]
-    private static extern int read_sharedobject();
+#if __LINUX || __OSX
+    [DllImport("./libreadso.so")]
+    private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
+
+    private string UseRunEntryPointSharedObject(string InputFile)
+    {
+        IntPtr result = run_entrypoint_sharedobject(Marshal.StringToHGlobalAnsi(InputFile));
+
+        return Marshal.PtrToStringAnsi(result);
+    }
+#endif 
 
     public PluginExecutor()
     {
@@ -58,16 +68,18 @@ public class PluginExecutor
 
     public void RunFromSO(Plugin plugin, IStorage storage)
     {
+#if __LINUX || __OSX
         QueueLength++;
 
         ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
         {
-            int result = read_sharedobject();
+            var result = UseRunEntryPointSharedObject(plugin.FilePath);
 
             storage.Save(result);
 
             Consume();
         }));
+#endif
     }
 
     public void RunFromDLL(Plugin plugin, IStorage storage)
@@ -115,7 +127,7 @@ public class PluginExecutor
 
             file = extensionConverterToIntepreterName[fileExtension];
 
-            if(string.IsNullOrEmpty(file))
+            if (string.IsNullOrEmpty(file))
             {
                 throw new ArgumentNullException($"Value {defaultExtensionName[fileExtension]} from interpreter object in json file not found.");
             }

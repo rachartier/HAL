@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int run() {
+char *run() {
 	return "je suis le run d'une librairie SO";
 }

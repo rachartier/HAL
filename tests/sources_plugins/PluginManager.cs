@@ -16,12 +16,14 @@ public class PluginManager
             case Plugin.FileType.DLL:
                 Executor.RunFromDLL(plugin, storage);
                 break;
-            case Plugin.FileType.SharedObject:
-                Executor.RunFromSO(plugin, storage);
-                break;
             case Plugin.FileType.Script:
                 Executor.RunFromScript(plugin, storage);
                 break;
+#if __LINUX || __OSX
+            case Plugin.FileType.SharedObject:
+                Executor.RunFromSO(plugin, storage);
+                break;
+#endif
         }
     }
 
@@ -38,7 +40,7 @@ public class PluginManager
 
     public void ScheldulePlugins(IEnumerable<Plugin> plugins, IStorage storage)
     {
-        foreach(var plugin in plugins)
+        foreach (var plugin in plugins)
         {
             ScheldulePlugin(plugin, storage);
         }

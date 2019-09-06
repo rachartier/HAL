@@ -1,0 +1,22 @@
+{
+	"interpreter": {
+		"unix": {
+			"python": "/usr/bin/python"
+		}
+	},
+
+	"plugins": {
+		"test.dll": {
+			"activated": true,
+			"hearthbeat": 0.002
+		},
+		"script.py": {
+			"activated": true,
+			"hearthbeat": 0.002
+		},
+		"testso.so": {
+			"activated": true,
+			"hearthbeat": 0.002
+		},
+	}
+}

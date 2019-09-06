@@ -17,7 +17,7 @@ namespace TestSourcesPlugins
             var plugins = new List<Plugin>()
             {
                // new Plugin("test/pozsjgtezpojt.ronitzorint"),
-                 new Plugin("test/test.dll"),
+                 // new Plugin("test/test.dll"),
                     new Plugin("testso.so"),
                    // new Plugin("test/script.pl"),
                    // new Plugin("test/script.sh"),

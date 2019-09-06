@@ -31,7 +31,7 @@ public class Plugin
 
     public Plugin(string path)
     {
-        FilePath = path;
+        FilePath = Path.GetFullPath(path);
         FileName = Path.GetFileName(path);
         FileExtension = Path.GetExtension(FileName);
         Type = getPluginType();
