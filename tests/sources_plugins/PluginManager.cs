@@ -8,16 +8,8 @@ public class PluginManager
 
     public void Run(Plugin plugin, IStorage storage)
     {
-        if (plugin.Activated == false)
+        if (!canBeRun(plugin))
             return;
-
-        if(!(((plugin.OsAuthorized & OSTarget.Linux) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-        || ((plugin.OsAuthorized & OSTarget.Windows) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-        || ((plugin.OsAuthorized & OSTarget.OSX) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.OSX)))
-        {
-            return;
-        }
-        
 
         switch (plugin.Type)
         {
@@ -32,7 +24,7 @@ public class PluginManager
 
     public void ScheldulePlugin(Plugin plugin, IStorage storage)
     {
-        if (plugin.Activated == false)
+        if (!canBeRun(plugin))
             return;
 
         ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}", plugin.Hearthbeat, () =>
@@ -47,5 +39,20 @@ public class PluginManager
         {
             ScheldulePlugin(plugin, storage);
         }
+    }
+
+    private bool canBeRun(Plugin plugin)
+    {
+        if (plugin.Activated == false)
+            return false;
+
+        if (!(((plugin.OsAuthorized & OSTarget.Linux) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+        || ((plugin.OsAuthorized & OSTarget.Windows) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+        || ((plugin.OsAuthorized & OSTarget.OSX) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.OSX)))
+        {
+            return false;
+        }
+
+        return true;
     }
 }
