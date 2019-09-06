@@ -24,28 +24,28 @@ public class PluginExecutor
         [".sh"] = ""
     };
 
+    [DllImport("libreadso.so")]
+    private static extern int read_sharedobject();
+
     public PluginExecutor()
     {
-        foreach(var fileType in Plugin.AcceptedFilesTypes[Plugin.FileType.Script])
+        foreach (var fileType in Plugin.AcceptedFilesTypes[Plugin.FileType.Script])
         {
             string key = fileType;
             string val = "";
 
             var interpreterConfig = JSONConfigFile.Root["interpreter"];
 
-            if(interpreterConfig == null)
+            if (interpreterConfig == null)
             {
                 throw new NullReferenceException("interpter is not set in the configuration file.");
             }
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                val = interpreterConfig["windows"].Value<string>(defaultExtensionName[fileType]);
-            }
-            else
-            {
-               val = interpreterConfig["unix"].Value<string>(defaultExtensionName[fileType]);
-            }
+#if __WINDOWS
+            val = interpreterConfig["windows"].Value<string>(defaultExtensionName[fileType]);
+#else 
+            val = interpreterConfig["unix"].Value<string>(defaultExtensionName[fileType]);
+#endif 
 
             if (string.IsNullOrEmpty(val))
             {
@@ -54,6 +54,20 @@ public class PluginExecutor
 
             extensionConverterToIntepreterName.Add(key, val);
         }
+    }
+
+    public void RunFromSO(Plugin plugin, IStorage storage)
+    {
+        QueueLength++;
+
+        ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
+        {
+            int result = read_sharedobject();
+
+            storage.Save(result);
+
+            Consume();
+        }));
     }
 
     public void RunFromDLL(Plugin plugin, IStorage storage)

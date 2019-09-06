@@ -41,7 +41,6 @@ public class JSONConfigFile
         plugin.Hearthbeat = pluginConfig["hearthbeat"].Value<double>();
         plugin.Activated = pluginConfig["activated"].Value<bool>();
 
-
         if(pluginConfig["os"] == null)
         {
             plugin.OsAuthorized |= OSTarget.Linux;

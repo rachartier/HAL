@@ -16,6 +16,9 @@ public class PluginManager
             case Plugin.FileType.DLL:
                 Executor.RunFromDLL(plugin, storage);
                 break;
+            case Plugin.FileType.SharedObject:
+                Executor.RunFromSO(plugin, storage);
+                break;
             case Plugin.FileType.Script:
                 Executor.RunFromScript(plugin, storage);
                 break;

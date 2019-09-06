@@ -7,13 +7,15 @@ public class Plugin
     {
         Unknown,
         DLL,
-        Script
+        Script,
+        SharedObject
     }
 
     public static Dictionary<FileType, string[]> AcceptedFilesTypes = new Dictionary<FileType, string[]>()
     {
         [FileType.DLL] = new string[] { ".dll" },
         [FileType.Script] = new string[] { ".py", ".rb", ".sh", ".pl" },
+        [FileType.SharedObject] = new string[] {".so"}
     };
 
     public string FileName { get; private set; }
