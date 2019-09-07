@@ -18,7 +18,8 @@ namespace TestSourcesPlugins
             {
                // new Plugin("test/pozsjgtezpojt.ronitzorint"),
                  // new Plugin("test/test.dll"),
-                    new Plugin("testso.so"),
+                    new Plugin("test/testso.so"),
+
                    // new Plugin("test/script.pl"),
                    // new Plugin("test/script.sh"),
                    new Plugin("test/script.py"),

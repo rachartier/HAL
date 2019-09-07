@@ -21,7 +21,8 @@
 		},
 		"testso.so": {
 			"activated": true,
-			"hearthbeat": 0.002
+      "hearthbeat": 0.002,
+      "os": ["linux"]
 		},
 	}
 }

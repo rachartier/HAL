@@ -26,13 +26,12 @@ public class PluginExecutor
     };
 
 #if __LINUX || __OSX
-    [DllImport("./libreadso.so")]
+    [DllImport("./libreadso")]
     private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
 
     private string UseRunEntryPointSharedObject(string InputFile)
     {
         IntPtr result = run_entrypoint_sharedobject(Marshal.StringToHGlobalAnsi(InputFile));
-
         return Marshal.PtrToStringAnsi(result);
     }
 #endif 

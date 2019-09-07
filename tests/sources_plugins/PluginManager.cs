@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -32,7 +33,7 @@ public class PluginManager
         if (!canBeRun(plugin))
             return;
 
-        ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}", plugin.Hearthbeat, () =>
+        ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
         {
             Run(plugin, storage);
         });
