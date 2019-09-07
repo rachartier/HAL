@@ -26,8 +26,17 @@
     },
     "testdll_c.dll": {
       "activated": true,
-      "hearthbeat": 0.002,
+      "hearthbeat": 0.000002,
       "os": [ "windows" ]
+    },
+    "tictactoe.dll": {
+      "activated": true,
+      "hearthbeat": 0.0002,
+      "os": [ "windows" ]
+    },
+    "os_informations.py": {
+      "activated": false,
+      "hearthbeat": 0.0002
     }
   }
 }

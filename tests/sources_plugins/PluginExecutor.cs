@@ -103,6 +103,7 @@ public class PluginExecutor
             }
             catch (Exception e)
             {
+                // if it can't load assembly, then it need to try a classic type file dll
                 if(e is System.BadImageFormatException || e is System.DllNotFoundException)
                 {
                     var result = UseRunEntryPointSharedObject(plugin.FilePath);

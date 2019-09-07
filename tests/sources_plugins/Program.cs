@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.IO;
 
 namespace TestSourcesPlugins
 {
@@ -10,22 +11,15 @@ namespace TestSourcesPlugins
             JSONConfigFile configFile = new JSONConfigFile();
             configFile.Load("config/config.json");
 
-            var pluginManager = new PluginManager();
             IStorage storage = new TextStorage();
 
-            var plugins = new List<Plugin>()
-            {
-               // new Plugin("test/pozsjgtezpojt.ronitzorint"),
-                 // new Plugin("test/test.dll"),
-                    new Plugin("test/testso.so"),
-                    new Plugin("test/testdll_c.dll"),
+            var pluginManager = new PluginManager();
+            var plugins = new List<Plugin>();
 
-                   // new Plugin("test/script.pl"),
-                   // new Plugin("test/script.sh"),
-                  // new Plugin("test/script.py"),
-                   // new Plugin("test/script.py"),
-                   // new Plugin("test/script.py"),
-            };
+            foreach (var file in Directory.GetFiles("plugins"))
+            {
+                plugins.Add(new Plugin(file));
+            }
 
             configFile.SetPluginsConfiguration(plugins);
 
@@ -33,7 +27,7 @@ namespace TestSourcesPlugins
 
             foreach (var plugin in plugins)
             {
-                Console.WriteLine($"Plugin {plugin.FileName} [{plugin.Type}] va etre execute...");
+                Console.WriteLine($"Plugin {plugin.FileName} [{plugin.Type}] loaded.");
                 pluginManager.Run(plugin, storage);
             }
             pluginManager.Executor.WaitForEmptyPool();
