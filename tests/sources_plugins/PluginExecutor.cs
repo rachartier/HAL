@@ -25,7 +25,7 @@ public class PluginExecutor
         [".sh"] = ""
     };
 
-    [DllImport("./libreadso")]
+    [DllImport("./lib/libreadso")]
     private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
 
     private string UseRunEntryPointSharedObject(string InputFile)
@@ -82,21 +82,33 @@ public class PluginExecutor
 
         ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
         {
-            var assembly = Assembly.LoadFrom(plugin.FilePath);
-            var type = assembly.GetTypes().FirstOrDefault();
-
-            var entryPointMethod = type?.GetMethod(MethodEntryPointName);
-
-            if (entryPointMethod != null)
+            try
             {
-                dynamic instance = Activator.CreateInstance(type);
-                dynamic result = entryPointMethod.Invoke(instance, null);
+                var assembly = Assembly.LoadFrom(plugin.FilePath);
+                var type = assembly.GetTypes().FirstOrDefault();
 
-                storage.Save(result);
+                var entryPointMethod = type?.GetMethod(MethodEntryPointName);
+
+                if (entryPointMethod != null)
+                {
+                    dynamic instance = Activator.CreateInstance(type);
+                    dynamic result = entryPointMethod.Invoke(instance, null);
+
+                    storage.Save(result);
+                }
+                else
+                {
+                    throw new MethodAccessException($"Method 'Run' from DLL {plugin.FileName} not found.");
+                }
             }
-            else
+            catch (Exception e)
             {
-                throw new MethodAccessException($"Method 'Run' from DLL {plugin.FileName} not found.");
+                if(e is System.BadImageFormatException || e is System.DllNotFoundException)
+                {
+                    var result = UseRunEntryPointSharedObject(plugin.FilePath);
+
+                    storage.Save(result);
+                }
             }
 
             Consume();

@@ -8,21 +8,26 @@
     }
   },
 
-	"plugins": {
+  "plugins": {
     "test.dll": {
       "activated": true,
       "hearthbeat": 0.002,
       "os": [ "windows", "linux" ]
     },
-		"script.py": {
-			"activated": true,
+    "script.py": {
+      "activated": true,
       "hearthbeat": 0.002,
-      "os": ["windows", "linux"]
-		},
-		"testso.so": {
-			"activated": true,
+      "os": [ "windows", "linux" ]
+    },
+    "testso.so": {
+      "activated": true,
       "hearthbeat": 0.002,
-      "os": ["linux"]
-		}
-	}
+      "os": [ "linux" ]
+    },
+    "testdll_c.dll": {
+      "activated": true,
+      "hearthbeat": 0.002,
+      "os": [ "windows" ]
+    }
+  }
 }

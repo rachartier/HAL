@@ -7,7 +7,6 @@ namespace TestSourcesPlugins
     {
         static void Main(string[] args)
         {
-
             JSONConfigFile configFile = new JSONConfigFile();
             configFile.Load("config/config.json");
 
@@ -19,10 +18,11 @@ namespace TestSourcesPlugins
                // new Plugin("test/pozsjgtezpojt.ronitzorint"),
                  // new Plugin("test/test.dll"),
                     new Plugin("test/testso.so"),
+                    new Plugin("test/testdll_c.dll"),
 
                    // new Plugin("test/script.pl"),
                    // new Plugin("test/script.sh"),
-                   new Plugin("test/script.py"),
+                  // new Plugin("test/script.py"),
                    // new Plugin("test/script.py"),
                    // new Plugin("test/script.py"),
             };

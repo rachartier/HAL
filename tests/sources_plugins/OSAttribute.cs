@@ -9,11 +9,15 @@ public class OSAttribute
     [Flags]
     public enum TargetFlag
     {
-        Linux = 1,
-        Windows = 2,
-        OSX = 4,
+        Linux   = 0x00000001,
+        Windows = 0x00000002,
+        OSX     = 0x00000004,
         All = Linux | Windows | OSX
     }
+
+    public static string FamillyLinuxName = "linux";
+    public static string FamillyWindowsName = "windows";
+    public static string FamillyOSXName = "osx";
 
     public static bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
     public static bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -21,18 +25,17 @@ public class OSAttribute
 
     public static Dictionary<TargetFlag, string> TargetOSName = new Dictionary<TargetFlag, string>()
     {
-        [TargetFlag.Linux] = "linux",
-        [TargetFlag.Windows] = "windows",
-        [TargetFlag.OSX] = "osx"
+        [TargetFlag.Linux] = FamillyLinuxName,
+        [TargetFlag.Windows] = FamillyWindowsName,
+        [TargetFlag.OSX] = FamillyOSXName
     };
 
     public static Dictionary<string, OSAttribute.TargetFlag> OSNameToTargetFlag = new Dictionary<string, OSAttribute.TargetFlag>()
     {
-        ["linux"] = OSAttribute.TargetFlag.Linux,
-        ["windows"] = OSAttribute.TargetFlag.Windows,
-        ["osx"] = OSAttribute.TargetFlag.OSX
+        [FamillyLinuxName] = OSAttribute.TargetFlag.Linux,
+        [FamillyWindowsName] = OSAttribute.TargetFlag.Windows,
+        [FamillyOSXName] = OSAttribute.TargetFlag.OSX
     };
-
 
     public static string GetOSFamillyName()
     {
