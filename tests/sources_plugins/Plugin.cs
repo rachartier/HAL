@@ -25,7 +25,7 @@ public class Plugin
 
     public FileType Type { get; private set; }
 
-    public OSTarget OsAuthorized = 0;
+    public OSAttribute.TargetFlag OsAuthorized = 0;
     public double Hearthbeat { get; set; } = 1;
     public bool Activated { get; set; } = false;
 

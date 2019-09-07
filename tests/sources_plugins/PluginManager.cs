@@ -20,11 +20,9 @@ public class PluginManager
             case Plugin.FileType.Script:
                 Executor.RunFromScript(plugin, storage);
                 break;
-#if __LINUX || __OSX
             case Plugin.FileType.SharedObject:
                 Executor.RunFromSO(plugin, storage);
                 break;
-#endif
         }
     }
 
@@ -52,9 +50,9 @@ public class PluginManager
         if (plugin.Activated == false)
             return false;
 
-        if (!(((plugin.OsAuthorized & OSTarget.Linux) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-        || ((plugin.OsAuthorized & OSTarget.Windows) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-        || ((plugin.OsAuthorized & OSTarget.OSX) != 0) && RuntimeInformation.IsOSPlatform(OSPlatform.OSX)))
+        if (!(((plugin.OsAuthorized & OSAttribute.TargetFlag.Linux) != 0) && OSAttribute.IsLinux
+        || ((plugin.OsAuthorized & OSAttribute.TargetFlag.Windows) != 0) && OSAttribute.IsWindows
+        || ((plugin.OsAuthorized & OSAttribute.TargetFlag.OSX) != 0) && OSAttribute.IsOSX))
         {
             return false;
         }

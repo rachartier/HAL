@@ -3,7 +3,7 @@
     "windows": {
       "python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
     },
-    "unix": {
+    "linux": {
       "python": "/usr/bin/python"
     }
   },
@@ -23,6 +23,6 @@
 			"activated": true,
       "hearthbeat": 0.002,
       "os": ["linux"]
-		},
+		}
 	}
 }

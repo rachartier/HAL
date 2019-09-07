@@ -8,13 +8,6 @@ public class JSONConfigFile
 {
     public static JObject Root { get; private set; }
 
-    private static Dictionary<string, OSTarget> osMask = new Dictionary<string, OSTarget>()
-    {
-        ["linux"] = OSTarget.Linux,
-        ["windows"] = OSTarget.Windows,
-        ["osx"] = OSTarget.OSX
-    };
-
     public void Load(string file)
     {
         if (!File.Exists(file))
@@ -43,18 +36,16 @@ public class JSONConfigFile
 
         if(pluginConfig["os"] == null)
         {
-            plugin.OsAuthorized |= OSTarget.Linux;
-            plugin.OsAuthorized |= OSTarget.Windows;
-            plugin.OsAuthorized |= OSTarget.OSX;
+            plugin.OsAuthorized |= OSAttribute.TargetFlag.All;
         }
         else
         {
             foreach (var os in pluginConfig["os"].ToObject<string[]>())
             {
-                if (!osMask.ContainsKey(os))
+                if (!OSAttribute.OSNameToTargetFlag.ContainsKey(os))
                     throw new ArgumentException($"OS {os} is not recognized.");
 
-                plugin.OsAuthorized |= osMask[os];
+                plugin.OsAuthorized |= OSAttribute.OSNameToTargetFlag[os];
             }
         }
     }

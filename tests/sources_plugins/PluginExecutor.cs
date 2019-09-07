@@ -25,7 +25,6 @@ public class PluginExecutor
         [".sh"] = ""
     };
 
-#if __LINUX || __OSX
     [DllImport("./libreadso")]
     private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
 
@@ -34,7 +33,6 @@ public class PluginExecutor
         IntPtr result = run_entrypoint_sharedobject(Marshal.StringToHGlobalAnsi(InputFile));
         return Marshal.PtrToStringAnsi(result);
     }
-#endif 
 
     public PluginExecutor()
     {
@@ -50,11 +48,7 @@ public class PluginExecutor
                 throw new NullReferenceException("interpter is not set in the configuration file.");
             }
 
-#if __WINDOWS
-            val = interpreterConfig["windows"].Value<string>(defaultExtensionName[fileType]);
-#else 
-            val = interpreterConfig["unix"].Value<string>(defaultExtensionName[fileType]);
-#endif 
+            val = interpreterConfig[OSAttribute.GetOSFamillyName()].Value<string>(defaultExtensionName[fileType]);
 
             if (string.IsNullOrEmpty(val))
             {
@@ -67,18 +61,19 @@ public class PluginExecutor
 
     public void RunFromSO(Plugin plugin, IStorage storage)
     {
-#if __LINUX || __OSX
-        QueueLength++;
-
-        ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
+        if(OSAttribute.IsLinux)
         {
-            var result = UseRunEntryPointSharedObject(plugin.FilePath);
+            QueueLength++;
 
-            storage.Save(result);
+            ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
+            {
+                var result = UseRunEntryPointSharedObject(plugin.FilePath);
 
-            Consume();
-        }));
-#endif
+                storage.Save(result);
+
+                Consume();
+            }));
+        }
     }
 
     public void RunFromDLL(Plugin plugin, IStorage storage)
