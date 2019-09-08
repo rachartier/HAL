@@ -35,7 +35,7 @@
       "os": [ "windows" ]
     },
     "os_informations.py": {
-      "activated": false,
+      "activated": true,
       "hearthbeat": 0.0002
     }
   }

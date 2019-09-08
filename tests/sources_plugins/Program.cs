@@ -1,6 +1,11 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.IO;
+using HAL.Storage.Configuration;
+using HAL.Storage;
+using HAL.Plugin.Mananger;
+using HAL.Plugin;
+using Newtonsoft.Json.Linq;
 
 namespace TestSourcesPlugins
 {
@@ -8,17 +13,17 @@ namespace TestSourcesPlugins
     {
         static void Main(string[] args)
         {
-            JSONConfigFile configFile = new JSONConfigFile();
+            IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
             configFile.Load("config/config.json");
 
             IStorage storage = new TextStorage();
 
             var pluginManager = new PluginManager();
-            var plugins = new List<Plugin>();
+            var plugins = new List<PluginFile>();
 
             foreach (var file in Directory.GetFiles("plugins"))
             {
-                plugins.Add(new Plugin(file));
+                plugins.Add(new PluginFile(file));
             }
 
             configFile.SetPluginsConfiguration(plugins);
