@@ -10,7 +10,7 @@ namespace HAL.Plugin.Executor
 {
     public partial class PluginExecutor
     {
-        public void RunFromDLL(PluginFile plugin, IStorage storage)
+        public void RunFromDLL(PluginFile plugin)
         {
             QueueLength++;
 
@@ -28,11 +28,11 @@ namespace HAL.Plugin.Executor
                         dynamic instance = Activator.CreateInstance(type);
                         dynamic result = entryPointMethod.Invoke(instance, null);
 
-                        storage.Save(result);
+                        plugin.RaiseOnExecutionFinished(result);
                     }
                     else
                     {
-                        throw new MethodAccessException($"Method 'Run' from DLL {plugin.FileName} not found.");
+                        throw new MethodAccessException($"Method '{MethodEntryPointName}' from DLL {plugin.FileName} not found.");
                     }
                 }
                 catch (Exception e)
@@ -42,7 +42,7 @@ namespace HAL.Plugin.Executor
                     {
                         var result = UseRunEntryPointSharedObject(plugin.FilePath);
 
-                        storage.Save(result);
+                        plugin.RaiseOnExecutionFinished(result);
                     }
                 }
 

@@ -33,7 +33,13 @@ namespace TestSourcesPlugins
             foreach (var plugin in plugins)
             {
                 Console.WriteLine($"Plugin {plugin.FileName} [{plugin.Type}] loaded.");
-                pluginManager.Run(plugin, storage);
+
+                plugin.OnExecutionFinished += new PluginFile.PluginResultHandler((object o, PluginResultArgs e) =>
+                {
+                    storage.Save(e.Result);
+                });
+
+                pluginManager.Run(plugin);
             }
             pluginManager.Executor.WaitForEmptyPool();
 
@@ -41,11 +47,12 @@ namespace TestSourcesPlugins
             Console.WriteLine("---------------------------------------------------------");
             Console.WriteLine("Tests Schelduler: ");
 
-            pluginManager.ScheldulePlugins(plugins, storage);
+            pluginManager.ScheldulePlugins(plugins);
 
             Console.WriteLine("---------------------------------------------------------");
 
             while (true) { }
+
         }
     }
 }

@@ -9,34 +9,19 @@
   },
 
   "plugins": {
-    "test.dll": {
-      "activated": true,
-      "hearthbeat": 0.002,
-      "os": [ "windows", "linux" ]
-    },
-    "script.py": {
-      "activated": true,
-      "hearthbeat": 0.002,
-      "os": [ "windows", "linux" ]
-    },
-    "testso.so": {
-      "activated": true,
-      "hearthbeat": 0.002,
-      "os": [ "linux" ]
-    },
-    "testdll_c.dll": {
-      "activated": true,
-      "hearthbeat": 0.000002,
-      "os": [ "windows" ]
-    },
     "tictactoe.dll": {
       "activated": true,
-      "hearthbeat": 0.0002,
+      "hearthbeat": 0.0001,
       "os": [ "windows" ]
+    },
+    "tictactoe.so": {
+      "activated": true,
+      "hearthbeat": 0.0001,
+      "os": [ "linux" ]
     },
     "os_informations.py": {
       "activated": true,
-      "hearthbeat": 0.0002
+      "hearthbeat": 0.001
     }
   }
 }

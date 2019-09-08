@@ -21,15 +21,14 @@ namespace HAL.Plugin.Executor
         private bool waitForComplete = false;
         private ManualResetEvent manualResetEvent;
 
-        private static Dictionary<string, string> extensionConverterToIntepreterName = new Dictionary<string, string>();
-        private static Dictionary<string, string> defaultExtensionName = new Dictionary<string, string>()
+        private static IDictionary<string, string> extensionConverterToIntepreterName = new Dictionary<string, string>();
+        private static IDictionary<string, string> defaultExtensionName = new Dictionary<string, string>()
         {
             [".py"] = "python",
             [".rb"] = "ruby",
             [".pl"] = "perl",
             [".sh"] = ""
         };
-
 
         public PluginExecutor()
         {

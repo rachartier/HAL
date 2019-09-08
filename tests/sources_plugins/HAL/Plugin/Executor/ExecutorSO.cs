@@ -12,14 +12,19 @@ namespace HAL.Plugin.Executor
     {
         [DllImport("./lib/libreadso")]
         private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
+        private static readonly object key = new object();
 
         private string UseRunEntryPointSharedObject(string InputFile)
         {
-            IntPtr result = run_entrypoint_sharedobject(Marshal.StringToHGlobalAnsi(InputFile));
-            return Marshal.PtrToStringAnsi(result);
+            lock (key)
+            {
+                IntPtr result = run_entrypoint_sharedobject(Marshal.StringToHGlobalAnsi(InputFile));
+
+                return Marshal.PtrToStringAnsi(result);
+            }
         }
 
-        public void RunFromSO(PluginFile plugin, IStorage storage)
+        public void RunFromSO(PluginFile plugin)
         {
             if (OSAttribute.IsLinux)
             {
@@ -28,8 +33,7 @@ namespace HAL.Plugin.Executor
                 ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
                 {
                     var result = UseRunEntryPointSharedObject(plugin.FilePath);
-
-                    storage.Save(result);
+                    plugin.RaiseOnExecutionFinished(result);
 
                     Consume();
                 }));

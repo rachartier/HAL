@@ -8,3 +8,10 @@ Json To Object:
 		- Array 					([1, 2.313, 'a', "aaaaaa"])
 		- Object (nested) ({a:1, b:2, c:3, o:{x:1,name:'hello'}})
 
+run_entrypoint_sharedobject (.so / .dll classique): ne pas aller en dessous de 0.00001 execution/heure ( 1 execution toutes les 36 millisecondes ) sinon le Marshal ne suit plus
+	- 3 executions toutes les 72 ms
+	- 5 executions toutes les 108 ms
+	- a tester sur des ordis + ou - puissants
+
+pas de limite particulière pour l'execution des scripts
+

@@ -4,6 +4,15 @@ using HAL.OSData;
 
 namespace HAL.Plugin
 {
+    public class PluginResultArgs
+    {
+        public readonly string Result;
+        public PluginResultArgs(string result)
+        {
+            Result = result;
+        }
+    }
+
     public class PluginFile
     {
         public enum FileType
@@ -12,6 +21,21 @@ namespace HAL.Plugin
             DLL,
             Script,
             SharedObject
+        }
+
+        public enum ReturnCode
+        {
+            Success,
+            Failure
+        }
+
+        public delegate void PluginResultHandler(object sender, PluginResultArgs e);
+
+        public event PluginResultHandler OnExecutionFinished;
+
+        public void RaiseOnExecutionFinished(string result)
+        {
+            OnExecutionFinished?.Invoke(this, new PluginResultArgs(result));
         }
 
         public static Dictionary<FileType, string[]> AcceptedFilesTypes = new Dictionary<FileType, string[]>()

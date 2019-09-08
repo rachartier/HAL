@@ -9,7 +9,7 @@ namespace HAL.Plugin.Executor
 {
     public partial class PluginExecutor
     {
-        public void RunFromScript(PluginFile plugin, IStorage storage)
+        public void RunFromScript(PluginFile plugin)
         {
             QueueLength++;
 
@@ -32,13 +32,13 @@ namespace HAL.Plugin.Executor
                     throw new ArgumentNullException($"Value {defaultExtensionName[fileExtension]} from interpreter object in json file not found.");
                 }
 
-                startProcess(storage, file, args);
+                startProcess(plugin, file, args);
 
                 Consume();
             }));
         }
 
-        private void startProcess(IStorage storage, string file, string args)
+        private void startProcess(PluginFile plugin, string file, string args)
         {
             var start = new ProcessStartInfo()
             {
@@ -54,7 +54,7 @@ namespace HAL.Plugin.Executor
             {
                 using (var reader = process.StandardOutput)
                 {
-                    storage.Save(reader.ReadToEnd());
+                    plugin.RaiseOnExecutionFinished(reader.ReadToEnd());
                 }
             }
         }

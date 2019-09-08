@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #if __linux__
 # include <dlfcn.h>
-# define EXPORT extern
+# define EXPORT
 #else
 # include <windows.h>
 # include <winbase.h>
@@ -32,19 +33,31 @@ extern "C" {
 #endif
 
 		if (lib != NULL) {
+			char* dll_result = NULL;
 
 #if __linux__
 			extrun = dlsym(lib, "run");
-			return extrun();
+
+			dll_result = extrun();
+			size_t size = strlen(dll_result) + 1;
+
+			char* ret = malloc(size);
+			memcpy(ret, dll_result, size * sizeof(char));
+
+			dlclose(lib);
+			
+			return ret;
 #else
 			extrun = (dll_function)GetProcAddress(lib, "run");
 
 			if (extrun) {
-				char* dll_result = extrun();
+				dll_result = extrun();
+
+				size_t size = strlen(dll_result) + 1;
 
 				// we need to allocate memory otherwise c#'s marshal can't process it. 
-				char* ret = malloc(strlen(dll_result) + 1);
-				strcpy(ret, dll_result);
+				char* ret = malloc(size);
+				memcpy(ret, dll_result, size * sizeof(char));
 
 				FreeLibrary(lib);
 

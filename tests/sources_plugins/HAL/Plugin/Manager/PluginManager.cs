@@ -13,7 +13,7 @@ namespace HAL.Plugin.Mananger
     {
         public PluginExecutor Executor { get; private set; } = new PluginExecutor();
 
-        public void Run(PluginFile plugin, IStorage storage)
+        public void Run(PluginFile plugin)
         {
             if (!canBeRun(plugin))
                 return;
@@ -21,33 +21,33 @@ namespace HAL.Plugin.Mananger
             switch (plugin.Type)
             {
                 case PluginFile.FileType.DLL:
-                    Executor.RunFromDLL(plugin, storage);
+                    Executor.RunFromDLL(plugin);
                     break;
                 case PluginFile.FileType.Script:
-                    Executor.RunFromScript(plugin, storage);
+                    Executor.RunFromScript(plugin);
                     break;
                 case PluginFile.FileType.SharedObject:
-                    Executor.RunFromSO(plugin, storage);
+                    Executor.RunFromSO(plugin);
                     break;
             }
         }
 
-        public void ScheldulePlugin(PluginFile plugin, IStorage storage)
+        public void ScheldulePlugin(PluginFile plugin)
         {
             if (!canBeRun(plugin))
                 return;
 
             ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
             {
-                Run(plugin, storage);
+                Run(plugin);
             });
         }
 
-        public void ScheldulePlugins(IEnumerable<PluginFile> plugins, IStorage storage)
+        public void ScheldulePlugins(IEnumerable<PluginFile> plugins)
         {
             foreach (var plugin in plugins)
             {
-                ScheldulePlugin(plugin, storage);
+                ScheldulePlugin(plugin);
             }
         }
 
