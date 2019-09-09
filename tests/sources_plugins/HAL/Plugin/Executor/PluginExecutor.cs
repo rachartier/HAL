@@ -27,7 +27,11 @@ namespace HAL.Plugin.Executor
             [".py"] = "python",
             [".rb"] = "ruby",
             [".pl"] = "perl",
-            [".sh"] = ""
+            [".sh"] = "bash",
+            [".lua"] = "lua",
+            [".jl"] = "julia",
+            [".php"] = "php",
+            [".scm"] = "scheme"
         };
 
         public PluginExecutor()

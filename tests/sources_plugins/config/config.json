@@ -1,37 +1,70 @@
 {
-  "interpreter": {
-    "windows": {
-      "python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
-    },
-    "linux": {
-      "python": "/usr/bin/python3"
-    }
-  },
+	"interpreter": {
+		"windows": {
+			"python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
+		},
+		"linux": {
+			"python": "/usr/bin/python3",
+			"ruby": "/usr/bin/ruby",
+			"bash": "/bin/sh",
+			"perl": "/usr/bin/perl",
+			"lua": "/usr/bin/lua5.3"
+		}
+	},
 
-  "plugins": {
-    "tictactoe.dll": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "windows" ]
-    },
-    "tictactoe.so": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "os_informations.py": {
-      "activated": true,
-      "hearthbeat": 0.001
-    },
-    "ip_address.so": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "disk_usage.py": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": ["linux"]
-    }
-  }
+	"plugins": {
+		"tictactoe.dll": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": [ "windows" ]
+		},
+		"tictactoe.so": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": [ "linux" ]
+		},
+		"os_informations.py": {
+			"activated": true,
+			"hearthbeat": 0.001
+		},
+		"ip_address.so": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": [ "linux" ]
+		},
+		"disk_usage.py": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": ["linux"]
+		},
+		"whois.rb": {
+			"activated": true,
+			"hearthbeat": 0.001,
+		},
+		"ping.sh": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": ["linux"]	    
+		},
+		"cputemp.sh": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": ["linux"]	    
+		},
+		"date.pl": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": ["linux"]	    
+		},
+		"last_weekend.pl": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": ["linux"]	    
+		},
+		"random_numbers.lua": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": ["linux"]	    
+		}
+	}
 }

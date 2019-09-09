@@ -39,11 +39,7 @@ namespace TestSourcesPlugins
                     storage.Save(e.Result);
                 });
 
-                pluginManager.Run(plugin);
             }
-            pluginManager.Executor.WaitForEmptyPool();
-
-            Console.WriteLine("Tous les plugins ont ete executes\n\n");
             Console.WriteLine("---------------------------------------------------------");
             Console.WriteLine("Tests Schelduler: ");
 

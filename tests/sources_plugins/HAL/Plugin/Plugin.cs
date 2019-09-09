@@ -41,7 +41,7 @@ namespace HAL.Plugin
         public static Dictionary<FileType, string[]> AcceptedFilesTypes = new Dictionary<FileType, string[]>()
         {
             [FileType.DLL] = new string[] { ".dll" },
-            [FileType.Script] = new string[] { ".py", ".rb", ".sh", ".pl" },
+            [FileType.Script] = new string[] { ".py", ".rb", ".sh", ".pl", ".lua", ".jl", ".php", ".scm" },
             [FileType.SharedObject] = new string[] { ".so" }
         };
 
