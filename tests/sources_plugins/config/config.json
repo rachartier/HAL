@@ -65,6 +65,16 @@
 			"activated": true,
 			"hearthbeat": 0.001,
 			"os": ["linux"]	    
+		},
+		"guid.rb": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": ["linux", "windows"]	    
+		},
+		"date.dll": {
+			"activated": true,
+			"hearthbeat": 0.001,
+			"os": ["linux", "windows"]	    
 		}
 	}
 }
