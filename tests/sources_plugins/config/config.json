@@ -4,24 +4,34 @@
       "python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
     },
     "linux": {
-      "python": "/usr/bin/python"
+      "python": "/usr/bin/python3"
     }
   },
 
   "plugins": {
     "tictactoe.dll": {
       "activated": true,
-      "hearthbeat": 0.0001,
+      "hearthbeat": 0.001,
       "os": [ "windows" ]
     },
     "tictactoe.so": {
       "activated": true,
-      "hearthbeat": 0.0001,
+      "hearthbeat": 0.001,
       "os": [ "linux" ]
     },
     "os_informations.py": {
       "activated": true,
       "hearthbeat": 0.001
+    },
+    "ip_address.so": {
+      "activated": true,
+      "hearthbeat": 0.001,
+      "os": [ "linux" ]
+    },
+    "disk_usage.py": {
+      "activated": true,
+      "hearthbeat": 0.001,
+      "os": ["linux"]
     }
   }
 }

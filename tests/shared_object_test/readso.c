@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #if __linux__
 # include <dlfcn.h>
@@ -17,6 +18,23 @@ extern "C" {
 #endif
 
 	typedef char* (*dll_function)(void);
+
+	static char* _cpy_mem_string(char* data, size_t len) {
+		char* string = NULL;
+		
+		if (data != NULL) {
+			string = malloc(len * sizeof(*string));
+
+			if (string != NULL) {
+				memcpy(string, data, len * sizeof(*string));
+				return string;
+			}
+		}
+
+		return NULL;
+	}
+
+
 
 	char* EXPORT run_entrypoint_sharedobject(char* input_file) {
 		dll_function extrun;
@@ -37,31 +55,21 @@ extern "C" {
 
 #if __linux__
 			extrun = dlsym(lib, "run");
-
 			dll_result = extrun();
-			size_t size = strlen(dll_result) + 1;
 
-			char* ret = malloc(size);
-			memcpy(ret, dll_result, size * sizeof(char));
-
-			dlclose(lib);
+			char* result = _cpy_mem_string(dll_result, strlen(dll_result) + 1);
 			
-			return ret;
+			dlclose(lib);
+
+			return result;
 #else
 			extrun = (dll_function)GetProcAddress(lib, "run");
 
 			if (extrun) {
 				dll_result = extrun();
-
-				size_t size = strlen(dll_result) + 1;
-
-				// we need to allocate memory otherwise c#'s marshal can't process it. 
-				char* ret = malloc(size);
-				memcpy(ret, dll_result, size * sizeof(char));
-
 				FreeLibrary(lib);
 
-				return ret;
+				return  _cpy_mem_string(dll_result, strlen(dll_result) + 1);;
 			}
 #endif
 		}
