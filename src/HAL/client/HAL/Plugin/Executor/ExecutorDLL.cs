@@ -10,6 +10,10 @@ namespace HAL.Plugin.Executor
 {
     public partial class PluginExecutor
     {
+        /// <summary>
+        /// run a code from a dll (dotnet dll and classical dll)
+        /// </summary>
+        /// <param name="plugin">plugin to be executed</param>
         public void RunFromDLL(PluginFile plugin)
         {
             QueueLength++;
@@ -18,6 +22,7 @@ namespace HAL.Plugin.Executor
             {
                 try
                 {
+                    // will try to see if it an assembly, then invoke the entry pointt
                     var assembly = Assembly.LoadFrom(plugin.FilePath);
                     var type = assembly.GetTypes().FirstOrDefault();
 

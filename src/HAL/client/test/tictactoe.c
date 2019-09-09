@@ -15,6 +15,7 @@
 
 #define MAX_JSON_SIZE 1024
 
+// there is 2 players: O and X
 const char player_char[] = { 'O', 'X' };
 
 static char json[1024] = { '\0' };
@@ -26,10 +27,12 @@ static char board[3][3] = {
 	"---"
 };
 
+// check if the cell at [x,y] is empty (there is no player here)
 static int is_cell_empty(int x, int y) {
 	return board[y][x] == '-';
 }
 
+// check if the board is full
 static int is_board_full() {
 	for (int y = 0; y < 3; ++y) {
 		for (int x = 0; x < 3; ++x) {
@@ -41,6 +44,7 @@ static int is_board_full() {
 	return 1;
 }
 
+// check the all rows at y to see if 'player' has win
 static int check_row(int y, char player) {
 	for (int x = 0; x < 3; ++x) {
 		if (board[y][x] != player)
@@ -50,6 +54,7 @@ static int check_row(int y, char player) {
 	return 1;
 }
 
+// check the all cols at x to see if 'player' has win
 static int check_col(int x, char player) {
 	for (int y = 0; y < 3; ++y) {
 		if (board[y][x] != player)
@@ -59,6 +64,7 @@ static int check_col(int x, char player) {
 	return 1;
 }
 
+// check the all diagonals and inverse diagonals to see if 'player' has win
 static int check_dia(char player) {
 	int winner = 1;
 	
@@ -78,6 +84,7 @@ static int check_dia(char player) {
 	return 1;
 }
 
+// make a player do a random placement 
 static void make_turn(int player_index) {
 	char pc = player_char[player_index];
 	
@@ -97,11 +104,13 @@ static void make_turn(int player_index) {
 	}
 }
 
+// write to json buffer
 void json_write(char* data) {
 	static int index = 0;
 
 	int data_size = strlen(data);
 
+	// if the size is over MAX_JSON_SIZE then it'll end it
 	if (data_size >= MAX_JSON_SIZE - 1) {
 		json[index] = '}';
 		json[index + 1] = '\0';
@@ -112,6 +121,7 @@ void json_write(char* data) {
 	index += data_size;
 }
 
+// write a json value into the json buffer
 void json_write_value(char* data) {
 	int data_size = strlen(data);
 	char normalized_json[data_size + 3];
@@ -120,6 +130,7 @@ void json_write_value(char* data) {
 	json_write(normalized_json);
 }
 
+// delete the last comme found to be a valid json
 void json_delete_last_comma() {
 	char* ptr = strrchr(json, ',');
 
@@ -135,7 +146,6 @@ char* run() {
 	srand(time(NULL));
 
 	json_write("{ \"history\": [");
-
 
 	while (victory == -1) {
 		make_turn(turn % 2);

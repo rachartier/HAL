@@ -15,6 +15,9 @@ namespace HAL.Plugin.Executor
 {
     public partial class PluginExecutor
     {
+        /// <summary>
+        /// default method entry point to execute the plugin's code
+        /// </summary>
         public string MethodEntryPointName { get; set; } = "Run";
         public uint QueueLength { get; private set; } = 0u;
 
@@ -22,6 +25,11 @@ namespace HAL.Plugin.Executor
         private ManualResetEvent manualResetEvent;
 
         private static IDictionary<string, string> extensionConverterToIntepreterName = new Dictionary<string, string>();
+
+
+        /// <summary>
+        /// default extension name, you need to add yourself an entry to add a script language 
+        /// </summary>
         private static IDictionary<string, string> defaultExtensionName = new Dictionary<string, string>()
         {
             [".py"] = "python",
@@ -29,9 +37,6 @@ namespace HAL.Plugin.Executor
             [".pl"] = "perl",
             [".sh"] = "bash",
             [".lua"] = "lua",
-            [".jl"] = "julia",
-            [".php"] = "php",
-            [".scm"] = "scheme"
         };
 
         public PluginExecutor()
@@ -41,6 +46,7 @@ namespace HAL.Plugin.Executor
                 string key = fileType;
                 string val = "";
 
+                // an interpreter is needed to interpret the code
                 var interpreterConfig = JSONConfigFile.Root["interpreter"];
 
                 if (interpreterConfig == null)
@@ -48,8 +54,10 @@ namespace HAL.Plugin.Executor
                     throw new NullReferenceException("interpter is not set in the configuration file.");
                 }
 
+                // an intepreter can change depending the os
                 val = interpreterConfig[OSAttribute.GetOSFamillyName()].Value<string>(defaultExtensionName[fileType]);
 
+                // if it can't be found, the default one is choose
                 if (string.IsNullOrEmpty(val))
                 {
                     val = defaultExtensionName[fileType];
@@ -59,6 +67,9 @@ namespace HAL.Plugin.Executor
             }
         }
 
+        /// <summary>
+        /// wait until all workers have finished their jobs
+        /// </summary>
         public void WaitForEmptyPool()
         {
             if (QueueLength == 0)
@@ -69,6 +80,9 @@ namespace HAL.Plugin.Executor
             manualResetEvent.WaitOne();
         }
 
+        /// <summary>
+        /// consume a worker and check if the worker was the last one
+        /// </summary>
         private void Consume()
         {
             QueueLength--;

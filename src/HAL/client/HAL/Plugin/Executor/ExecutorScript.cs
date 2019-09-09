@@ -9,6 +9,10 @@ namespace HAL.Plugin.Executor
 {
     public partial class PluginExecutor
     {
+        /// <summary>
+        /// run a code from a script language
+        /// </summary>
+        /// <param name="plugin">plugin to be executed</param>
         public void RunFromScript(PluginFile plugin)
         {
             QueueLength++;
@@ -20,6 +24,7 @@ namespace HAL.Plugin.Executor
 
                 var fileExtension = plugin.FileExtension;
 
+                // check if the extension is known
                 if (!extensionConverterToIntepreterName.ContainsKey(plugin.FileExtension))
                 {
                     throw new ArgumentException("Unknown extension.");
@@ -27,6 +32,7 @@ namespace HAL.Plugin.Executor
 
                 file = extensionConverterToIntepreterName[fileExtension];
 
+                // check if the extension had been set
                 if (string.IsNullOrEmpty(file))
                 {
                     throw new ArgumentNullException($"Value {defaultExtensionName[fileExtension]} from interpreter object in json file not found.");

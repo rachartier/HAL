@@ -39,7 +39,8 @@
 		},
 		"whois.rb": {
 			"activated": true,
-			"hearthbeat": 0.001,
+      "hearthbeat": 0.001,
+      "os": ["linux"]
 		},
 		"ping.sh": {
 			"activated": true,
@@ -69,7 +70,7 @@
 		"guid.rb": {
 			"activated": true,
 			"hearthbeat": 0.001,
-			"os": ["linux", "windows"]	    
+			"os": ["linux"]	    
 		},
 		"date.dll": {
 			"activated": true,

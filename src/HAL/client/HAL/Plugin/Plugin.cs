@@ -1,6 +1,7 @@
 using System.IO;
 using System.Collections.Generic;
 using HAL.OSData;
+using System;
 
 namespace HAL.Plugin
 {
@@ -38,10 +39,11 @@ namespace HAL.Plugin
             OnExecutionFinished?.Invoke(this, new PluginResultArgs(result));
         }
 
+        // if an extension need to be added, then you'll need to add it here in the correct file type
         public static Dictionary<FileType, string[]> AcceptedFilesTypes = new Dictionary<FileType, string[]>()
         {
             [FileType.DLL] = new string[] { ".dll" },
-            [FileType.Script] = new string[] { ".py", ".rb", ".sh", ".pl", ".lua", ".jl", ".php", ".scm" },
+            [FileType.Script] = new string[] { ".py", ".rb", ".sh", ".pl", ".lua" },
             [FileType.SharedObject] = new string[] { ".so" }
         };
 
@@ -63,6 +65,22 @@ namespace HAL.Plugin
             FileExtension = Path.GetExtension(FileName);
             Type = getPluginType();
             Name = Path.GetFileNameWithoutExtension(FilePath);
+        }
+
+        public bool CanBeRunOnOS()
+        {
+            return ((((OsAuthorized & OSAttribute.TargetFlag.Linux) != 0) && OSAttribute.IsLinux
+                || ((OsAuthorized & OSAttribute.TargetFlag.Windows) != 0) && OSAttribute.IsWindows
+                || ((OsAuthorized & OSAttribute.TargetFlag.OSX) != 0) && OSAttribute.IsOSX));
+        }
+
+        /// <summary>
+        /// verify if the plugin can be run
+        /// </summary>
+        /// <returns>true if it can be run, false otherwise</returns>
+        public bool CanBeRun()
+        {
+            return (Activated == true && CanBeRunOnOS());
         }
 
         private FileType getPluginType()

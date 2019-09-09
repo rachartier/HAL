@@ -13,9 +13,13 @@ namespace HAL.Plugin.Mananger
     {
         public PluginExecutor Executor { get; private set; } = new PluginExecutor();
 
+        /// <summary>
+        /// run a plugin depending it's type
+        /// </summary>
+        /// <param name="plugin">plugin to be executed</param>
         public void Run(PluginFile plugin)
         {
-            if (!canBeRun(plugin))
+            if (!plugin.CanBeRun())
                 return;
 
             switch (plugin.Type)
@@ -32,9 +36,13 @@ namespace HAL.Plugin.Mananger
             }
         }
 
+        /// <summary>
+        /// scheldule a plugin to be executed at each heartbeat
+        /// </summary>
+        /// <param name="plugin"></param>
         public void ScheldulePlugin(PluginFile plugin)
         {
-            if (!canBeRun(plugin))
+            if (!plugin.CanBeRun())
                 return;
 
             ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
@@ -43,27 +51,16 @@ namespace HAL.Plugin.Mananger
             });
         }
 
+        /// <summary>
+        /// scheldule a list of plugins to be executed
+        /// </summary>
+        /// <param name="plugins"></param>
         public void ScheldulePlugins(IEnumerable<PluginFile> plugins)
         {
             foreach (var plugin in plugins)
             {
                 ScheldulePlugin(plugin);
             }
-        }
-
-        private bool canBeRun(PluginFile plugin)
-        {
-            if (plugin.Activated == false)
-                return false;
-
-            if (!(((plugin.OsAuthorized & OSAttribute.TargetFlag.Linux) != 0) && OSAttribute.IsLinux
-            || ((plugin.OsAuthorized & OSAttribute.TargetFlag.Windows) != 0) && OSAttribute.IsWindows
-            || ((plugin.OsAuthorized & OSAttribute.TargetFlag.OSX) != 0) && OSAttribute.IsOSX))
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

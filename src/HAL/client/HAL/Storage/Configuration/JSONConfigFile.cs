@@ -18,6 +18,8 @@ namespace HAL.Storage.Configuration
             }
 
             string jsonData = File.ReadAllText(file);
+
+            // root is composed of all the leaves
             Root = JObject.Parse(jsonData);
         }
 
@@ -28,6 +30,7 @@ namespace HAL.Storage.Configuration
 
             JObject pluginConfig = Root["plugins"].Value<JObject>(plugin.FileName);
 
+            // plugin needs to have a specific configuration, otherwise it can't be run
             if (pluginConfig == null)
             {
                 throw new NullReferenceException($"Plugin {plugin.FileName} does not have any configuration.");
@@ -36,6 +39,7 @@ namespace HAL.Storage.Configuration
             plugin.Hearthbeat = pluginConfig["hearthbeat"].Value<double>();
             plugin.Activated = pluginConfig["activated"].Value<bool>();
 
+            // if no os is specified then all of them is authorized
             if (pluginConfig["os"] == null)
             {
                 plugin.OsAuthorized |= OSAttribute.TargetFlag.All;
