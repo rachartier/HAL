@@ -19,7 +19,7 @@
 			"os": [ "windows" ]
 		},
 		"tictactoe.so": {
-			"activated": true,
+			"activated": false,
 			"hearthbeat": 0.001,
 			"os": [ "linux" ]
 		},
