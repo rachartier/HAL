@@ -23,6 +23,14 @@ namespace HAL.Storage.Configuration
             Root = JObject.Parse(jsonData);
         }
 
+        /*
+         * A plugin's configuration is composed of 3 majors attributes:
+         *  - hearthbeat (in hours), the plugin will be launched one time per heartbeat.
+         *  - activated (bool), tell if the plugin is activated or not
+         *  - os (array), is composed of one or more familly os (linux, windows, osx)
+         *      plugin will be executed only on the specified OS
+         *
+         */
         public override void SetPluginConfiguration(PluginFile plugin)
         {
             if (Root == null)

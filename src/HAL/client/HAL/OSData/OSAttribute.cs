@@ -7,6 +7,9 @@ namespace HAL.OSData
 {
     public class OSAttribute
     {
+        /*
+         * Supported Familly OS type
+         */
         [Flags]
         public enum TargetFlag
         {

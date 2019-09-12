@@ -45,6 +45,7 @@ namespace HAL.Plugin.Mananger
             if (!plugin.CanBeRun())
                 return;
 
+            // the schelduler is called to run the plugin each heartbeat
             ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
             {
                 Run(plugin);

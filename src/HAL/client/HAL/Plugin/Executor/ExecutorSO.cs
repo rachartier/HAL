@@ -28,7 +28,7 @@ namespace HAL.Plugin.Executor
             {
                 IntPtr result = run_entrypoint_sharedobject(Marshal.StringToHGlobalAnsi(InputFile));
 
-                // result need to be converted to a string type, otherwise it can't be read
+                // result need to be converted to a string type, otherwise it can't be read and memory will be corrupted
                 return Marshal.PtrToStringAnsi(result);
             }
         }

@@ -6,11 +6,22 @@ using HAL.Storage;
 using HAL.Plugin.Mananger;
 using HAL.Plugin;
 using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace HAL
 {
     class Program
     {
+        static void PrintPluginInfos(PluginFile plugin, int indentSize)
+        {
+            string dotsLine = new string('.', indentSize - plugin.FileName.Length);
+            string activated = (plugin.CanBeRun() ? "ACTIVATED" : "NOT ACTIVATED");
+            string onThisOs = (plugin.CanBeRunOnOS() ? "" : " ON THIS OS");
+
+            string infos = String.Format($"{plugin.FileName}{dotsLine}{activated}{onThisOs}");
+
+            Console.WriteLine(infos);
+        }
         static void Main(string[] args)
         {
             IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
@@ -30,15 +41,9 @@ namespace HAL
 
             foreach (var plugin in plugins)
             {
-                string infos = String.Format("{0,-20}{1,10}{2}{3}", 
-                    plugin.FileName, 
-                    " ",
-                    (plugin.CanBeRun() ? "WORKING" : "NOT WORKING"),
-                    (plugin.CanBeRunOnOS() ? "" : " ON THIS OS"));
+                PrintPluginInfos(plugin, 30);
 
-                Console.WriteLine(infos);
-
-                plugin.OnExecutionFinished += new PluginFile.PluginResultHandler((object o, PluginResultArgs e) =>
+                plugin.OnExecutionFinished += new PluginFile.PluginResultHandler((o, e) =>
                 {
                     storage.Save(e.Result);
                 });

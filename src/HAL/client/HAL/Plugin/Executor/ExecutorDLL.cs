@@ -22,7 +22,7 @@ namespace HAL.Plugin.Executor
             {
                 try
                 {
-                    // will try to see if it an assembly, then invoke the entry pointt
+                    // will try to see if it is an assembly, then invoke the entry pointt
                     var assembly = Assembly.LoadFrom(plugin.FilePath);
                     var type = assembly.GetTypes().FirstOrDefault();
 
@@ -42,7 +42,7 @@ namespace HAL.Plugin.Executor
                 }
                 catch (Exception e)
                 {
-                    // if it can't load assembly, then it need to try a classic type file dll
+                    // otherwise, if it can't load assembly, it need to try a classic type file dll
                     if (e is System.BadImageFormatException || e is System.DllNotFoundException)
                     {
                         var result = UseRunEntryPointSharedObject(plugin.FilePath);

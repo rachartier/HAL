@@ -1,8 +1,8 @@
 {
 	"interpreter": {
-		"windows": {
-			"python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
-		},
+    "windows": {
+      "python": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python37_64\\python.exe"
+    },
 		"linux": {
 			"python": "/usr/bin/python3",
 			"ruby": "/usr/bin/ruby",
