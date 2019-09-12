@@ -25,6 +25,8 @@ Il utilise un système de plugins, qui sont chargés automatiquement au démarra
 
 Et d'autres peuvent être ajoutés manuellement si besoin.
 
+Les plugins sont déposés dans le dossier "plugins", qui est un dossier spéciale scanné permettant de charger automatiquement tous les plugins qui s'y trouvent. 
+
 HAL est destiné à tout utilisateur voulant supervisé les ordinateurs sur un réseau
 
 Installation
@@ -131,7 +133,6 @@ Ce dernier sera alors activé, aura une execution toutes les demie-heure et sera
 
 ##### Exemple en C/C++ (classique DLL, Shared Object)
 
-
 Un point d'entrée est obligatoire pour l'execution du plugin. Le retour de ce point d'entrée sera alors sauvegardé par le client. Il doit impérativement être en JSON.
 
 ``` c
@@ -148,10 +149,9 @@ Exemple d'un code en C (ip\_infos.c) uniquement disponible sur linux (ifaddrs.h)
 
 char *run(void) {
 	struct ifaddrs* id;
-	int val;
 	char* ret = malloc(1024);
 
-	val = getifaddrs(&id);
+	getifaddrs(&id);
 
 	sprintf(ret, "{ \"name\": \"%s\", \"addr\": %d, \"data\": %d}", id->ifa_name, id->ifa_addr, id->ifa_data);
 	
@@ -163,25 +163,23 @@ Des fonctions peuvent bien sûr être faites pour clarifier le code.
 
 
 Compilation en .so sous linux:
-
 	`gcc -Wall -Wextra -fPIC -shared ip_infos.c -o ip_infos.so`
 
 Compilation en .dll sous windows (si plugin compatible) avec utilisation de [MinGW](http://www.mingw.org/)
+	`gcc -Wall -Wextra -fPIC -shared fichier.c -o fichier.dll`
 
-	`gcc -Wall -Wextra -fPIC -shared fichier.c -o ip_infos.dll`
-
-puid mryytr ip_infos.so/.dll dans le dossier plugins
+puis copier ip_infos.so dans le dossier plugins
 
 ##### Exemple en C# (AssemblyDLL)
 
-Un point d'entrée est aussi obligatoire pour l'execution du plugin. Le retour de ce point d'entrée sera alors sauvegardé par le client. Il doit impérativement être en JSON.
+Un point d'entrée est aussi obligatoire pour l'execution du plugin. Le retour du point d'entrée sera alors sauvegardé par le client. Il doit impérativement être en JSON.
 
 ``` cs
 namespace Plugin {
 	public class NomPlugin {
-		public string Run() {
+	    public string Run() {
 
-		}
+	    }
 	}
 }
 ```
@@ -200,21 +198,52 @@ namespace plugin
 {
     public class MachineName 
     {
-			public string Run() {
-				return $"{{\"machinename\": {Environment.MachineName}}}";
-			}
+	    public string Run() {
+		    return $"{{\"machinename\": {Environment.MachineName}}}";
+	    }
     }
 }
 ```
 
-build la librairie:
+Puis build la librairie:
 
 `dotnet build`
 
-puis copier et renommer si besoin plugin.dll qui se trouve dans bin/Debug/netstandard<version>/ et le mettre ensuite dans le dossier plugins
+Finalement, copier et renommer si besoin plugin.dll qui se trouve dans bin/Debug/netstandard<version>/ et le mettre ensuite dans le dossier plugins
 
 Add another file extension
 ---------------------
+
+Pour ajouter des extensions, il faut modifier le code source. 
+
+src/HAL/client/HAL/Plugin/Plugin.cs
+``` cs
+// if an extension need to be added, then you'll need to add it here in the correct file type
+public static Dictionary<FileType, string[]> AcceptedFilesTypes = new Dictionary<FileType, string[]>()
+{
+    [FileType.DLL] = new string[] { ".dll" },
+    [FileType.Script] = new string[] { ".py", ".rb", ".sh", ".pl", ".lua" },
+    [FileType.SharedObject] = new string[] { ".so" }
+};
+``` 
+
+Il suffit juste d'ajouter le nom de l'extension dans la bonne catégorie. Pour ajouter une extension de script il faut aussi modifier le fichier: src/HAL/client/HAL/Plugin/Executor/PluginExecutor.cs
+
+``` cs
+/// <summary>
+/// default extension name, you need to add yourself an entry to add a script language 
+/// </summary>
+private static IDictionary<string, string> defaultExtensionName = new Dictionary<string, string>()
+{
+    [".py"] = "python",
+    [".rb"] = "ruby",
+    [".pl"] = "perl",
+    [".sh"] = "bash",
+    [".lua"] = "lua",
+    //[".extension"] = "extension/command name"
+};
+```
+Il faut ajouter un enssemble de clés/valeurs avec le nom de l'extension (qui est aussi la commande par défaut dans un shell), comme ça, il n'est pas obligé de renseigner un intérpréteur dans le fichier de config.
 
 ### Schema récapitulatif du projet
 ![](documents/schemas/Schema_recap_fleche_png.png)
