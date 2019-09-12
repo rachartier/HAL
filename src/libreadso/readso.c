@@ -59,27 +59,31 @@ extern "C" {
 
 		if (lib != NULL) {
 			char* dll_result = NULL;
-
 #if __linux__
 			// it need to extract the run function to call the plugin code
 			extrun = dlsym(lib, "run");
 			dll_result = extrun();
 
+			// a new string need to be created in order to marshal's c# can do operations on it
+			char* result = _cpy_mem_string(dll_result, strlen(dll_result) + 1);
+
 			dlclose(lib);
+
+			return result;
+
 #elif defined _WIN32 || defined _WIN64
-			// same as linux, it need to extract the run function
+			// same as linux, it need to extract the run 
 			extrun = (dll_function)GetProcAddress(lib, "run");
 
 			if (extrun) {
 				dll_result = extrun();
 				FreeLibrary(lib);
+
+				return  _cpy_mem_string(dll_result, strlen(dll_result) + 1);;
 			}
-			else {
-				return NULL;
-			}
+
+			extrun = (dll_function)GetProcAddress(lib, "run");
 #endif
-			// a new string need to be created in order to marshal's c# can do operations on it
-			return _cpy_mem_string(dll_result, strlen(dll_result) + 1);;
 		}
 
 		return NULL;

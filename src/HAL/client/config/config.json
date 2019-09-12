@@ -1,14 +1,12 @@
 {
 	"interpreter": {
     "windows": {
-      "python": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python37_64\\python.exe"
+      "python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
     },
 		"linux": {
 			"python": "/usr/bin/python3",
 			"ruby": "/usr/bin/ruby",
 			"bash": "/bin/sh",
-			"perl": "/usr/bin/perl",
-			"lua": "/usr/bin/lua5.3"
 		}
 	},
 
@@ -19,7 +17,7 @@
 			"os": [ "windows" ]
 		},
 		"tictactoe.so": {
-			"activated": false,
+			"activated": true,
 			"hearthbeat": 0.001,
 			"os": [ "linux" ]
 		},
@@ -53,17 +51,17 @@
 			"os": ["linux"]	    
 		},
 		"date.pl": {
-			"activated": true,
+			"activated": false,
 			"hearthbeat": 0.001,
 			"os": ["linux"]	    
 		},
 		"last_weekend.pl": {
-			"activated": true,
+			"activated": false,
 			"hearthbeat": 0.001,
 			"os": ["linux"]	    
 		},
 		"random_numbers.lua": {
-			"activated": true,
+			"activated": false,
 			"hearthbeat": 0.001,
 			"os": ["linux"]	    
 		},
