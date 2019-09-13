@@ -6,73 +6,73 @@
     "linux": {
       "python": "/usr/bin/python3",
       "ruby": "/usr/bin/ruby",
-      "bash": "/bin/sh",
+      "bash": "/bin/sh"
     }
   },
 
   "plugins": {
     "tictactoe.dll": {
       "activated": true,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "windows" ]
     },
     "tictactoe.so": {
       "activated": true,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "os_informations.py": {
       "activated": true,
-      "hearthbeat": 0.001
+      "hearthbeat": 0.0001
     },
     "ip_address.so": {
       "activated": true,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "disk_usage.py": {
       "activated": true,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "whois.rb": {
       "activated": true,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "ping.sh": {
       "activated": true,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "cputemp.sh": {
       "activated": true,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "date.pl": {
       "activated": false,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "last_weekend.pl": {
       "activated": false,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "random_numbers.lua": {
       "activated": false,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "guid.rb": {
       "activated": true,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux" ]
     },
     "date.dll": {
       "activated": true,
-      "hearthbeat": 0.001,
+      "hearthbeat": 0.0001,
       "os": [ "linux", "windows" ]
     }
   }

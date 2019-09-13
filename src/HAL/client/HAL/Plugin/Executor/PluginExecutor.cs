@@ -31,6 +31,31 @@ namespace HAL.Plugin.Executor
             refPluginMaster = pluginMaster;
         }
 
+        /*
+         * libreadso allow to run multiple instance of classic dll or .so 
+         */
+        [DllImport("./lib/libreadso")]
+        private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
+        private static readonly object key = new object();
+
+        /// <summary>
+        /// run_entrypoint_sharedobject wrapper, to allocate the memory needed for the correct execution
+        /// </summary>
+        /// <param name="InputFile">dll/so path</param>
+        /// <returns></returns>
+        private string UseRunEntryPointSharedObject(string InputFile, out IntPtr ptrString)
+        {
+            lock (key)
+            {
+                ptrString = Marshal.StringToHGlobalAnsi(InputFile);
+                IntPtr ptrResult = run_entrypoint_sharedobject(ptrString);
+
+                // result need to be converted to a string type, otherwise it can't be read and memory will be corrupted
+                return Marshal.PtrToStringAnsi(ptrResult);
+            }
+        }
+
+
         /// <summary>
         /// wait until all workers have finished their jobs
         /// </summary>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
@@ -45,9 +46,11 @@ namespace HAL.Plugin.Executor
                     // otherwise, if it can't load assembly, it need to try a classic type file dll
                     if (e is System.BadImageFormatException || e is System.DllNotFoundException)
                     {
-                        var result = UseRunEntryPointSharedObject(plugin.FilePath);
+                        var result = UseRunEntryPointSharedObject(plugin.FilePath, out IntPtr ptrString);
 
                         plugin.RaiseOnExecutionFinished(result);
+
+                        Marshal.FreeHGlobal(ptrString);
                     }
                 }
 
