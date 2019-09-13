@@ -1,3 +1,4 @@
+using HAL.Loggin;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -30,6 +31,8 @@ namespace HAL.Plugin.Schelduler
                 task.Invoke();
             }, null, 0, hoursToMillis(intervalHours));
 
+            Log.Instance.Info($"{taskName} schelduled each {intervalHours} heartbeats.");
+
             if (timers.TryAdd(taskName, timer) == false)
             {
                 throw new ArgumentException("Task name already in use.");
@@ -46,6 +49,8 @@ namespace HAL.Plugin.Schelduler
             if (timers.TryGetValue(taskName, out Timer timer))
             {
                 timer.Dispose();
+
+                Log.Instance.Info($"{taskName} unschelduled");
 
                 return timers.Remove(taskName);
             }

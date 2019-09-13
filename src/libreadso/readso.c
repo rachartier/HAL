@@ -13,6 +13,22 @@
 # define EXPORT __declspec(dllexport)
 #endif
 
+
+/*
+	libreadso had to be created in order to read shared object file and "classic" dll
+	
+	c# has a tag (DllImport) to load a so/dll, but you need to specifically add one for each dll/so
+	if we want to load them on the fly, then we'll want to have this utility librairie.
+	
+	it serves two purposes:
+		- execute the "run" procedure of a .so/.dll and get the resulting string
+		- allocate the memory needed by c#'s marshal of the data returned by the run procedure 
+
+	if no memory is allocated, then marshal will get the adress of the first result, then add the size of the second data, the size of the third data and so on.
+
+*/
+
+
 // the code need to be executed as C
 #ifdef __cplusplus
 extern "C" {

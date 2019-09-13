@@ -214,36 +214,26 @@ Finalement, copier et renommer si besoin plugin.dll qui se trouve dans bin/Debug
 Add another file extension
 ---------------------
 
-Pour ajouter des extensions, il faut modifier le code source. 
+Pour ajouter une extension personnalisée, il suffit d'ajouter "custom_extensions" dans le fichier de configuration.
+Par exemple, pour ajouter une extension de PHP (.php):
 
-src/HAL/client/HAL/Plugin/Plugin.cs
-``` cs
-// if an extension need to be added, then you'll need to add it here in the correct file type
-public static Dictionary<FileType, string[]> AcceptedFilesTypes = new Dictionary<FileType, string[]>()
+``` json
 {
-    [FileType.DLL] = new string[] { ".dll" },
-    [FileType.Script] = new string[] { ".py", ".rb", ".sh", ".pl", ".lua" },
-    [FileType.SharedObject] = new string[] { ".so" }
-};
-``` 
+  "custom_extensions": {
+  	".php": "php"
+  }
+  "interpreter": {
+	"php": "path/to/php"
+	...
+  },
 
-Il suffit juste d'ajouter le nom de l'extension dans la bonne catégorie. Pour ajouter une extension de script il faut aussi modifier le fichier: src/HAL/client/HAL/Plugin/Executor/PluginExecutor.cs
-
-``` cs
-/// <summary>
-/// default extension name, you need to add yourself an entry to add a script language 
-/// </summary>
-private static IDictionary<string, string> defaultExtensionName = new Dictionary<string, string>()
-{
-    [".py"] = "python",
-    [".rb"] = "ruby",
-    [".pl"] = "perl",
-    [".sh"] = "bash",
-    [".lua"] = "lua",
-    //[".extension"] = "extension/command name"
-};
+  "plugins": {
+	...
+  }
+}
 ```
-Il faut ajouter un enssemble de clés/valeurs avec le nom de l'extension (qui est aussi la commande par défaut dans un shell), comme ça, il n'est pas obligé de renseigner un intérpréteur dans le fichier de config.
+
+Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini par défaut.
 
 ### Schema récapitulatif du projet
 ![](documents/schemas/Schema_recap_fleche_png.png)

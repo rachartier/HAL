@@ -16,20 +16,6 @@ namespace HAL.Plugin
 
     public class PluginFile
     {
-        public enum FileType
-        {
-            Unknown,
-            DLL,
-            Script,
-            SharedObject
-        }
-
-        public enum ReturnCode
-        {
-            Success,
-            Failure
-        }
-
         public delegate void PluginResultHandler(object sender, PluginResultArgs e);
 
         public event PluginResultHandler OnExecutionFinished;
@@ -39,31 +25,23 @@ namespace HAL.Plugin
             OnExecutionFinished?.Invoke(this, new PluginResultArgs(result));
         }
 
-        // if an extension need to be added, then you'll need to add it here in the correct file type
-        public static Dictionary<FileType, string[]> AcceptedFilesTypes = new Dictionary<FileType, string[]>()
-        {
-            [FileType.DLL] = new string[] { ".dll" },
-            [FileType.Script] = new string[] { ".py", ".rb", ".sh", ".pl", ".lua" },
-            [FileType.SharedObject] = new string[] { ".so" }
-        };
-
         public string FileName { get; private set; }
         public string FilePath { get; private set; }
         public string FileExtension { get; private set; }
         public string Name { get; private set; }
 
-        public FileType Type { get; private set; }
+        public PluginMaster.FileType Type { get; private set; }
 
         public OSAttribute.TargetFlag OsAuthorized = 0;
         public double Hearthbeat { get; set; } = 1;
         public bool Activated { get; set; } = false;
 
-        public PluginFile(string path)
+        public PluginFile(PluginMaster pluginMaster, string path)
         {
             FilePath = Path.GetFullPath(path);
             FileName = Path.GetFileName(path);
             FileExtension = Path.GetExtension(FileName);
-            Type = getPluginType();
+            Type = getPluginType(pluginMaster);
             Name = Path.GetFileNameWithoutExtension(FilePath);
         }
 
@@ -83,9 +61,9 @@ namespace HAL.Plugin
             return (Activated == true && CanBeRunOnOS());
         }
 
-        private FileType getPluginType()
+        private PluginMaster.FileType getPluginType(PluginMaster pluginMaster)
         {
-            foreach (var pair in AcceptedFilesTypes)
+            foreach (var pair in pluginMaster.AcceptedFilesTypes)
             {
                 foreach (string ext in pair.Value)
                 {
@@ -96,7 +74,7 @@ namespace HAL.Plugin
                 }
             }
 
-            return FileType.Unknown;
+            return PluginMaster.FileType.Unknown;
         }
     }
 }

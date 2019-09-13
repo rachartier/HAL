@@ -30,6 +30,19 @@ namespace HAL.Storage.Configuration
         public abstract void SetPluginConfiguration(PluginFile plugin);
 
         /// <summary>
+        /// add all the custom extensions that a script can be
+        /// other plugin's type, like dll and so should not be modified to operate properly
+        /// </summary>
+        /// <param name="pluginMaster">the plugin master wich will be configured</param>
+        public abstract void SetScriptExtensionsConfiguration(PluginMaster pluginMaster);
+
+        /// <summary>
+        /// set all the custom interpreters
+        /// </summary>
+        /// <param name="pluginMaster">the plugin master wich will be configured</param>
+        public abstract void SetInterpreterNameConfiguration(PluginMaster pluginMaster);
+
+        /// <summary>
         /// set a list of plugins configuration
         /// </summary>
         /// <param name="plugins"></param>

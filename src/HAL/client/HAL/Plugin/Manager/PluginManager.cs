@@ -1,4 +1,5 @@
 
+using HAL.Loggin;
 using HAL.OSData;
 using HAL.Plugin.Executor;
 using HAL.Plugin.Schelduler;
@@ -11,7 +12,12 @@ namespace HAL.Plugin.Mananger
 {
     public class PluginManager
     {
-        public PluginExecutor Executor { get; private set; } = new PluginExecutor();
+        public PluginExecutor Executor { get; private set; }
+
+        public PluginManager(PluginMaster pluginMaster)
+        {
+            Executor = new PluginExecutor(pluginMaster);
+        }
 
         /// <summary>
         /// run a plugin depending it's type
@@ -24,13 +30,13 @@ namespace HAL.Plugin.Mananger
 
             switch (plugin.Type)
             {
-                case PluginFile.FileType.DLL:
+                case PluginMaster.FileType.DLL:
                     Executor.RunFromDLL(plugin);
                     break;
-                case PluginFile.FileType.Script:
+                case PluginMaster.FileType.Script:
                     Executor.RunFromScript(plugin);
                     break;
-                case PluginFile.FileType.SharedObject:
+                case PluginMaster.FileType.SharedObject:
                     Executor.RunFromSO(plugin);
                     break;
             }
@@ -49,6 +55,7 @@ namespace HAL.Plugin.Mananger
             ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
             {
                 Run(plugin);
+                Log.Instance.Info($"{plugin.FileName} correctly executed.");
             });
         }
 
