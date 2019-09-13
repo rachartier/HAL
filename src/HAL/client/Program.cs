@@ -7,21 +7,13 @@ using HAL.Plugin.Mananger;
 using HAL.Plugin;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using NLog;
+using NLog.Fluent;
 
 namespace HAL
 {
     class Program
     {
-        static void PrintPluginInfos(PluginFile plugin, int indentSize)
-        {
-            string dotsLine = new string('.', indentSize - plugin.FileName.Length);
-            string activated = (plugin.CanBeRun() ? "ACTIVATED" : "NOT ACTIVATED");
-            string onThisOs = (plugin.CanBeRunOnOS() ? "" : " ON THIS OS");
-
-            string infos = String.Format($"{plugin.FileName}{dotsLine}{activated}{onThisOs}");
-
-            Console.WriteLine(infos);
-        }
         static void Main(string[] args)
         {
             IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
@@ -29,27 +21,28 @@ namespace HAL
 
             IStorage storage = new TextStorage();
 
-            var pluginManager = new PluginManager();
-            var plugins = new List<PluginFile>();
+            var pluginMaster = new PluginMaster();
+            var pluginManager = new PluginManager(pluginMaster);
+
+            configFile.SetScriptExtensionsConfiguration(pluginMaster);
+            configFile.SetInterpreterNameConfiguration(pluginMaster);
 
             foreach (var file in Directory.GetFiles("plugins"))
             {
-                plugins.Add(new PluginFile(file));
+                pluginMaster.AddPlugin(file);
             }
 
-            configFile.SetPluginsConfiguration(plugins);
+            configFile.SetPluginsConfiguration(pluginMaster.Plugins);
 
-            foreach (var plugin in plugins)
+            foreach (var plugin in pluginMaster.Plugins)
             {
-                PrintPluginInfos(plugin, 30);
-
                 plugin.OnExecutionFinished += new PluginFile.PluginResultHandler((o, e) =>
                 {
                     storage.Save(e.Result);
                 });
 
             }
-            pluginManager.ScheldulePlugins(plugins);
+            pluginManager.ScheldulePlugins(pluginMaster.Plugins);
 
             while (true) { }
         }

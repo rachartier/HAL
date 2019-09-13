@@ -1,3 +1,4 @@
+using HAL.Loggin;
 using HAL.OSData;
 using HAL.Plugin;
 using Newtonsoft.Json.Linq;
@@ -16,6 +17,8 @@ namespace HAL.Storage.Configuration
             {
                 throw new FileNotFoundException($"'{file} not found.'");
             }
+
+            Log.Instance.Info($"Configuration file {file} loaded");
 
             string jsonData = File.ReadAllText(file);
 
@@ -61,6 +64,61 @@ namespace HAL.Storage.Configuration
 
                     plugin.OsAuthorized |= OSAttribute.OSNameToTargetFlag[os];
                 }
+            }
+        }
+
+        public override void SetScriptExtensionsConfiguration(PluginMaster pluginMaster)
+        {
+            if (Root == null)
+                return;
+            try
+            {
+                JToken[] extensionsConfig = Root["custom_extensions"].Values<JToken>().ToArray();
+
+                foreach (var ext in extensionsConfig)
+                {
+                    try
+                    {
+                        pluginMaster.AddScriptExtension(((JProperty)ext).Name, ext.ToObject<string>());
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Log.Instance.Error(ex.Message);
+                    }
+                }
+            }
+            catch (NullReferenceException)
+            {
+                Log.Instance.Warn("custom_extensions is not found in the configuration file.");
+            }
+        }
+
+        public override void SetInterpreterNameConfiguration(PluginMaster pluginMaster)
+        {
+            foreach (var fileType in pluginMaster.AcceptedFilesTypes[PluginMaster.FileType.Script])
+            {
+                string key = fileType;
+                string val = "";
+
+                // an interpreter is needed to interpret the code
+                var interpreterConfig = Root["interpreter"];
+
+                if (interpreterConfig == null)
+                {
+                    Log.Instance.Error("intepreter is not set in the configuration file.");
+                    throw new NullReferenceException("intepreter is not set in the configuration file.");
+                }
+
+                // an intepreter can change depending the os
+                val = interpreterConfig[OSAttribute.GetOSFamillyName()].Value<string>(pluginMaster.ExtensionsNames[fileType]);
+
+                // if it can't be found, the default one is choose
+                if (string.IsNullOrEmpty(val))
+                {
+                    val = pluginMaster.ExtensionsNames[fileType];
+                }
+
+                pluginMaster.ExtensionToIntepreterName.Add(key, val);
             }
         }
     }

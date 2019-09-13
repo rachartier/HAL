@@ -24,47 +24,11 @@ namespace HAL.Plugin.Executor
         private bool waitForComplete = false;
         private ManualResetEvent manualResetEvent;
 
-        private static IDictionary<string, string> extensionConverterToIntepreterName = new Dictionary<string, string>();
+        private PluginMaster refPluginMaster;
 
-
-        /// <summary>
-        /// default extension name, you need to add yourself an entry to add a script language 
-        /// </summary>
-        private static IDictionary<string, string> defaultExtensionName = new Dictionary<string, string>()
+        public PluginExecutor(PluginMaster pluginMaster)
         {
-            [".py"] = "python",
-            [".rb"] = "ruby",
-            [".pl"] = "perl",
-            [".sh"] = "bash",
-            [".lua"] = "lua",
-        };
-
-        public PluginExecutor()
-        {
-            foreach (var fileType in PluginFile.AcceptedFilesTypes[PluginFile.FileType.Script])
-            {
-                string key = fileType;
-                string val = "";
-
-                // an interpreter is needed to interpret the code
-                var interpreterConfig = JSONConfigFile.Root["interpreter"];
-
-                if (interpreterConfig == null)
-                {
-                    throw new NullReferenceException("interpter is not set in the configuration file.");
-                }
-
-                // an intepreter can change depending the os
-                val = interpreterConfig[OSAttribute.GetOSFamillyName()].Value<string>(defaultExtensionName[fileType]);
-
-                // if it can't be found, the default one is choose
-                if (string.IsNullOrEmpty(val))
-                {
-                    val = defaultExtensionName[fileType];
-                }
-
-                extensionConverterToIntepreterName.Add(key, val);
-            }
+            refPluginMaster = pluginMaster;
         }
 
         /// <summary>
