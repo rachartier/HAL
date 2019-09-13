@@ -19,7 +19,7 @@ namespace HALServer.Server
             IPAddress ipAddr = ipHost.AddressList[0];
             IPEndPoint iPEndPoint = new IPEndPoint(ipAddr, Port);
 
-            //DevNote: Penser à récupérer les DateTime de dernières écritures des plugins côté serveur
+            //TODO: Penser à récupérer les DateTime de dernières écritures des plugins côté serveur
             var plugins = new List<PluginFile>();
 
             foreach (var file in Directory.GetFiles("plugins"))
@@ -41,6 +41,7 @@ namespace HALServer.Server
 
                 //prepare the data to come
                 string data = null;
+                //bytes is a buffer that contain the storage location for the received data
                 byte[] bytes = null;
 
                 while (true)
@@ -75,9 +76,9 @@ namespace HALServer.Server
             }
         }
 
-        public void FileExist(String path)
+        public bool FileExist(String path)
         {
-            Console.WriteLine(File.Exists(path) ? "File exists." : "File does not exist.");
+            return File.Exists(path)? true : false;
         }
     }
 }

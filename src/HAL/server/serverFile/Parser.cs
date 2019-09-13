@@ -8,9 +8,8 @@ namespace HALServer.Server
     {
         public static void ParseOneDataPlugin(string data)
         {
-            //WIP
-            //Gérer la création d'une datetime afin de pouvoir comparer avec la datetime du plugin sur le serv
-            //Gérer le retour d'une datetime associé à un nom de plugin
+            //TODO: Gérer la création d'une datetime afin de pouvoir comparer avec la datetime du plugin sur le serv
+            //TODO: Gérer le retour d'une datetime associé à un nom de plugin
         }
     }
 }
