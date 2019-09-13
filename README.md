@@ -117,7 +117,7 @@ Exemple de configuration:
 	},
 
 	"plugins": {
-		"info_machine.py" {
+		"info_machine.py": {
 			"activated": true,
 			"heartbeat": 0.5,
 			"os": ["windows", "linux"]
