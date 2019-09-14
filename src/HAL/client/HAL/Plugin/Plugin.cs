@@ -7,8 +7,11 @@ namespace HAL.Plugin
     public class PluginResultArgs : EventArgs
     {
         public readonly string Result;
-        public PluginResultArgs(string result)
+        public readonly PluginFile Plugin;
+
+        public PluginResultArgs(PluginFile plugin, string result)
         {
+            Plugin = plugin;
             Result = result;
         }
     }
@@ -25,7 +28,7 @@ namespace HAL.Plugin
         /// <param name="result"></param>
         public void RaiseOnExecutionFinished(string result)
         {
-            OnExecutionFinished?.Invoke(this, new PluginResultArgs(result));
+            OnExecutionFinished?.Invoke(this, new PluginResultArgs(this, result)); ;
         }
 
         public readonly string FileName;
