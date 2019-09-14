@@ -91,7 +91,7 @@ namespace HAL.Plugin.Mananger
                 {
                     ScheldulePlugin(plugin);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     return false;
                 }
