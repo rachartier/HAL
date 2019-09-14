@@ -16,4 +16,10 @@
     <ProjectReference Include="..\client\client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="test\tictactoe.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

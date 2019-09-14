@@ -51,7 +51,8 @@ namespace HAL.Plugin.Mananger
         /// <summary>
         /// scheldule a plugin to be executed at each heartbeat
         /// </summary>
-        /// <param name="plugin"></param>
+        /// <param name="plugin">the plugin to be schelduled</param>
+        /// <returns>true if schelduled, false otherwise</returns>
         public bool ScheldulePlugin(PluginFile plugin)
         {
             if (!plugin.CanBeRun())
@@ -67,26 +68,33 @@ namespace HAL.Plugin.Mananger
                     Run(plugin);
                     Log.Instance.Info($"{plugin.FileName} correctly executed.");
                 });
-
-                return true;
             }
             catch (Exception e)
             {
                 Log.Instance.Error(e.Message);
                 return false;
             }
+
+            return true;
         }
 
         /// <summary>
         /// scheldule a list of plugins to be executed
         /// </summary>
-        /// <param name="plugins"></param>
-        public void ScheldulePlugins(IEnumerable<PluginFile> plugins)
+        /// <param name="plugins">a collection of plugins</param>
+        /// <returns>true if all plugins are schelduled, false otherwise</returns>
+        public bool ScheldulePlugins(IEnumerable<PluginFile> plugins)
         {
+            bool allSchelduled = true;
             foreach (var plugin in plugins)
             {
-                ScheldulePlugin(plugin);
+                if (!ScheldulePlugin(plugin))
+                {
+                    allSchelduled = false;
+                }
             }
+
+            return allSchelduled;
         }
     }
 }

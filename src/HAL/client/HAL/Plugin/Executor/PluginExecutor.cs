@@ -50,16 +50,19 @@ namespace HAL.Plugin.Executor
         /// <summary>
         /// wait until all workers have finished their jobs
         /// </summary>
-        public void WaitForEmptyPool()
+        /// <returns>true if completed, false otherwise</returns>
+        public bool WaitForEmptyPool()
         {
             if (QueueLength == 0)
             {
-                return;
+                return false;
             }
 
             manualResetEvent = new ManualResetEvent(false);
             waitForComplete = true;
             manualResetEvent.WaitOne();
+
+            return true;
         }
 
         /// <summary>

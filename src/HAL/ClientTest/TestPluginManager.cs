@@ -1,16 +1,13 @@
 ﻿using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ClientTest
 {
     public partial class TestPlugin
     {
         [TestMethod]
-        public void PluginManager_ValidScheldulerTask()
+        public void PluginManager_ValidScheldulePlugin()
         {
             PluginMaster pluginMaster = new PluginMaster();
             PluginManager pluginManager = new PluginManager(pluginMaster);
@@ -27,7 +24,7 @@ namespace ClientTest
         }
 
         [TestMethod]
-        public void PluginManager_InvalidScheldulerTask()
+        public void PluginManager_InvalidScheldulePlugin()
         {
             PluginMaster pluginMaster = new PluginMaster();
             PluginManager pluginManager = new PluginManager(pluginMaster);
@@ -40,6 +37,23 @@ namespace ClientTest
             bool result = pluginManager.ScheldulePlugin(plugin);
 
             Assert.AreEqual(result, false, "ScheldulerService shouldn't have accepted this task");
+        }
+
+        public void PluginManager_ValidScheldulerTask()
+        {
+            const int nbPlugins = 10;
+
+            PluginMaster pluginMaster = new PluginMaster();
+            PluginManager pluginManager = new PluginManager(pluginMaster);
+
+            for (int i = 0; i < nbPlugins; ++i)
+            {
+                pluginMaster.AddPlugin("test/script.py");
+            }
+
+            bool result = pluginManager.ScheldulePlugins(pluginMaster.Plugins);
+
+            Assert.AreEqual(result, true, "ScheldulePlugins should avec returned true");
         }
     }
 }

@@ -1,7 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HAL.Plugin;
-using HAL.Plugin.Schelduler;
-using HAL.Plugin.Mananger;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ClientTest
 {

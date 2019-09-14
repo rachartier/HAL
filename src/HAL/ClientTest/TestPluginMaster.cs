@@ -1,9 +1,6 @@
 ﻿using HAL.Plugin;
-using HAL.Plugin.Mananger;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ClientTest
 {
@@ -18,9 +15,9 @@ namespace ClientTest
             {
                 pluginMaster.AddScriptExtension(".aa", "aaa");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Assert.Fail("AddScriptExtension shouldn't had raised an exception");
+                Assert.Fail($"AddScriptExtension shouldn't had raised an exception: {e.Message}");
             }
         }
 
@@ -31,7 +28,7 @@ namespace ClientTest
 
             pluginMaster.AddScriptExtension(".aa", "aaa");
 
-            Assert.ThrowsException<ArgumentException>(() => pluginMaster.AddScriptExtension(".aa", ".bb"), "AddScriptExtension should had have raised an exception");
+            Assert.ThrowsException<ArgumentException>(() => pluginMaster.AddScriptExtension(".aa", "aaa"), "AddScriptExtension should had have raised an exception");
         }
     }
 }
