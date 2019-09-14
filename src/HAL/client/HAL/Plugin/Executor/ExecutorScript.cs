@@ -1,9 +1,5 @@
-﻿using HAL.Loggin;
-using HAL.Storage;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Text;
 using System.Threading;
 
 namespace HAL.Plugin.Executor
@@ -36,10 +32,7 @@ namespace HAL.Plugin.Executor
                 // check if the extension had been set
                 if (string.IsNullOrEmpty(file))
                 {
-                    string msg = $"Value {refPluginMaster.ExtensionsNames[fileExtension]} from interpreter object in json file not found.";
-
-                    Log.Instance.Error(msg);
-                    throw new ArgumentNullException(msg);
+                    throw new ArgumentNullException($"Value {refPluginMaster.ExtensionsNames[fileExtension]} from interpreter object in json file not found.");
                 }
 
                 startProcess(plugin, file, args);

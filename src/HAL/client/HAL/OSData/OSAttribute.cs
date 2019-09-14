@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace HAL.OSData
 {
@@ -13,10 +12,10 @@ namespace HAL.OSData
         [Flags]
         public enum TargetFlag
         {
-            Linux   = 0x00000001,
+            Linux = 0x00000001,
             Windows = 0x00000002,
-            OSX     = 0x00000004,
-            All     = Linux | Windows | OSX
+            OSX = 0x00000004,
+            All = Linux | Windows | OSX
         }
 
         public static string FamillyLinuxName = "linux";
@@ -29,16 +28,16 @@ namespace HAL.OSData
 
         public static IDictionary<TargetFlag, string> TargetOSName = new Dictionary<TargetFlag, string>()
         {
-            [TargetFlag.Linux]   = FamillyLinuxName,
+            [TargetFlag.Linux] = FamillyLinuxName,
             [TargetFlag.Windows] = FamillyWindowsName,
-            [TargetFlag.OSX]     = FamillyOSXName
+            [TargetFlag.OSX] = FamillyOSXName
         };
 
         public static IDictionary<string, OSAttribute.TargetFlag> OSNameToTargetFlag = new Dictionary<string, OSAttribute.TargetFlag>()
         {
-            [FamillyLinuxName]   = OSAttribute.TargetFlag.Linux,
+            [FamillyLinuxName] = OSAttribute.TargetFlag.Linux,
             [FamillyWindowsName] = OSAttribute.TargetFlag.Windows,
-            [FamillyOSXName]     = OSAttribute.TargetFlag.OSX
+            [FamillyOSXName] = OSAttribute.TargetFlag.OSX
         };
 
         /// <summary>
@@ -50,9 +49,9 @@ namespace HAL.OSData
         {
             string name = "";
 
-            name = IsLinux   ? TargetOSName[TargetFlag.Linux]   : name;
+            name = IsLinux ? TargetOSName[TargetFlag.Linux] : name;
             name = IsWindows ? TargetOSName[TargetFlag.Windows] : name;
-            name = IsOSX     ? TargetOSName[TargetFlag.OSX]     : name;
+            name = IsOSX ? TargetOSName[TargetFlag.OSX] : name;
 
             return name;
         }

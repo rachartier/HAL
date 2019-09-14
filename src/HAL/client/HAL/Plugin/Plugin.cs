@@ -1,11 +1,10 @@
-using System.IO;
-using System.Collections.Generic;
 using HAL.OSData;
 using System;
+using System.IO;
 
 namespace HAL.Plugin
 {
-    public class PluginResultArgs
+    public class PluginResultArgs : EventArgs
     {
         public readonly string Result;
         public PluginResultArgs(string result)
@@ -20,19 +19,23 @@ namespace HAL.Plugin
 
         public event PluginResultHandler OnExecutionFinished;
 
+        /// <summary>
+        /// this event is raised when the execution of the plugin is completed
+        /// </summary>
+        /// <param name="result"></param>
         public void RaiseOnExecutionFinished(string result)
         {
             OnExecutionFinished?.Invoke(this, new PluginResultArgs(result));
         }
 
-        public string FileName { get; private set; }
-        public string FilePath { get; private set; }
-        public string FileExtension { get; private set; }
-        public string Name { get; private set; }
+        public readonly string FileName;
+        public readonly string FilePath;
+        public readonly string FileExtension;
+        public readonly string Name;
 
-        public PluginMaster.FileType Type { get; private set; }
+        public readonly PluginMaster.FileType Type;
 
-        public OSAttribute.TargetFlag OsAuthorized = 0;
+        public OSAttribute.TargetFlag OsAuthorized { get; set; } = 0;
         public double Hearthbeat { get; set; } = 1;
         public bool Activated { get; set; } = false;
 
@@ -41,10 +44,14 @@ namespace HAL.Plugin
             FilePath = Path.GetFullPath(path);
             FileName = Path.GetFileName(path);
             FileExtension = Path.GetExtension(FileName);
-            Type = getPluginType(pluginMaster);
             Name = Path.GetFileNameWithoutExtension(FilePath);
+            Type = getPluginType(pluginMaster);
         }
 
+        /// <summary>
+        /// verify if the plugin can be run on this os
+        /// </summary>
+        /// <returns></returns>
         public bool CanBeRunOnOS()
         {
             return ((((OsAuthorized & OSAttribute.TargetFlag.Linux) != 0) && OSAttribute.IsLinux
@@ -65,12 +72,9 @@ namespace HAL.Plugin
         {
             foreach (var pair in pluginMaster.AcceptedFilesTypes)
             {
-                foreach (string ext in pair.Value)
+                if (pair.Value.Contains(FileExtension))
                 {
-                    if (ext.Equals(FileExtension))
-                    {
-                        return pair.Key;
-                    }
+                    return pair.Key;
                 }
             }
 

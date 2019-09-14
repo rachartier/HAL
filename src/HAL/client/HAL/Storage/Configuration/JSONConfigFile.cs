@@ -3,7 +3,6 @@ using HAL.OSData;
 using HAL.Plugin;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -37,7 +36,9 @@ namespace HAL.Storage.Configuration
         public override void SetPluginConfiguration(PluginFile plugin)
         {
             if (Root == null)
+            {
                 return;
+            }
 
             JObject pluginConfig = Root["plugins"].Value<JObject>(plugin.FileName);
 
@@ -60,7 +61,9 @@ namespace HAL.Storage.Configuration
                 foreach (var os in pluginConfig["os"].ToObject<string[]>())
                 {
                     if (!OSAttribute.OSNameToTargetFlag.ContainsKey(os))
+                    {
                         throw new ArgumentException($"OS {os} is not recognized.");
+                    }
 
                     plugin.OsAuthorized |= OSAttribute.OSNameToTargetFlag[os];
                 }
@@ -70,7 +73,10 @@ namespace HAL.Storage.Configuration
         public override void SetScriptExtensionsConfiguration(PluginMaster pluginMaster)
         {
             if (Root == null)
+            {
                 return;
+            }
+
             try
             {
                 JToken[] extensionsConfig = Root["custom_extensions"].Values<JToken>().ToArray();

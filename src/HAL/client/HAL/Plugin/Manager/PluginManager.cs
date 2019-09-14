@@ -1,18 +1,15 @@
 
 using HAL.Loggin;
-using HAL.OSData;
 using HAL.Plugin.Executor;
 using HAL.Plugin.Schelduler;
-using HAL.Storage;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace HAL.Plugin.Mananger
 {
     public class PluginManager
     {
-        public PluginExecutor Executor { get; private set; }
+        public readonly PluginExecutor Executor;
 
         public PluginManager(PluginMaster pluginMaster)
         {
@@ -26,19 +23,28 @@ namespace HAL.Plugin.Mananger
         public void Run(PluginFile plugin)
         {
             if (!plugin.CanBeRun())
-                return;
-
-            switch (plugin.Type)
             {
-                case PluginMaster.FileType.DLL:
-                    Executor.RunFromDLL(plugin);
-                    break;
-                case PluginMaster.FileType.Script:
-                    Executor.RunFromScript(plugin);
-                    break;
-                case PluginMaster.FileType.SharedObject:
-                    Executor.RunFromSO(plugin);
-                    break;
+                return;
+            }
+
+            try
+            {
+                switch (plugin.Type)
+                {
+                    case PluginMaster.FileType.DLL:
+                        Executor.RunFromDLL(plugin);
+                        break;
+                    case PluginMaster.FileType.Script:
+                        Executor.RunFromScript(plugin);
+                        break;
+                    case PluginMaster.FileType.SharedObject:
+                        Executor.RunFromSO(plugin);
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Instance.Error(e.Message);
             }
         }
 
@@ -46,17 +52,29 @@ namespace HAL.Plugin.Mananger
         /// scheldule a plugin to be executed at each heartbeat
         /// </summary>
         /// <param name="plugin"></param>
-        public void ScheldulePlugin(PluginFile plugin)
+        public bool ScheldulePlugin(PluginFile plugin)
         {
             if (!plugin.CanBeRun())
-                return;
-
-            // the schelduler is called to run the plugin each heartbeat
-            ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
             {
-                Run(plugin);
-                Log.Instance.Info($"{plugin.FileName} correctly executed.");
-            });
+                return false;
+            }
+
+            try
+            {
+                // the schelduler is called to run the plugin each heartbeat
+                ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
+                {
+                    Run(plugin);
+                    Log.Instance.Info($"{plugin.FileName} correctly executed.");
+                });
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log.Instance.Error(e.Message);
+                return false;
+            }
         }
 
         /// <summary>

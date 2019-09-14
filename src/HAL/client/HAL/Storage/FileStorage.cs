@@ -2,9 +2,9 @@ namespace HAL.Storage
 {
     public class FileStorage : IStorage
     {
-	    public StorageCode Save<T>(T obj)
-	    {
-	        return StorageCode.Unknown;	
-	    }
+        public StorageCode Save<T>(T obj)
+        {
+            return StorageCode.Unknown;
+        }
     }
 }

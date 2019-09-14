@@ -10,7 +10,7 @@ namespace HAL.Plugin.Schelduler
         public static ScheldulerService Instance => instance ?? (instance = new ScheldulerService());
         private static ScheldulerService instance;
 
-        private IDictionary<string, Timer> timers = new Dictionary<string, Timer>();
+        private readonly IDictionary<string, Timer> timers = new Dictionary<string, Timer>();
 
         private ScheldulerService()
         {
@@ -31,12 +31,12 @@ namespace HAL.Plugin.Schelduler
                 task.Invoke();
             }, null, 0, hoursToMillis(intervalHours));
 
-            Log.Instance.Info($"{taskName} schelduled each {intervalHours} heartbeats.");
-
             if (timers.TryAdd(taskName, timer) == false)
             {
                 throw new ArgumentException("Task name already in use.");
             }
+
+            Log.Instance.Info($"{taskName} schelduled each {intervalHours} heartbeats.");
         }
 
         /// <summary>

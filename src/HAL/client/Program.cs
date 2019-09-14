@@ -1,20 +1,15 @@
-﻿using System.Collections.Generic;
-using System;
-using System.IO;
-using HAL.Storage.Configuration;
-using HAL.Storage;
+﻿using HAL.Plugin;
 using HAL.Plugin.Mananger;
-using HAL.Plugin;
+using HAL.Storage;
+using HAL.Storage.Configuration;
 using Newtonsoft.Json.Linq;
-using System.Text;
-using NLog;
-using NLog.Fluent;
+using System.IO;
 
 namespace HAL
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
             configFile.Load("config/config.json");

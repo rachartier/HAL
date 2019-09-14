@@ -1,15 +1,6 @@
 using System;
-using System.Reflection;
-using System.Linq;
-using System.Diagnostics;
-using System.Threading;
 using System.Runtime.InteropServices;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Text;
-using HAL.Storage;
-using HAL.OSData;
-using HAL.Storage.Configuration;
+using System.Threading;
 
 namespace HAL.Plugin.Executor
 {
@@ -24,7 +15,7 @@ namespace HAL.Plugin.Executor
         private bool waitForComplete = false;
         private ManualResetEvent manualResetEvent;
 
-        private PluginMaster refPluginMaster;
+        private readonly PluginMaster refPluginMaster;
 
         public PluginExecutor(PluginMaster pluginMaster)
         {
@@ -36,13 +27,13 @@ namespace HAL.Plugin.Executor
          */
         [DllImport("./lib/libreadso")]
         private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
-        private static readonly object key = new object();
+        private readonly object key = new object();
 
         /// <summary>
         /// run_entrypoint_sharedobject wrapper, to allocate the memory needed for the correct execution
         /// </summary>
         /// <param name="InputFile">dll/so path</param>
-        /// <returns></returns>
+        /// <returns>the converted result string</returns>
         private string UseRunEntryPointSharedObject(string InputFile, out IntPtr ptrString)
         {
             lock (key)
@@ -62,7 +53,9 @@ namespace HAL.Plugin.Executor
         public void WaitForEmptyPool()
         {
             if (QueueLength == 0)
+            {
                 return;
+            }
 
             manualResetEvent = new ManualResetEvent(false);
             waitForComplete = true;

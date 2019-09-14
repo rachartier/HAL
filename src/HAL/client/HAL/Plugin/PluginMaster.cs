@@ -1,7 +1,6 @@
 ﻿using HAL.Loggin;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace HAL.Plugin
 {
@@ -38,7 +37,7 @@ namespace HAL.Plugin
                 return plugins.AsReadOnly();
             }
         }
-        private List<PluginFile> plugins = new List<PluginFile>();
+        private readonly List<PluginFile> plugins = new List<PluginFile>();
 
         public PluginMaster()
         {
@@ -57,7 +56,7 @@ namespace HAL.Plugin
         /// <param name="name">complete name</param>
         public void AddScriptExtension(string extension, string name)
         {
-            if(AcceptedFilesTypes[FileType.Script].Contains(extension))
+            if (AcceptedFilesTypes[FileType.Script].Contains(extension))
             {
                 throw new ArgumentException($"{extension} is already definded.");
             }
