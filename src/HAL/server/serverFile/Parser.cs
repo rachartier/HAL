@@ -1,15 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace HALServer.Server
+namespace Server
 {
     public class Parser
     {
-        public static void ParseOneDataPlugin(string data)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns>A Tuple of String that contain the path and a DateTime that contain the date</returns>
+        public static (string path, DateTime date) ParseOnePluginFromData(string data)
         {
-            //TODO: Gérer la création d'une datetime afin de pouvoir comparer avec la datetime du plugin sur le serv
-            //TODO: Gérer le retour d'une datetime associé à un nom de plugin
+            string[] splitData = data.Split(' ');
+            List<string> pluginData = new List<string>();
+            string path;
+            string date;
+            string time;
+            int day, month, year, hour, minute, second;
+
+            foreach (string word in splitData)
+            {
+                word.Trim();
+                if (word.Equals(":") || word.Contains("<EOF>") || String.IsNullOrWhiteSpace(word)) continue;
+                pluginData.Add(word);
+            }
+
+            path = pluginData.ElementAt(0);
+            date = pluginData.ElementAt(1);
+            time = pluginData.ElementAt(2);
+
+            day = Int32.Parse(date.Split('/', StringSplitOptions.RemoveEmptyEntries).ElementAt(0));
+            month = Int32.Parse(date.Split('/', StringSplitOptions.RemoveEmptyEntries).ElementAt(1));
+            year = Int32.Parse(date.Split('/', StringSplitOptions.RemoveEmptyEntries).ElementAt(2));
+
+            hour = Int32.Parse(time.Split(':', StringSplitOptions.RemoveEmptyEntries).ElementAt(0));
+            minute = Int32.Parse(time.Split(':', StringSplitOptions.RemoveEmptyEntries).ElementAt(1));
+            second = Int32.Parse(time.Split(':', StringSplitOptions.RemoveEmptyEntries).ElementAt(2));
+
+            Console.WriteLine("chemin : {0} date : {1} time : {2}", path, date, time);
+
+            return (path, new DateTime(year, month, day, hour, minute, second));
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Server;
+using System;
+using System.IO;
 
 namespace server
 {
@@ -6,7 +8,11 @@ namespace server
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Directory.SetCurrentDirectory("..//..//..");
+
+            ServerFile server = new ServerFile();
+
+            server.StartServer();
         }
     }
 }

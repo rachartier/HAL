@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System.Text;
 using NLog;
 using NLog.Fluent;
+using HAL.Client;
 
 namespace HAL
 {
@@ -16,6 +17,8 @@ namespace HAL
     {
         static void Main(string[] args)
         {
+            Directory.SetCurrentDirectory("..//..//..");
+            ClientFile client = new ClientFile();
             IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
             configFile.Load("config/config.json");
 
@@ -43,6 +46,8 @@ namespace HAL
 
             }
             pluginManager.ScheldulePlugins(pluginMaster.Plugins);
+
+            client.StartClient();
 
             while (true) { }
         }

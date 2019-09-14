@@ -1,7 +1,7 @@
 {
   "interpreter": {
     "windows": {
-      "python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
+      "python": "C:\\Users\\BuddyNeet\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
     },
     "linux": {
       "python": "/usr/bin/python3",
