@@ -17,12 +17,12 @@ namespace HAL.Storage.Configuration
                 throw new FileNotFoundException($"'{file} not found.'");
             }
 
-            Log.Instance.Info($"Configuration file {file} loaded");
-
             string jsonData = File.ReadAllText(file);
 
             // root is composed of all the leaves
             Root = JObject.Parse(jsonData);
+
+            Log.Instance.Info($"Configuration file {file} loaded");
         }
 
         /*
@@ -51,7 +51,7 @@ namespace HAL.Storage.Configuration
             plugin.Hearthbeat = pluginConfig["hearthbeat"].Value<double>();
             plugin.Activated = pluginConfig["activated"].Value<bool>();
 
-            // if no os is specified then all of them is authorized
+            // if no os is specified then all of them are authorized
             if (pluginConfig["os"] == null)
             {
                 plugin.OsAuthorized |= OSAttribute.TargetFlag.All;

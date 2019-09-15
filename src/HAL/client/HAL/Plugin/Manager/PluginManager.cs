@@ -68,14 +68,14 @@ namespace HAL.Plugin.Mananger
                     Run(plugin);
                     Log.Instance.Info($"{plugin.FileName} correctly executed.");
                 });
+
+                return true;
             }
             catch (Exception e)
             {
                 Log.Instance.Error(e.Message);
                 return false;
             }
-
-            return true;
         }
 
         /// <summary>
@@ -85,16 +85,19 @@ namespace HAL.Plugin.Mananger
         /// <returns>true if all plugins are schelduled, false otherwise</returns>
         public bool ScheldulePlugins(IEnumerable<PluginFile> plugins)
         {
-            bool allSchelduled = true;
             foreach (var plugin in plugins)
             {
-                if (!ScheldulePlugin(plugin))
+                try
                 {
-                    allSchelduled = false;
+                    ScheldulePlugin(plugin);
+                }
+                catch (Exception)
+                {
+                    return false;
                 }
             }
 
-            return allSchelduled;
+            return true;
         }
     }
 }
