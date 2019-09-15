@@ -97,8 +97,6 @@ extern "C" {
 
 				return  _cpy_mem_string(dll_result, strlen(dll_result) + 1);;
 			}
-
-			extrun = (dll_function)GetProcAddress(lib, "run");
 #endif
 		}
 
