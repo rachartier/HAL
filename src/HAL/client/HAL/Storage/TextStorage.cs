@@ -1,12 +1,18 @@
+using HAL.Plugin;
 using System;
+using System.Threading.Tasks;
 
 namespace HAL.Storage
 {
-    public class TextStorage : IStorage
+    public class TextStorage : IStoragePlugin
     {
-        public StorageCode Save<T>(T obj)
+        public async Task<StorageCode> Save<T>(PluginFile plugin, T obj)
         {
-            Console.WriteLine(obj);
+            await Task.Run(() =>
+            {
+                Console.WriteLine(obj);
+            });
+
             return StorageCode.Success;
         }
     }

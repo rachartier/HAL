@@ -14,7 +14,7 @@ namespace HAL
             IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
             configFile.Load("config/config.json");
 
-            IStorage storage = new TextStorage();
+            IStoragePlugin storage = new FileStorage();
 
             var pluginMaster = new PluginMaster();
             var pluginManager = new PluginManager(pluginMaster);
@@ -33,10 +33,10 @@ namespace HAL
             {
                 plugin.OnExecutionFinished += new PluginFile.PluginResultHandler((o, e) =>
                 {
-                    storage.Save(e.Result);
+                    storage.Save(e.Plugin, e.Result);
                 });
-
             }
+
             pluginManager.ScheldulePlugins(pluginMaster.Plugins);
 
             while (true) { }
