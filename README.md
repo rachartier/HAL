@@ -100,6 +100,8 @@ Par la suite, il faut ajouter la configuration du plugin portant le nom et exten
 	- os (array de string): 
 		- optionnel, permet de lancer le plugin uniquement sur un ou plusieurs famille de système d'exploitation
 		- si rien n'est spécifié, le plugin sera disponible sur toutes les familles
+	- si l'OS cible est linux, une autre option peut être spécifiée:
+		- admin_rights (booléen): si le script doit être exécuté en administrateur (sudo), si non spécifié, alors false par défaut
 
 Exemple de configuration:
 
