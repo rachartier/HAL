@@ -51,6 +51,12 @@ namespace HAL.Storage.Configuration
             plugin.Hearthbeat = pluginConfig["hearthbeat"].Value<double>();
             plugin.Activated = pluginConfig["activated"].Value<bool>();
 
+            if (OSAttribute.IsLinux)
+            {
+                bool? needAdministratorRights = pluginConfig["admin_rights"]?.Value<bool>();
+                plugin.AdministratorRights = needAdministratorRights.GetValueOrDefault();
+            }
+
             // if no os is specified then all of them are authorized
             if (pluginConfig["os"] == null)
             {

@@ -41,6 +41,7 @@ namespace HAL.Plugin
         public OSAttribute.TargetFlag OsAuthorized { get; set; } = 0;
         public double Hearthbeat { get; set; } = 1;
         public bool Activated { get; set; } = false;
+        public bool AdministratorRights { get; set; } = false;
 
         public PluginFile(PluginMaster pluginMaster, string path)
         {
