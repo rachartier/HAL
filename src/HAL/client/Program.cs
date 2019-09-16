@@ -24,14 +24,14 @@ namespace HAL
 
             foreach (var file in Directory.GetFiles("plugins"))
             {
-                pluginMaster.AddPlugin(file);
+                pluginMaster.AddPlugin<BasePlugin>(file);
             }
 
             configFile.SetPluginsConfiguration(pluginMaster.Plugins);
 
             foreach (var plugin in pluginMaster.Plugins)
             {
-                plugin.OnExecutionFinished += new PluginFile.PluginResultHandler((o, e) =>
+                plugin.OnExecutionFinished += new BasePlugin.PluginResultHandler((o, e) =>
                 {
                     storage.Save(e.Plugin, e.Result);
                 });

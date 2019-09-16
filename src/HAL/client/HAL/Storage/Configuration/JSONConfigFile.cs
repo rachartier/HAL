@@ -33,7 +33,7 @@ namespace HAL.Storage.Configuration
          *      plugin will be executed only on the specified OS
          *
          */
-        public override void SetPluginConfiguration(PluginFile plugin)
+        public override void SetPluginConfiguration(BasePlugin plugin)
         {
             if (Root == null)
             {
@@ -91,7 +91,7 @@ namespace HAL.Storage.Configuration
                 {
                     try
                     {
-                        pluginMaster.AddScriptExtension(((JProperty)ext).Name, ext.ToObject<string>());
+                        pluginMaster.AddScriptExtension((ext as JProperty).Name, ext.ToObject<string>());
                     }
                     catch (ArgumentException ex)
                     {
@@ -107,7 +107,7 @@ namespace HAL.Storage.Configuration
 
         public override void SetInterpreterNameConfiguration(PluginMaster pluginMaster)
         {
-            foreach (var fileType in pluginMaster.AcceptedFilesTypes[PluginMaster.FileType.Script])
+            foreach (var fileType in pluginMaster.AcceptedFilesTypes[BasePlugin.FileType.Script])
             {
                 string key = fileType;
                 string val = "";

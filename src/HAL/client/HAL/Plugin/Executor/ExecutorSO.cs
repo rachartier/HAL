@@ -11,7 +11,7 @@ namespace HAL.Plugin.Executor
         /// run a code from a shared object fille
         /// </summary>
         /// <param name="plugin">plugin to be executed</param>
-        public void RunFromSO(PluginFile plugin)
+        public void RunFromSO(BasePlugin plugin)
         {
             // .so works only on linux
             if (OSAttribute.IsLinux)

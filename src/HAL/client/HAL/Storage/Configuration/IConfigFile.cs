@@ -24,7 +24,7 @@ namespace HAL.Storage.Configuration
         /// set a plugin's configuration from the configuration file
         /// </summary>
         /// <param name="plugin"></param>
-        public abstract void SetPluginConfiguration(PluginFile plugin);
+        public abstract void SetPluginConfiguration(BasePlugin plugin);
 
         /// <summary>
         /// add all the custom extensions that a script can be
@@ -43,7 +43,7 @@ namespace HAL.Storage.Configuration
         /// set a list of plugins configuration
         /// </summary>
         /// <param name="plugins"></param>
-        public void SetPluginsConfiguration(IEnumerable<PluginFile> plugins)
+        public void SetPluginsConfiguration(IEnumerable<BasePlugin> plugins)
         {
             foreach (var plugin in plugins)
             {

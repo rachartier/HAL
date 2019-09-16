@@ -20,7 +20,7 @@ namespace HAL.Plugin.Mananger
         /// run a plugin depending it's type
         /// </summary>
         /// <param name="plugin">plugin to be executed</param>
-        public void Run(PluginFile plugin)
+        public void Run(BasePlugin plugin)
         {
             if (!plugin.CanBeRun())
             {
@@ -31,13 +31,13 @@ namespace HAL.Plugin.Mananger
             {
                 switch (plugin.Type)
                 {
-                    case PluginMaster.FileType.DLL:
+                    case BasePlugin.FileType.DLL:
                         Executor.RunFromDLL(plugin);
                         break;
-                    case PluginMaster.FileType.Script:
+                    case BasePlugin.FileType.Script:
                         Executor.RunFromScript(plugin);
                         break;
-                    case PluginMaster.FileType.SharedObject:
+                    case BasePlugin.FileType.SharedObject:
                         Executor.RunFromSO(plugin);
                         break;
                 }
@@ -52,12 +52,11 @@ namespace HAL.Plugin.Mananger
         /// scheldule a plugin to be executed at each heartbeat
         /// </summary>
         /// <param name="plugin">the plugin to be schelduled</param>
-        /// <returns>true if schelduled, false otherwise</returns>
-        public bool ScheldulePlugin(PluginFile plugin)
+        public void ScheldulePlugin(BasePlugin plugin)
         {
             if (!plugin.CanBeRun())
             {
-                return false;
+                return;
             }
 
             try
@@ -69,12 +68,10 @@ namespace HAL.Plugin.Mananger
                     Log.Instance.Info($"{plugin.FileName} correctly executed.");
                 });
 
-                return true;
             }
             catch (Exception e)
             {
                 Log.Instance.Error(e.Message);
-                return false;
             }
         }
 
@@ -82,22 +79,12 @@ namespace HAL.Plugin.Mananger
         /// scheldule a list of plugins to be executed
         /// </summary>
         /// <param name="plugins">a collection of plugins</param>
-        /// <returns>true if all plugins are schelduled, false otherwise</returns>
-        public bool ScheldulePlugins(IEnumerable<PluginFile> plugins)
+        public void ScheldulePlugins(IEnumerable<BasePlugin> plugins)
         {
             foreach (var plugin in plugins)
             {
-                try
-                {
-                    ScheldulePlugin(plugin);
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
+                ScheldulePlugin(plugin);
             }
-
-            return true;
         }
     }
 }

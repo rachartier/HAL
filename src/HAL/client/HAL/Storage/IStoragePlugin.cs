@@ -1,4 +1,3 @@
-using HAL.Plugin;
 using System.Threading.Tasks;
 
 namespace HAL.Storage
@@ -12,6 +11,6 @@ namespace HAL.Storage
         /// <param name="plugin">plugin to be saved</param>
         /// <param name="obj">an object</param>
         /// <returns></returns>
-        Task<StorageCode> Save<T>(PluginFile plugin, T obj);
+        Task<StorageCode> Save<T>(Plugin.BasePlugin plugin, T obj);
     }
 }

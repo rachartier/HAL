@@ -33,11 +33,11 @@ namespace HAL.OSData
             [TargetFlag.OSX] = FamillyOSXName
         };
 
-        public static IDictionary<string, OSAttribute.TargetFlag> OSNameToTargetFlag = new Dictionary<string, OSAttribute.TargetFlag>()
+        public static IDictionary<string, TargetFlag> OSNameToTargetFlag = new Dictionary<string, TargetFlag>()
         {
-            [FamillyLinuxName] = OSAttribute.TargetFlag.Linux,
-            [FamillyWindowsName] = OSAttribute.TargetFlag.Windows,
-            [FamillyOSXName] = OSAttribute.TargetFlag.OSX
+            [FamillyLinuxName] = TargetFlag.Linux,
+            [FamillyWindowsName] = TargetFlag.Windows,
+            [FamillyOSXName] = TargetFlag.OSX
         };
 
         /// <summary>

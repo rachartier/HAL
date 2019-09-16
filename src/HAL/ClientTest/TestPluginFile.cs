@@ -11,7 +11,7 @@ namespace ClientTest
         {
             PluginMaster pluginMaster = new PluginMaster();
 
-            pluginMaster.AddPlugin("test/script.py");
+            pluginMaster.AddPlugin<BasePlugin>("test/script.py");
 
             Assert.AreEqual(pluginMaster.Plugins[0].FileExtension, ".py", "Plugin extension not  recognized");
         }
@@ -21,7 +21,7 @@ namespace ClientTest
         {
             PluginMaster pluginMaster = new PluginMaster();
 
-            pluginMaster.AddPlugin("test/script.py");
+            pluginMaster.AddPlugin<BasePlugin>("test/script.py");
 
             Assert.AreEqual(pluginMaster.Plugins[0].FileName, "script.py", "Bad plugin filename");
         }
@@ -31,7 +31,7 @@ namespace ClientTest
         {
             PluginMaster pluginMaster = new PluginMaster();
 
-            pluginMaster.AddPlugin("test/script.py");
+            pluginMaster.AddPlugin<BasePlugin>("test/script.py");
 
             Assert.AreEqual(pluginMaster.Plugins[0].Name, "script", "Bad plugin name");
         }
@@ -41,7 +41,7 @@ namespace ClientTest
         {
             PluginMaster pluginMaster = new PluginMaster();
 
-            PluginFile plugin = new PluginFile(pluginMaster, "test/script.py");
+            BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py");
             plugin.Activated = false;
 
             Assert.AreEqual(plugin.CanBeRun(), false, "Plugin shouldn't be executable");
@@ -52,7 +52,7 @@ namespace ClientTest
         {
             PluginMaster pluginMaster = new PluginMaster();
 
-            PluginFile plugin = new PluginFile(pluginMaster, "test/script.py");
+            BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py");
             plugin.Activated = true;
             plugin.OsAuthorized |= HAL.OSData.OSAttribute.TargetFlag.All;
 

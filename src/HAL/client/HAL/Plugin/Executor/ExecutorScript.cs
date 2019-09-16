@@ -10,7 +10,7 @@ namespace HAL.Plugin.Executor
         /// run a code from a script language
         /// </summary>
         /// <param name="plugin">plugin to be executed</param>
-        public void RunFromScript(PluginFile plugin)
+        public void RunFromScript(BasePlugin plugin)
         {
             QueueLength++;
 
@@ -41,7 +41,7 @@ namespace HAL.Plugin.Executor
             }));
         }
 
-        private void startProcess(PluginFile plugin, string file, string args)
+        private void startProcess(BasePlugin plugin, string file, string args)
         {
             string verb = "";
 
@@ -51,12 +51,12 @@ namespace HAL.Plugin.Executor
                 {
                     args = string.Format($" -c \"sudo {file} {args}\"");
                 }
- /*              
-                else if (OSData.OSAttribute.IsWindows)
-                {
-                    verb = "runas";
-                }
-*/
+                /*              
+                               else if (OSData.OSAttribute.IsWindows)
+                               {
+                                   verb = "runas";
+                               }
+               */
             }
 
             var start = new ProcessStartInfo()

@@ -1,4 +1,3 @@
-using HAL.Plugin;
 using System;
 using System.Threading.Tasks;
 
@@ -6,7 +5,7 @@ namespace HAL.Storage
 {
     public class TextStorage : IStoragePlugin
     {
-        public async Task<StorageCode> Save<T>(PluginFile plugin, T obj)
+        public async Task<StorageCode> Save<T>(Plugin.BasePlugin plugin, T obj)
         {
             await Task.Run(() =>
             {

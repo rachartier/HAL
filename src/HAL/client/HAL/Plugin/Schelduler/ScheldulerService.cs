@@ -7,6 +7,8 @@ namespace HAL.Plugin.Schelduler
 {
     public class ScheldulerService
     {
+        public static uint NB_MILLIS_IN_HOURS = 3_600_000U;
+
         public static ScheldulerService Instance => instance ?? (instance = new ScheldulerService());
         private static ScheldulerService instance;
 
@@ -24,12 +26,10 @@ namespace HAL.Plugin.Schelduler
         /// <param name="task">the specific task</param>
         public void SchelduleTask(string taskName, double intervalHours, Action task)
         {
-            Func<double, int> hoursToMillis = x => (int)(intervalHours * 3_600_000);
-
             var timer = new Timer(t =>
             {
                 task.Invoke();
-            }, null, 0, hoursToMillis(intervalHours));
+            }, null, 0, (uint)(intervalHours * NB_MILLIS_IN_HOURS));
 
             if (timers.TryAdd(taskName, timer) == false)
             {

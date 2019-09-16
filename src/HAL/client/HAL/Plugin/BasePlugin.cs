@@ -1,61 +1,59 @@
-using HAL.OSData;
+﻿using HAL.OSData;
 using System;
-using System.IO;
 
 namespace HAL.Plugin
 {
     public class PluginResultArgs : EventArgs
     {
         public readonly string Result;
-        public readonly PluginFile Plugin;
+        public readonly BasePlugin Plugin;
 
-        public PluginResultArgs(PluginFile plugin, string result)
+        public PluginResultArgs(BasePlugin plugin, string result)
         {
             Plugin = plugin;
             Result = result;
         }
     }
 
-    public class PluginFile
+    public class BasePlugin : PluginFileInfo
     {
-        public delegate void PluginResultHandler(object sender, PluginResultArgs e);
-
-        public event PluginResultHandler OnExecutionFinished;
-
-        /// <summary>
-        /// this event is raised when the execution of the plugin is completed
-        /// </summary>
-        /// <param name="result"></param>
-        public void RaiseOnExecutionFinished(string result)
+        public enum FileType
         {
-            OnExecutionFinished?.Invoke(this, new PluginResultArgs(this, result)); ;
+            Unknown,
+            DLL,
+            Script,
+            SharedObject
         }
 
-        public readonly string FileName;
-        public readonly string FilePath;
-        public readonly string FileExtension;
-        public readonly string Name;
+        public delegate void PluginResultHandler(object sender, PluginResultArgs e);
+        public event PluginResultHandler OnExecutionFinished;
 
-        public readonly PluginMaster.FileType Type;
+        public readonly FileType Type;
 
         public OSAttribute.TargetFlag OsAuthorized { get; set; } = 0;
         public double Hearthbeat { get; set; } = 1;
         public bool Activated { get; set; } = false;
         public bool AdministratorRights { get; set; } = false;
 
-        public PluginFile(PluginMaster pluginMaster, string path)
+        public BasePlugin(PluginMaster pluginMaster, string path)
+        : base(path)
         {
-            FilePath = Path.GetFullPath(path);
-            FileName = Path.GetFileName(path);
-            FileExtension = Path.GetExtension(FileName);
-            Name = Path.GetFileNameWithoutExtension(FilePath);
             Type = getPluginType(pluginMaster);
+        }
+
+        /// <summary>
+        /// this event is raised when the execution of the plugin is completed
+        /// </summary>
+        /// <param name="result">plugin's resultat</param>
+        public void RaiseOnExecutionFinished(string result)
+        {
+            OnExecutionFinished?.Invoke(this, new PluginResultArgs(this, result)); ;
         }
 
         /// <summary>
         /// verify if the plugin can be run on this os
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true if it can be run on this os, false otherwise</returns>
         public bool CanBeRunOnOS()
         {
             return ((((OsAuthorized & OSAttribute.TargetFlag.Linux) != 0) && OSAttribute.IsLinux
@@ -69,10 +67,10 @@ namespace HAL.Plugin
         /// <returns>true if it can be run, false otherwise</returns>
         public bool CanBeRun()
         {
-            return (Activated == true && CanBeRunOnOS());
+            return (Activated && CanBeRunOnOS());
         }
 
-        private PluginMaster.FileType getPluginType(PluginMaster pluginMaster)
+        private FileType getPluginType(PluginMaster pluginMaster)
         {
             foreach (var pair in pluginMaster.AcceptedFilesTypes)
             {
@@ -82,7 +80,7 @@ namespace HAL.Plugin
                 }
             }
 
-            return PluginMaster.FileType.Unknown;
+            return FileType.Unknown;
         }
     }
 }

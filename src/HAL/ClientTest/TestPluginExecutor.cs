@@ -14,7 +14,7 @@ namespace ClientTest
             var pluginMaster = new PluginMaster();
             var executor = new PluginExecutor(pluginMaster);
 
-            pluginMaster.AddPlugin("test/tictactoe.dll");
+            pluginMaster.AddPlugin<BasePlugin>("test/tictactoe.dll");
 
             for (int i = 0; i < nbInstances; ++i)
             {

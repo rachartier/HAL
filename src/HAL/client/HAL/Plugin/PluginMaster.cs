@@ -6,38 +6,30 @@ namespace HAL.Plugin
 {
     public class PluginMaster
     {
-        public enum FileType
-        {
-            Unknown,
-            DLL,
-            Script,
-            SharedObject
-        }
-
         public enum ReturnCode
         {
             Success,
             Failure
         }
 
-        public IDictionary<FileType, List<string>> AcceptedFilesTypes = new Dictionary<PluginMaster.FileType, List<string>>()
+        public IDictionary<BasePlugin.FileType, List<string>> AcceptedFilesTypes = new Dictionary<BasePlugin.FileType, List<string>>()
         {
-            [FileType.DLL] = new List<string> { ".dll" },
-            [FileType.Script] = new List<string> { },
-            [FileType.SharedObject] = new List<string> { ".so" }
+            [BasePlugin.FileType.DLL] = new List<string> { ".dll" },
+            [BasePlugin.FileType.Script] = new List<string> { },
+            [BasePlugin.FileType.SharedObject] = new List<string> { ".so" }
         };
 
         public IDictionary<string, string> ExtensionsNames = new Dictionary<string, string>();
         public IDictionary<string, string> ExtensionToIntepreterName = new Dictionary<string, string>();
 
-        public IReadOnlyList<PluginFile> Plugins
+        public IReadOnlyList<BasePlugin> Plugins
         {
             get
             {
                 return plugins.AsReadOnly();
             }
         }
-        private readonly List<PluginFile> plugins = new List<PluginFile>();
+        private readonly List<BasePlugin> plugins = new List<BasePlugin>();
 
         public PluginMaster()
         {
@@ -56,12 +48,12 @@ namespace HAL.Plugin
         /// <param name="name">complete name</param>
         public void AddScriptExtension(string extension, string name)
         {
-            if (AcceptedFilesTypes[FileType.Script].Contains(extension))
+            if (AcceptedFilesTypes[BasePlugin.FileType.Script].Contains(extension))
             {
                 throw new ArgumentException($"{extension} is already definded.");
             }
 
-            AcceptedFilesTypes[FileType.Script].Add(extension);
+            AcceptedFilesTypes[BasePlugin.FileType.Script].Add(extension);
 
             ExtensionsNames.Add(extension, name);
             Log.Instance.Info($"Extension {name} ({extension}) added.");
@@ -71,9 +63,10 @@ namespace HAL.Plugin
         /// add a plugin by its path
         /// </summary>
         /// <param name="path">path of the plugin</param>
-        public void AddPlugin(string path)
+        public void AddPlugin<TPlugin>(string path) where TPlugin : BasePlugin
         {
-            plugins.Add(new PluginFile(this, path));
+            var plugin = (TPlugin)Activator.CreateInstance(typeof(TPlugin), this, path);
+            plugins.Add(plugin);
 
             Log.Instance.Info($"Plugin {path} loaded.");
         }

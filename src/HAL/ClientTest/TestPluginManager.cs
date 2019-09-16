@@ -1,6 +1,7 @@
 ﻿using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ClientTest
 {
@@ -12,31 +13,20 @@ namespace ClientTest
             PluginMaster pluginMaster = new PluginMaster();
             PluginManager pluginManager = new PluginManager(pluginMaster);
 
-            PluginFile plugin = new PluginFile(pluginMaster, "test/script.py")
+            BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py")
             {
                 Activated = true,
                 OsAuthorized = HAL.OSData.OSAttribute.TargetFlag.All
             };
 
-            bool result = pluginManager.ScheldulePlugin(plugin);
-
-            Assert.AreEqual(result, true, "ScheldulerService should have accepted this task");
-        }
-
-        [TestMethod]
-        public void PluginManager_InvalidScheldulePlugin()
-        {
-            PluginMaster pluginMaster = new PluginMaster();
-            PluginManager pluginManager = new PluginManager(pluginMaster);
-
-            PluginFile plugin = new PluginFile(pluginMaster, "test/script.py")
+            try
             {
-                Activated = false
-            };
-
-            bool result = pluginManager.ScheldulePlugin(plugin);
-
-            Assert.AreEqual(result, false, "ScheldulerService shouldn't have accepted this task");
+                pluginManager.ScheldulePlugin(plugin);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail($"ScheldulerService should have accepted this task: {e.Message}");
+            }
         }
 
         public void PluginManager_ValidScheldulerTask()
@@ -48,12 +38,17 @@ namespace ClientTest
 
             for (int i = 0; i < nbPlugins; ++i)
             {
-                pluginMaster.AddPlugin("test/script.py");
+                pluginMaster.AddPlugin<BasePlugin>("test/script.py");
             }
 
-            bool result = pluginManager.ScheldulePlugins(pluginMaster.Plugins);
-
-            Assert.AreEqual(result, true, "ScheldulePlugins should avec returned true");
+            try
+            {
+                pluginManager.ScheldulePlugins(pluginMaster.Plugins);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail($"ScheldulerService should have accepted this task: {e.Message}");
+            }
         }
     }
 }
