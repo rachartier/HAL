@@ -43,6 +43,7 @@
     "ping.sh": {
       "activated": true,
       "hearthbeat": 0.001,
+      "admin_right":  true,
       "os": [ "linux" ]
     },
     "cputemp.sh": {

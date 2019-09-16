@@ -43,10 +43,27 @@ namespace HAL.Plugin.Executor
 
         private void startProcess(PluginFile plugin, string file, string args)
         {
+            string verb = "";
+
+            if (plugin.AdministratorRights)
+            {
+                if (OSData.OSAttribute.IsLinux)
+                {
+                    args = string.Format($" -c \"sudo {file} {args}\"");
+                }
+ /*              
+                else if (OSData.OSAttribute.IsWindows)
+                {
+                    verb = "runas";
+                }
+*/
+            }
+
             var start = new ProcessStartInfo()
             {
                 FileName = file,
                 Arguments = args,
+                Verb = verb,
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
