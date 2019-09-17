@@ -1,4 +1,4 @@
-﻿using Server.Plugin;
+﻿using server.serverFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -95,10 +95,10 @@ namespace Server
         /// </returns>
         private int CheckPlugin(string serverPath, DateTime serverDate, string clientPath, DateTime clientDate)
         {
-            //TODO: Régler le problème des Dates et de la comparaison des dates (Millis différent)
-            if (!serverPath.Equals(clientPath)) return 1;
-            if (serverDate.CompareTo(clientDate) > 0) return 1;
-            if (serverPath.Equals(clientPath) || serverDate.CompareTo(clientDate) == 0) return 0;
+            var dateComparer = new ServerDateComparer();
+
+            if (!serverPath.Equals(clientPath) || dateComparer.Compare(serverDate, clientDate) > 0) return 1;
+            if (serverPath.Equals(clientPath) || dateComparer.Compare(serverDate, clientDate) == 0) return 0;
 
             return -1;
         }
@@ -113,13 +113,19 @@ namespace Server
         {
             List<string> pluginToUpdate = new List<string>();
 
+            //TODO: ERREUR PARCOURS DES DICOS A CORRIGER
             foreach(KeyValuePair<string, DateTime> serverEntry in serverPlugins)
             {
                 foreach(KeyValuePair<string, DateTime> clientEntry in clientPlugins)
                 {
-                    if (CheckPlugin(serverEntry.Key, serverEntry.Value, clientEntry.Key, clientEntry.Value) > 0) pluginToUpdate.Add(clientEntry.Key);
+                    if (CheckPlugin(serverEntry.Key, serverEntry.Value, clientEntry.Key, clientEntry.Value) > 0)
+                    {
+                        pluginToUpdate.Add(clientEntry.Key);
+                    } else
+                    {
+                        break;
+                    }
                 }
-                break;
             }
 
             Console.WriteLine("pluginToUpdate List count : {0} ", pluginToUpdate.Count);
@@ -136,18 +142,18 @@ namespace Server
         {
             Dictionary<string, DateTime> pluginsOnServer = new Dictionary<string, DateTime>();
 
-            var plugins = new List<PluginFile>();
+            var plugins = new List<String>();
 
             foreach (var file in Directory.GetFiles("plugins"))
             {
-                plugins.Add(new PluginFile(file));
+                plugins.Add(file);
             }
 
             var lenght = plugins.Count;
 
             foreach (var plugin in plugins)
             {
-                pluginsOnServer.Add(GetPathFromRoot(plugin.FilePath), File.GetLastWriteTime(plugin.FilePath));
+                pluginsOnServer.Add(plugin, File.GetLastWriteTime(plugin));
             }
 
             return pluginsOnServer;
