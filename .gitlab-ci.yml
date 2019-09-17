@@ -7,13 +7,16 @@ build:
     stage: build
     script:
         - dotnet build -c Release 
-        - dotnet publish -c Release --no-restore -o $CI_PROJECT_DIR/build/release
-    artifacts:
-        paths:
-            - $CI_PROJECT_DIR/build/release
    
 test:
     stage: test
     script:
         - dotnet test --no-restore
 
+deploy:
+    stage: deploy        
+    script:
+        - dotnet publish -c Release --no-restore -o $CI_PROJECT_DIR/build/release
+    artifacts:
+        paths:
+            - $CI_PROJECT_DIR/build/release
