@@ -1,7 +1,7 @@
 image: microsoft/dotnet:latest
 
 before_script:
-    - cd hal/dev/src/HAL/ 
+    - cd dev/src/HAL/ 
  
 build:
     stage: build
