@@ -16,7 +16,7 @@ test:
 deploy:
     stage: deploy        
     script:
-        - dotnet publish -c Release --no-restore -o $CI_PROJECT_DIR/build/release
+        - dotnet publish -c Release -o $CI_PROJECT_DIR/build/release
     artifacts:
         paths:
             - $CI_PROJECT_DIR/build/release
