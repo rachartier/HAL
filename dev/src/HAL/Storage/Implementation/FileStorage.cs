@@ -6,6 +6,10 @@ namespace HAL.Storage
 {
     public class FileStorage : IStoragePlugin
     {
+        public void Init()
+        {
+        }
+
         public async Task<StorageCode> Save<T>(Plugin.BasePlugin plugin, T obj)
         {
             string dirName = "results/";

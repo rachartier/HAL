@@ -14,7 +14,7 @@ namespace HAL
             IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
             configFile.Load("config/config.json");
 
-            IStoragePlugin storage = new FileStorage();
+            IStoragePlugin storage = new TextStorage();
 
             var pluginMaster = new PluginMaster();
             var pluginManager = new PluginManager(pluginMaster);

@@ -1,5 +1,4 @@
-
-using HAL.Loggin;
+﻿using HAL.Loggin;
 using HAL.Plugin.Executor;
 using HAL.Plugin.Schelduler;
 using System;
@@ -44,7 +43,7 @@ namespace HAL.Plugin.Mananger
             }
             catch (Exception e)
             {
-                Log.Instance.Error(e.Message);
+                Log.Instance?.Error(e.Message);
             }
         }
 
@@ -65,13 +64,13 @@ namespace HAL.Plugin.Mananger
                 ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
                 {
                     Run(plugin);
-                    Log.Instance.Info($"{plugin.FileName} correctly executed.");
+                    Log.Instance?.Info($"{plugin.FileName} correctly executed.");
                 });
 
             }
             catch (Exception e)
             {
-                Log.Instance.Error(e.Message);
+                Log.Instance?.Error(e.Message);
             }
         }
 

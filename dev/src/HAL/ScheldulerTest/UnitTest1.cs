@@ -1,10 +1,11 @@
-﻿using HAL.Plugin.Schelduler;
+using HAL.Plugin.Schelduler;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace ClientTest
+namespace ScheldulerTest
 {
-    public partial class TestPlugin
+    [TestClass]
+    public class UnitTest1
     {
         [TestMethod]
         public void Schelduler_ValidAddTask()
