@@ -19,10 +19,10 @@ namespace HAL.Plugin.Schelduler
         }
 
         /// <summary>
-        /// scheldule a task, it will be repeated once in a hearthbeat
+        /// scheldule a task, it will be repeated each interval
         /// </summary>
         /// <param name="taskName">task's name to be identified</param>
-        /// <param name="intervalHours">hearthbeat in hours, meaning it will be repeated at hearthbeats per hour</param>
+        /// <param name="intervalHours">interval hours, meaning the task will be repeated at an interval</param>
         /// <param name="task">the specific task</param>
         public void SchelduleTask(string taskName, double intervalHours, Action task)
         {
@@ -36,7 +36,7 @@ namespace HAL.Plugin.Schelduler
                 throw new ArgumentException("Task name already in use.");
             }
 
-            Log.Instance.Info($"{taskName} schelduled each {intervalHours} heartbeats.");
+            Log.Instance?.Info($"{taskName} schelduled each {intervalHours} heartbeats.");
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace HAL.Plugin.Schelduler
             {
                 timer.Dispose();
 
-                Log.Instance.Info($"{taskName} unschelduled");
+                Log.Instance?.Info($"{taskName} unschelduled");
 
                 return timers.Remove(taskName);
             }

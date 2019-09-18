@@ -20,7 +20,6 @@ namespace HAL.Plugin
         };
 
         public IDictionary<string, string> ExtensionsNames { get; private set; } = new Dictionary<string, string>();
-        public IDictionary<string, string> ExtensionToIntepreterName { get; private set; } = new Dictionary<string, string>();
 
         public IReadOnlyList<BasePlugin> Plugins
         {
@@ -56,7 +55,7 @@ namespace HAL.Plugin
             AcceptedFilesTypes[BasePlugin.FileType.Script].Add(extension);
 
             ExtensionsNames.Add(extension, name);
-            Log.Instance.Info($"Extension {name} ({extension}) added.");
+            Log.Instance?.Info($"Extension {name} ({extension}) added.");
         }
 
         /// <summary>
@@ -68,7 +67,7 @@ namespace HAL.Plugin
             var plugin = (TPlugin)Activator.CreateInstance(typeof(TPlugin), this, path);
             plugins.Add(plugin);
 
-            Log.Instance.Info($"Plugin {path} loaded.");
+            Log.Instance?.Info($"Plugin {path} loaded.");
         }
     }
 }

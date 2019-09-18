@@ -22,7 +22,7 @@ namespace HAL.Storage.Configuration
             // root is composed of all the leaves
             Root = JObject.Parse(jsonData);
 
-            Log.Instance.Info($"Configuration file {file} loaded");
+            Log.Instance?.Info($"Configuration file {file} loaded");
         }
 
         /*
@@ -95,13 +95,13 @@ namespace HAL.Storage.Configuration
                     }
                     catch (ArgumentException ex)
                     {
-                        Log.Instance.Error(ex.Message);
+                        Log.Instance?.Error(ex.Message);
                     }
                 }
             }
             catch (NullReferenceException)
             {
-                Log.Instance.Warn("custom_extensions is not found in the configuration file.");
+                Log.Instance?.Warn("custom_extensions is not found in the configuration file.");
             }
         }
 
@@ -117,7 +117,7 @@ namespace HAL.Storage.Configuration
 
                 if (interpreterConfig == null)
                 {
-                    Log.Instance.Error("intepreter is not set in the configuration file.");
+                    Log.Instance?.Error("intepreter is not set in the configuration file.");
                     throw new NullReferenceException("intepreter is not set in the configuration file.");
                 }
 
@@ -130,7 +130,14 @@ namespace HAL.Storage.Configuration
                     val = pluginMaster.ExtensionsNames[fileType];
                 }
 
-                pluginMaster.ExtensionToIntepreterName.Add(key, val);
+                if(!pluginMaster.ExtensionsNames.ContainsKey(key))
+                {
+                    pluginMaster.AddScriptExtension(key, val);
+                }
+                else
+                {
+                    pluginMaster.ExtensionsNames[key] = val;
+                }
             }
         }
     }
