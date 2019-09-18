@@ -22,12 +22,12 @@ namespace HAL.Plugin.Executor
                 var fileExtension = plugin.FileExtension;
 
                 // check if the extension is known
-                if (!refPluginMaster.ExtensionToIntepreterName.ContainsKey(plugin.FileExtension))
+                if (!refPluginMaster.ExtensionsNames.ContainsKey(plugin.FileExtension))
                 {
                     throw new ArgumentException("Unknown extension.");
                 }
 
-                file = refPluginMaster.ExtensionToIntepreterName[fileExtension];
+                file = refPluginMaster.ExtensionsNames[fileExtension];
 
                 // check if the extension had been set
                 if (string.IsNullOrEmpty(file))
