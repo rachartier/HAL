@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{BFA53FC5-183A-42E1-8C04-FFDDDECDAB8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "client\client.csproj", "{BFA53FC5-183A-42E1-8C04-FFDDDECDAB8C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "server\server.csproj", "{30D01695-55B1-4AAD-AAAD-0829FCF12627}"
 EndProject
