@@ -3,10 +3,9 @@ using HAL.Plugin.Mananger;
 using HAL.Storage;
 using HAL.Storage.Configuration;
 using Newtonsoft.Json.Linq;
-using System.Text;
-using NLog;
-using NLog.Fluent;
 using HAL.Client;
+using System.IO;
+using Plugin.Manager;
 
 namespace HAL
 {
