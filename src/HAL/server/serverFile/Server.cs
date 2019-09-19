@@ -95,10 +95,8 @@ namespace Server
         /// </returns>
         private int CheckPlugin(string serverPath, DateTime serverDate, string clientPath, DateTime clientDate)
         {
-            var dateComparer = new ServerDateComparer();
-
-            if (!serverPath.Equals(clientPath) || dateComparer.Compare(serverDate, clientDate) > 0) return 1;
-            if (serverPath.Equals(clientPath) || dateComparer.Compare(serverDate, clientDate) == 0) return 0;
+            if (!serverPath.Equals(clientPath) || ServerDateComparer.Compare(serverDate, clientDate) > 0) return 1;
+            if (serverPath.Equals(clientPath) || ServerDateComparer.Compare(serverDate, clientDate) == 0) return 0;
 
             return -1;
         }
@@ -184,11 +182,6 @@ namespace Server
         {
             int lenght = filePath.Split("\\", StringSplitOptions.RemoveEmptyEntries).Length;
             return string.Format("plugins\\{0}",filePath.Split("\\", StringSplitOptions.RemoveEmptyEntries).GetValue(lenght-1).ToString());
-        }
-
-        private bool FileExist(String path)
-        {
-            return File.Exists(path)? true : false;
         }
     }
 }

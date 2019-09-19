@@ -4,34 +4,21 @@ using System.Text;
 
 namespace server.serverFile
 {
-    class ServerDateComparer : IComparer<DateTime>
+    class ServerDateComparer
     {
-        public int Compare(DateTime serverDate, DateTime clientDate)
+        public static int Compare(DateTime serverDate, DateTime clientDate)
         {
-            (serverDate, clientDate) = CreateOnlyDateAndTime(serverDate, clientDate);
-            if (serverDate.CompareTo(clientDate) == 0) return 0;
-            if (serverDate.CompareTo(clientDate) > 0) return 1;
+            var serverDateTime = SimpleDateConverter(serverDate);
+            var clientDateTime = SimpleDateConverter(clientDate);
+            if (serverDateTime.CompareTo(clientDateTime) == 0) return 0;
+            if (serverDateTime.CompareTo(clientDateTime) > 0) return 1;
 
             return -1;
         }
 
-        private (DateTime newServerDate, DateTime newClientDate) CreateOnlyDateAndTime(DateTime actualServerDate, DateTime actualClientDate)
+        private static DateTime SimpleDateConverter(DateTime date)
         {
-            var newServerDate = new DateTime(actualServerDate.Year,
-                                            actualServerDate.Month,
-                                            actualServerDate.Day,
-                                            actualServerDate.Hour,
-                                            actualServerDate.Minute,
-                                            actualServerDate.Second);
-
-            var newClientDate = new DateTime(actualClientDate.Year,
-                                            actualClientDate.Month,
-                                            actualClientDate.Day,
-                                            actualClientDate.Hour,
-                                            actualClientDate.Minute,
-                                            actualClientDate.Second);
-
-            return (newServerDate, newClientDate);
+            return new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace HAL.Client
     {
 
         private const int Port = 11000;
-        public List<PluginFile> plugins { get; set; }
+        public List<PluginFile> Plugins { get; set; }
 
         public void StartClient()
         {
