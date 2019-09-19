@@ -33,19 +33,19 @@ namespace HAL.Storage.Configuration
          *      plugin will be executed only on the specified OS
          *
          */
-        public override void SetPluginConfiguration(BasePlugin plugin)
+        public override void SetPluginConfiguration(APlugin plugin)
         {
             if (Root == null)
             {
                 return;
             }
 
-            JObject pluginConfig = Root["plugins"].Value<JObject>(plugin.FileName);
+            JObject pluginConfig = Root["plugins"].Value<JObject>(plugin.Infos.FileName);
 
             // plugin needs to have a specific configuration, otherwise it can't be run
             if (pluginConfig == null)
             {
-                throw new NullReferenceException($"Plugin {plugin.FileName} does not have any configuration.");
+                throw new NullReferenceException($"Plugin {plugin.Infos.FileName} does not have any configuration.");
             }
 
             plugin.Hearthbeat = pluginConfig["hearthbeat"].Value<double>();
@@ -76,7 +76,7 @@ namespace HAL.Storage.Configuration
             }
         }
 
-        public override void SetScriptExtensionsConfiguration(PluginMaster pluginMaster)
+        public override void SetScriptExtensionsConfiguration(IPluginMaster pluginMaster)
         {
             if (Root == null)
             {
@@ -105,9 +105,9 @@ namespace HAL.Storage.Configuration
             }
         }
 
-        public override void SetInterpreterNameConfiguration(PluginMaster pluginMaster)
+        public override void SetInterpreterNameConfiguration(IPluginMaster pluginMaster)
         {
-            foreach (var fileType in pluginMaster.AcceptedFilesTypes[BasePlugin.FileType.Script])
+            foreach (var fileType in pluginMaster.AcceptedFilesTypes[PluginFileInfos.FileType.Script])
             {
                 string key = fileType;
                 string val = "";

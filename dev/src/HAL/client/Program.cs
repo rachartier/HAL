@@ -3,11 +3,12 @@ using HAL.Plugin.Mananger;
 using HAL.Storage;
 using HAL.Storage.Configuration;
 using Newtonsoft.Json.Linq;
+using Plugin.Manager;
 using System.IO;
 
 namespace HAL
 {
-    internal class Program
+    public class Program
     {
         private static void Main(string[] args)
         {
@@ -16,7 +17,8 @@ namespace HAL
 
             IStoragePlugin storage = new TextStorage();
 
-            var pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
+
             var pluginManager = new PluginManager(pluginMaster);
 
             configFile.SetScriptExtensionsConfiguration(pluginMaster);
@@ -24,7 +26,7 @@ namespace HAL
 
             foreach (var file in Directory.GetFiles("plugins"))
             {
-                pluginMaster.AddPlugin<BasePlugin>(file);
+                pluginMaster.AddPlugin(file);
             }
 
             configFile.SetPluginsConfiguration(pluginMaster.Plugins);

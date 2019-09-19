@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\client\client.csproj" />
     <ProjectReference Include="..\Loggin\Loggin.csproj" />
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
   </ItemGroup>

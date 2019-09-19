@@ -17,6 +17,6 @@ namespace HAL.Storage
         /// <param name="plugin">plugin to be saved</param>
         /// <param name="obj">an object</param>
         /// <returns></returns>
-        Task<StorageCode> Save<T>(BasePlugin plugin, T obj);
+        Task<StorageCode> Save<T>(APlugin plugin, T obj);
     }
 }

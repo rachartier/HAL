@@ -1,3 +1,4 @@
+using HAL.Plugin;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -10,16 +11,16 @@ namespace HAL.Storage
         {
         }
 
-        public async Task<StorageCode> Save<T>(Plugin.BasePlugin plugin, T obj)
+        public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
         {
             string dirName = "results/";
 
             string strTodayDate = DateTime.Now.ToString("yyyy-MM-dd");
             string completeTodayDate = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
-            Directory.CreateDirectory($"{dirName}{strTodayDate}/{plugin.Name}/");
+            Directory.CreateDirectory($"{dirName}{strTodayDate}/{plugin.Infos.Name}/");
 
-            using (var fw = File.CreateText($"{dirName}{strTodayDate}/{plugin.Name}/{completeTodayDate}_{plugin.Name}.json"))
+            using (var fw = File.CreateText($"{dirName}{strTodayDate}/{plugin.Infos.Name}/{completeTodayDate}_{plugin.Infos.Name}.json"))
             {
                 await fw.WriteAsync(obj.ToString());
             }
