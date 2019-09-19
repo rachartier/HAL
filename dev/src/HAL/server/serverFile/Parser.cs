@@ -1,7 +1,8 @@
-﻿using System;
+﻿using HAL.Plugin;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Server
 {
@@ -11,8 +12,8 @@ namespace Server
         /// 
         /// </summary>
         /// <param name="data"></param>
-        /// <returns>A Tuple of String that contain the path and a DateTime that contain the date</returns>
-        public static (string path, DateTime date) ParseOnePluginFromData(string data)
+        /// <returns>A PluginFileInfos with a path and a DateTime of the last writen access</returns>
+        public static PluginFileInfos ParseOnePluginFromData(string data)
         {
             string[] splitData = data.Split(' ');
             List<string> pluginData = new List<string>();
@@ -40,9 +41,7 @@ namespace Server
             minute = Int32.Parse(time.Split(':', StringSplitOptions.RemoveEmptyEntries).ElementAt(1));
             second = Int32.Parse(time.Split(':', StringSplitOptions.RemoveEmptyEntries).ElementAt(2));
 
-            Console.WriteLine("chemin : {0} date : {1} time : {2}", path, date, time);
-
-            return (path, new DateTime(year, month, day, hour, minute, second));
+            return new PluginFileInfos(Path.GetFileName(path), new DateTime(year, month, day, hour, minute, second));
         }
     }
 }

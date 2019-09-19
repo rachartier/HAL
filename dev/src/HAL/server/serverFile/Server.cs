@@ -1,7 +1,10 @@
-﻿using server.serverFile;
+﻿using HAL.Plugin;
+using server.serverFile;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -15,7 +18,7 @@ namespace Server
 
         public void StartServer()
         {
-            Dictionary<string, DateTime> pluginsFound = new Dictionary<string, DateTime>();
+            var pluginsFound = new List<PluginFileInfos>();
 
             IPHostEntry ipHost = Dns.GetHostEntry("localhost");
             IPAddress ipAddr = ipHost.AddressList[0];
@@ -56,14 +59,12 @@ namespace Server
                 string[] strList = data.Split(";");
                 foreach (string s in strList)
                 {
-                    Console.WriteLine(s);
                     //Detect the EOF and break the loop
                     if (s.Equals("<EOF>")) break;
-                    (string path, DateTime date) = Parser.ParseOnePluginFromData(s);
-                    pluginsFound.Add(path, date);
+                    pluginsFound.Add(Parser.ParseOnePluginFromData(s));
                 }
 
-                List<string> pluginToUpdate = CheckAllPlugins(PluginsOnServer(), pluginsFound);
+                var pluginToUpdate = CheckAllPlugins(PluginsOnServer(), pluginsFound);
 
                 if (pluginToUpdate != null) SendFileToClient(handler, pluginToUpdate);
 
@@ -107,26 +108,24 @@ namespace Server
         /// <param name="serverPlugins">The dictionary that contain all the path (Key) and the last writen date (Value) of the server-side plugins</param>
         /// <param name="clientPlugins">The dictionary that contain all the path (Key) and the last writen date (Value) of the client-side plugins</param>
         /// <returns> A list of the path that need to be updating OR null if none</returns>
-        private List<string> CheckAllPlugins(Dictionary<string, DateTime> serverPlugins, Dictionary<string, DateTime> clientPlugins)
+        private List<PluginFileInfos> CheckAllPlugins(List<PluginFileInfos> serverPlugins, List<PluginFileInfos> clientPlugins)
         {
-            List<string> pluginToUpdate = new List<string>();
+            var pluginToUpdate = new List<PluginFileInfos>();
 
-            //TODO: ERREUR PARCOURS DES DICOS A CORRIGER
-            foreach(KeyValuePair<string, DateTime> serverEntry in serverPlugins)
+            //TODO: Faire une vérif de taille
+            //TODO: récupérer la différence de présence entre les deux dossiers plugins (LINQ?)
+
+            for (int i=0; i<serverPlugins.Count; i++)
             {
-                foreach(KeyValuePair<string, DateTime> clientEntry in clientPlugins)
+                if (CheckPlugin(serverPlugins[i].FileName, 
+                            serverPlugins[i].DateLastWrite, 
+                            clientPlugins[i].FilePath, 
+                            clientPlugins[i].DateLastWrite) > 0)
                 {
-                    if (CheckPlugin(serverEntry.Key, serverEntry.Value, clientEntry.Key, clientEntry.Value) > 0)
-                    {
-                        pluginToUpdate.Add(clientEntry.Key);
-                    } else
-                    {
-                        break;
-                    }
+                    pluginToUpdate.Add(serverPlugins[i]);
                 }
             }
 
-            Console.WriteLine("pluginToUpdate List count : {0} ", pluginToUpdate.Count);
             if (pluginToUpdate.Count == 0) return null;
 
             return pluginToUpdate;
@@ -135,26 +134,17 @@ namespace Server
         /// <summary>
         /// Get all the plugin available on the server-side 
         /// </summary>
-        /// <returns>A dictionary that contains a string for the path and a DateTime for the last written access of the plugins</returns>
-        private Dictionary<string, DateTime> PluginsOnServer()
+        /// <returns>A List of PluginFileInfos</returns>
+        private List<PluginFileInfos> PluginsOnServer()
         {
-            Dictionary<string, DateTime> pluginsOnServer = new Dictionary<string, DateTime>();
-
-            var plugins = new List<String>();
+            var pluginsInfo = new List<PluginFileInfos>();
 
             foreach (var file in Directory.GetFiles("plugins"))
             {
-                plugins.Add(file);
+                pluginsInfo.Add(new PluginFileInfos(file));
             }
 
-            var lenght = plugins.Count;
-
-            foreach (var plugin in plugins)
-            {
-                pluginsOnServer.Add(plugin, File.GetLastWriteTime(plugin));
-            }
-
-            return pluginsOnServer;
+            return pluginsInfo;
         }
 
         /// <summary>
@@ -162,13 +152,13 @@ namespace Server
         /// </summary>
         /// <param name="handler">The handler of the actual connection </param>
         /// <param name="fileSendingList">List of file which need to be sent</param>
-        private void SendFileToClient(Socket handler, List<string> fileSendingList)
+        private void SendFileToClient(Socket handler, List<PluginFileInfos> fileSendingList)
         {
             try
             {
-                foreach(string path in fileSendingList)
+                foreach(var path in fileSendingList)
                 {
-                    handler.SendFile(path);
+                    handler.SendFile(path.FilePath);
                 }
             }
             catch (SocketException se)

@@ -9,4 +9,17 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Plugin\Plugin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="plugins\date.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="plugins\tictactoe.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
