@@ -27,7 +27,7 @@ Et d'autres peuvent être ajoutés manuellement si besoin.
 
 Les plugins sont déposés dans le dossier "plugins", qui est un dossier spéciale scanné permettant de charger automatiquement tous les plugins qui s'y trouvent. 
 
-HAL est destiné à tout utilisateur voulant supervisé les ordinateurs sur un réseau
+HAL est destiné à tout utilisateur voulant superviser les ordinateurs sur un réseau.
 
 Installation
 ------------
@@ -44,7 +44,7 @@ Les informations retournées par le plugin doivent être sous un format JSON.
 ## Rédaction d'un plugin
 #### Rédaction d'un plugin avec un langage de script
 
-Toutes les sorties sur l'entrée standard seront sauvegardé par le client.
+Toutes les sorties sur l'entrée standard seront sauvegardées par le client.
 
 Un exemple de rédaction d'un plugin (info\_machines.py) pour récupérer diverses informations de la machine en python:
 
@@ -95,10 +95,13 @@ Pour linux et osx, des intepréteurs par défaut sont déjà configurés, il n'e
 Par la suite, il faut ajouter la configuration du plugin portant le nom et extension (nom.extension) dans la branche "plugins":
 
 	- activated (booléen): permet de savoir si le plugin est actif ou non, par conséquent si il doit être executé
-	- heartbeat (double): 1 execution par heartbeat. Correspond à l'execution périodique d'un plugin où le hearthbeat défini la période
+	- heartbeat (double): 1 execution par heartbeat. Correspond à l'execution périodique d'un plugin où le hearthbeat défini la période.
+		- plus le heartbeat est petit, plus nombreux seront les executions par heure, et donc par conséquent une plus grande charge système.
 	- os (array de string): 
 		- optionnel, permet de lancer le plugin uniquement sur un ou plusieurs famille de système d'exploitation
 		- si rien n'est spécifié, le plugin sera disponible sur toutes les familles
+	- si l'OS cible est linux, une autre option peut être spécifiée:
+		- admin_rights (booléen): si le script doit être exécuté en administrateur (sudo), si non spécifié, alors false par défaut
 
 Exemple de configuration:
 
@@ -209,7 +212,7 @@ Puis build la librairie:
 
 `dotnet build`
 
-Finalement, copier et renommer si besoin plugin.dll qui se trouve dans bin/Debug/netstandard<version>/ et le mettre ensuite dans le dossier plugins
+Finalement, copier et renommer si besoin plugin.dll et le mettre ensuite dans le dossier plugins
 
 Add another file extension
 ---------------------
@@ -223,7 +226,9 @@ Par exemple, pour ajouter une extension de PHP (.php):
   	".php": "php"
   }
   "interpreter": {
-	"php": "path/to/php"
+	"linux": {
+	  "php": "path/to/php"
+	}
 	...
   },
 
