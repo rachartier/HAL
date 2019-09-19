@@ -15,9 +15,9 @@ namespace HAL.Plugin.Executor
         private bool waitForComplete = false;
         private ManualResetEvent manualResetEvent;
 
-        private readonly PluginMaster refPluginMaster;
+        private readonly IPluginMaster refPluginMaster;
 
-        public PluginExecutor(PluginMaster pluginMaster)
+        public PluginExecutor(IPluginMaster pluginMaster)
         {
             refPluginMaster = pluginMaster;
         }

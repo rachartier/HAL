@@ -10,7 +10,7 @@ namespace HAL.Plugin.Mananger
     {
         public readonly PluginExecutor Executor;
 
-        public PluginManager(PluginMaster pluginMaster)
+        public PluginManager(IPluginMaster pluginMaster)
         {
             Executor = new PluginExecutor(pluginMaster);
         }
@@ -19,7 +19,7 @@ namespace HAL.Plugin.Mananger
         /// run a plugin depending it's type
         /// </summary>
         /// <param name="plugin">plugin to be executed</param>
-        public void Run(BasePlugin plugin)
+        public void Run(APlugin plugin)
         {
             if (!plugin.CanBeRun())
             {
@@ -30,13 +30,13 @@ namespace HAL.Plugin.Mananger
             {
                 switch (plugin.Type)
                 {
-                    case BasePlugin.FileType.DLL:
+                    case PluginFileInfos.FileType.DLL:
                         Executor.RunFromDLL(plugin);
                         break;
-                    case BasePlugin.FileType.Script:
+                    case PluginFileInfos.FileType.Script:
                         Executor.RunFromScript(plugin);
                         break;
-                    case BasePlugin.FileType.SharedObject:
+                    case PluginFileInfos.FileType.SharedObject:
                         Executor.RunFromSO(plugin);
                         break;
                 }
@@ -51,7 +51,7 @@ namespace HAL.Plugin.Mananger
         /// scheldule a plugin to be executed at each heartbeat
         /// </summary>
         /// <param name="plugin">the plugin to be schelduled</param>
-        public void ScheldulePlugin(BasePlugin plugin)
+        public void ScheldulePlugin(APlugin plugin)
         {
             if (!plugin.CanBeRun())
             {
@@ -61,10 +61,10 @@ namespace HAL.Plugin.Mananger
             try
             {
                 // the schelduler is called to run the plugin each heartbeat
-                ScheldulerService.Instance.SchelduleTask($"task_{plugin.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
+                ScheldulerService.Instance.SchelduleTask($"task_{plugin.Infos.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
                 {
                     Run(plugin);
-                    Log.Instance?.Info($"{plugin.FileName} correctly executed.");
+                    Log.Instance?.Info($"{plugin.Infos.FileName} correctly executed.");
                 });
 
             }
@@ -78,7 +78,7 @@ namespace HAL.Plugin.Mananger
         /// scheldule a list of plugins to be executed
         /// </summary>
         /// <param name="plugins">a collection of plugins</param>
-        public void ScheldulePlugins(IEnumerable<BasePlugin> plugins)
+        public void ScheldulePlugins(IEnumerable<APlugin> plugins)
         {
             foreach (var plugin in plugins)
             {

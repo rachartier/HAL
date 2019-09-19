@@ -12,7 +12,7 @@ namespace HAL.Plugin.Executor
         /// run a code from a dll (dotnet dll and classical dll)
         /// </summary>
         /// <param name="plugin">plugin to be executed</param>
-        public void RunFromDLL(BasePlugin plugin)
+        public void RunFromDLL(APlugin plugin)
         {
             QueueLength++;
 
@@ -35,9 +35,9 @@ namespace HAL.Plugin.Executor
             }));
         }
 
-        private void tryRunAssemblyDLL(BasePlugin plugin)
+        private void tryRunAssemblyDLL(APlugin plugin)
         {
-            var assembly = Assembly.LoadFrom(plugin.FilePath);
+            var assembly = Assembly.LoadFrom(plugin.Infos.FilePath);
             var type = assembly.GetTypes().FirstOrDefault();
 
             var entryPointMethod = type?.GetMethod(MethodEntryPointName);
@@ -51,13 +51,13 @@ namespace HAL.Plugin.Executor
             }
             else
             {
-                throw new MethodAccessException($"Method '{MethodEntryPointName}' from DLL {plugin.FileName} not found.");
+                throw new MethodAccessException($"Method '{MethodEntryPointName}' from DLL {plugin.Infos.FileName} not found.");
             }
         }
 
-        private void runClassicDLL(BasePlugin plugin)
+        private void runClassicDLL(APlugin plugin)
         {
-            var result = UseRunEntryPointSharedObject(plugin.FilePath, out IntPtr ptrString);
+            var result = UseRunEntryPointSharedObject(plugin.Infos.FilePath, out IntPtr ptrString);
 
             plugin.RaiseOnExecutionFinished(result);
 

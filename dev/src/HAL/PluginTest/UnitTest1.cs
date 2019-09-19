@@ -2,6 +2,7 @@ using HAL.Plugin;
 using HAL.Plugin.Executor;
 using HAL.Plugin.Mananger;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Plugin.Manager;
 using System;
 
 namespace PluginTest
@@ -12,7 +13,7 @@ namespace PluginTest
         [TestMethod]
         public void PluginMaster_ValidAddScriptExtension()
         {
-            PluginMaster pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
             try
             {
@@ -27,7 +28,7 @@ namespace PluginTest
         [TestMethod]
         public void PluginMaster_InvalidAddScriptExtension()
         {
-            PluginMaster pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
             pluginMaster.AddScriptExtension(".aa", "aaa");
 
@@ -39,10 +40,10 @@ namespace PluginTest
         {
             const int nbInstances = 10;
 
-            var pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
             var executor = new PluginExecutor(pluginMaster);
 
-            pluginMaster.AddPlugin<BasePlugin>("test/script.py");
+            pluginMaster.AddPlugin("test/script.py");
 
             try
             {
@@ -59,7 +60,7 @@ namespace PluginTest
         [TestMethod]
         public void PluginManager_ValidScheldulePlugin()
         {
-            PluginMaster pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
             PluginManager pluginManager = new PluginManager(pluginMaster);
 
             BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py")
@@ -81,13 +82,13 @@ namespace PluginTest
         public void PluginManager_ValidScheldulerTask()
         {
             const int nbPlugins = 10;
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
-            PluginMaster pluginMaster = new PluginMaster();
             PluginManager pluginManager = new PluginManager(pluginMaster);
 
             for (int i = 0; i < nbPlugins; ++i)
             {
-                pluginMaster.AddPlugin<BasePlugin>("test/script.py");
+                pluginMaster.AddPlugin("test/script.py");
             }
 
             try
@@ -103,37 +104,37 @@ namespace PluginTest
         [TestMethod]
         public void PluginFile_ValidExtensions()
         {
-            PluginMaster pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
-            pluginMaster.AddPlugin<BasePlugin>("test/script.py");
+            pluginMaster.AddPlugin("test/script.py");
 
-            Assert.AreEqual(pluginMaster.Plugins[0].FileExtension, ".py", "Plugin extension not  recognized");
+            Assert.AreEqual(pluginMaster.Plugins[0].Infos.FileExtension, ".py", "Plugin extension not  recognized");
         }
 
         [TestMethod]
         public void PluginFile_ValidFileName()
         {
-            PluginMaster pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
-            pluginMaster.AddPlugin<BasePlugin>("test/script.py");
+            pluginMaster.AddPlugin("test/script.py");
 
-            Assert.AreEqual(pluginMaster.Plugins[0].FileName, "script.py", "Bad plugin filename");
+            Assert.AreEqual(pluginMaster.Plugins[0].Infos.FileName, "script.py", "Bad plugin filename");
         }
 
         [TestMethod]
         public void PluginFile_ValidName()
         {
-            PluginMaster pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
-            pluginMaster.AddPlugin<BasePlugin>("test/script.py");
+            pluginMaster.AddPlugin("test/script.py");
 
-            Assert.AreEqual(pluginMaster.Plugins[0].Name, "script", "Bad plugin name");
+            Assert.AreEqual(pluginMaster.Plugins[0].Infos.Name, "script", "Bad plugin name");
         }
 
         [TestMethod]
         public void PluginFile_ValidActivatedFalse()
         {
-            PluginMaster pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
             BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py");
             plugin.Activated = false;
@@ -144,7 +145,7 @@ namespace PluginTest
         [TestMethod]
         public void PluginFile_ValidActivatedTrue()
         {
-            PluginMaster pluginMaster = new PluginMaster();
+            IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
             BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py")
             {

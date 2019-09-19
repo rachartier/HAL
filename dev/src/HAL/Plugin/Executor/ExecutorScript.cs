@@ -10,19 +10,19 @@ namespace HAL.Plugin.Executor
         /// run a code from a script language
         /// </summary>
         /// <param name="plugin">plugin to be executed</param>
-        public void RunFromScript(BasePlugin plugin)
+        public void RunFromScript(APlugin plugin)
         {
             QueueLength++;
 
             ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
             {
                 string file = "";
-                string args = plugin.FilePath;
+                string args = plugin.Infos.FilePath;
 
-                var fileExtension = plugin.FileExtension;
+                var fileExtension = plugin.Infos.FileExtension;
 
                 // check if the extension is known
-                if (!refPluginMaster.ExtensionsNames.ContainsKey(plugin.FileExtension))
+                if (!refPluginMaster.ExtensionsNames.ContainsKey(plugin.Infos.FileExtension))
                 {
                     throw new ArgumentException("Unknown extension.");
                 }
@@ -41,7 +41,7 @@ namespace HAL.Plugin.Executor
             }));
         }
 
-        private void startProcess(BasePlugin plugin, string file, string args)
+        private void startProcess(APlugin plugin, string file, string args)
         {
             string verb = "";
 

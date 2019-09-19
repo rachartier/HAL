@@ -2,14 +2,22 @@
 
 namespace HAL.Plugin
 {
-    public class PluginFileInfo
+    public class PluginFileInfos
     {
+        public enum FileType
+        {
+            Unknown,
+            DLL,
+            Script,
+            SharedObject
+        }
+
         public readonly string FileName;
         public readonly string FilePath;
         public readonly string FileExtension;
         public readonly string Name;
 
-        public PluginFileInfo(string path)
+        public PluginFileInfos(string path)
         {
             FileName = Path.GetFileName(path);
             FilePath = Path.GetFullPath(path);
