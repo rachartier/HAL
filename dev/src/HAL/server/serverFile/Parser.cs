@@ -1,19 +1,19 @@
-﻿using HAL.Plugin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using HAL.Plugin;
 
 namespace Server
 {
     public class Parser
     {
         /// <summary>
-        /// 
+        /// Parse a receive Data in the format " {path} : {date} " with a <EOF>, into a PluginFileInfo
         /// </summary>
         /// <param name="data"></param>
-        /// <returns>A PluginFileInfos with a path and a DateTime of the last writen access</returns>
-        public static PluginFileInfos ParseOnePluginFromData(string data)
+        /// <returns>A PluginSocketInfos with a path and a DateTime of the last writen access</returns>
+        public static PluginSocketInfo ParseOnePluginFromData(string data)
         {
             string[] splitData = data.Split(' ');
             List<string> pluginData = new List<string>();
@@ -41,7 +41,7 @@ namespace Server
             minute = Int32.Parse(time.Split(':', StringSplitOptions.RemoveEmptyEntries).ElementAt(1));
             second = Int32.Parse(time.Split(':', StringSplitOptions.RemoveEmptyEntries).ElementAt(2));
 
-            return new PluginFileInfos(Path.GetFileName(path), new DateTime(year, month, day, hour, minute, second));
+            return new PluginSocketInfo(Path.GetFileName(path), new DateTime(year, month, day, hour, minute, second));
         }
     }
 }

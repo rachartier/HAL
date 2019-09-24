@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -13,9 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\client\client.csproj" />
-    <ProjectReference Include="..\Loggin\Loggin.csproj" />
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
+    <ProjectReference Include="..\server\server.csproj" />
   </ItemGroup>
 
 </Project>

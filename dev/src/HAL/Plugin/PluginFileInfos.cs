@@ -13,11 +13,11 @@ namespace HAL.Plugin
             SharedObject
         }
 
-        public readonly string FileName;
-        public readonly string FilePath;
-        public readonly string FileExtension;
-        public readonly string Name;
-        public readonly DateTime DateLastWrite;
+        public string FileName { get; protected set; }
+        public string FilePath { get; protected set; }
+        public string FileExtension { get; protected set; }
+        public string Name { get; protected set; }
+        public DateTime DateLastWrite { get; protected set; }
 
         public PluginFileInfos(string path)
         {
@@ -25,20 +25,14 @@ namespace HAL.Plugin
             FilePath = Path.GetFullPath(path);
             FileExtension = Path.GetExtension(FileName);
             Name = Path.GetFileNameWithoutExtension(FilePath);
-            DateLastWrite = File.GetLastWriteTime(FilePath);
-        }
-
-        public PluginFileInfos(string path, DateTime date)
-        {
-            FilePath = path;
-            DateLastWrite = date;
         }
 
         public bool Equals(PluginFileInfos other)
         {
             if (this == other) return true;
             if (other == null) return false;
-            return this.FileName.Equals(other.FileName);
+            return this.FileName.Equals(other.FileName) &&
+                this.DateLastWrite.CompareTo(other.DateLastWrite) == 0;
         }
     }
 }
