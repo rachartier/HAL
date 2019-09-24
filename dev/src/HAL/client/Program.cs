@@ -16,7 +16,6 @@ namespace HAL
             configFile.Load("config/config.json");
 
             IStoragePlugin storage = new TextStorage();
-
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
             var pluginManager = new PluginManager(pluginMaster);

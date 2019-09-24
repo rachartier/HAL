@@ -15,7 +15,7 @@ namespace HAL.Loggin
                 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
                 Instance = LogManager.GetCurrentClassLogger();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 Console.Error.WriteLine("nlog.config not found. No loggin will be used.");
             }
