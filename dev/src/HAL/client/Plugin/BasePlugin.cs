@@ -1,6 +1,4 @@
 ﻿using HAL.OSData;
-using Plugin.Manager;
-using System;
 using static HAL.Plugin.PluginFileInfos;
 
 namespace HAL.Plugin

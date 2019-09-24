@@ -8,7 +8,7 @@ namespace HAL.Plugin
         IDictionary<string, string> ExtensionsNames { get; set; }
 
         IReadOnlyList<APlugin> Plugins { get; }
- 
+
         void AddScriptExtension(string extension, string name);
         void AddPlugin(string path);
     }

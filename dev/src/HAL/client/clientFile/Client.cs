@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using HAL.Plugin;
 
 namespace HAL.Client
 {
-    class ClientFile
+    internal class ClientFile
     {
 
         private const int Port = 11000;
@@ -52,13 +49,15 @@ namespace HAL.Client
                     // Release the socket.    
                     client.Shutdown(SocketShutdown.Both);
                     client.Close();
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
 
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }

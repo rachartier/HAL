@@ -29,10 +29,18 @@ namespace HAL.Plugin
 
         public bool Equals(PluginFileInfos other)
         {
-            if (this == other) return true;
-            if (other == null) return false;
-            return this.FileName.Equals(other.FileName) &&
-                this.DateLastWrite.CompareTo(other.DateLastWrite) == 0;
+            if (this == other)
+            {
+                return true;
+            }
+
+            if (other == null)
+            {
+                return false;
+            }
+
+            return FileName.Equals(other.FileName) &&
+                DateLastWrite.CompareTo(other.DateLastWrite) == 0;
         }
     }
 }

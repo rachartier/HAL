@@ -1,10 +1,8 @@
 ﻿using HAL.Plugin;
 using server.serverFile;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -60,13 +58,20 @@ namespace Server
                 foreach (string s in strList)
                 {
                     //Detect the EOF and break the loop
-                    if (s.Equals("<EOF>")) break;
+                    if (s.Equals("<EOF>"))
+                    {
+                        break;
+                    }
+
                     pluginsFound.Add(Parser.ParseOnePluginFromData(s));
                 }
 
                 var pluginToUpdate = CheckAllPlugins(PluginsOnServer(), pluginsFound);
 
-                if (pluginToUpdate != null) SendFileToClient(handler, pluginToUpdate);
+                if (pluginToUpdate != null)
+                {
+                    SendFileToClient(handler, pluginToUpdate);
+                }
 
                 //Optionnal echo message.
                 byte[] msg = Encoding.ASCII.GetBytes(data);
@@ -96,8 +101,15 @@ namespace Server
         /// </returns>
         private int CheckPlugin(string serverPath, DateTime serverDate, string clientPath, DateTime clientDate)
         {
-            if (!serverPath.Equals(clientPath) || ServerDateComparer.Compare(serverDate, clientDate) > 0) return 1;
-            if (serverPath.Equals(clientPath) || ServerDateComparer.Compare(serverDate, clientDate) == 0) return 0;
+            if (!serverPath.Equals(clientPath) || ServerDateComparer.Compare(serverDate, clientDate) > 0)
+            {
+                return 1;
+            }
+
+            if (serverPath.Equals(clientPath) || ServerDateComparer.Compare(serverDate, clientDate) == 0)
+            {
+                return 0;
+            }
 
             return -1;
         }
@@ -115,18 +127,21 @@ namespace Server
             //TODO: Faire une vérif de taille
             //TODO: récupérer la différence de présence entre les deux dossiers plugins (LINQ?)
 
-            for (int i=0; i<serverPlugins.Count; i++)
+            for (int i = 0; i < serverPlugins.Count; i++)
             {
-                if (CheckPlugin(serverPlugins[i].FileName, 
-                            serverPlugins[i].DateLastWrite, 
-                            clientPlugins[i].FilePath, 
+                if (CheckPlugin(serverPlugins[i].FileName,
+                            serverPlugins[i].DateLastWrite,
+                            clientPlugins[i].FilePath,
                             clientPlugins[i].DateLastWrite) > 0)
                 {
                     pluginToUpdate.Add(serverPlugins[i]);
                 }
             }
 
-            if (pluginToUpdate.Count == 0) return null;
+            if (pluginToUpdate.Count == 0)
+            {
+                return null;
+            }
 
             return pluginToUpdate;
         }
@@ -156,7 +171,7 @@ namespace Server
         {
             try
             {
-                foreach(var path in fileSendingList)
+                foreach (var path in fileSendingList)
                 {
                     handler.SendFile(path.FilePath);
                 }
@@ -171,7 +186,7 @@ namespace Server
         private string GetPathFromRoot(string filePath)
         {
             int lenght = filePath.Split("\\", StringSplitOptions.RemoveEmptyEntries).Length;
-            return string.Format("plugins\\{0}",filePath.Split("\\", StringSplitOptions.RemoveEmptyEntries).GetValue(lenght-1).ToString());
+            return string.Format("plugins\\{0}", filePath.Split("\\", StringSplitOptions.RemoveEmptyEntries).GetValue(lenght - 1).ToString());
         }
     }
 }

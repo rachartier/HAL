@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HAL.Plugin;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using HAL.Plugin;
 
 namespace Server
 {
@@ -25,7 +25,11 @@ namespace Server
             foreach (string word in splitData)
             {
                 word.Trim();
-                if (word.Equals(":") || word.Contains("<EOF>") || String.IsNullOrWhiteSpace(word)) continue;
+                if (word.Equals(":") || word.Contains("<EOF>") || String.IsNullOrWhiteSpace(word))
+                {
+                    continue;
+                }
+
                 pluginData.Add(word);
             }
 

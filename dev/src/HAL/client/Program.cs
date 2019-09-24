@@ -1,11 +1,11 @@
-﻿using HAL.Plugin;
+﻿using HAL.Client;
+using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using HAL.Storage;
 using HAL.Storage.Configuration;
 using Newtonsoft.Json.Linq;
-using HAL.Client;
-using System.IO;
 using Plugin.Manager;
+using System.IO;
 
 namespace HAL
 {

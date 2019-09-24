@@ -52,7 +52,7 @@ namespace PluginTest
                     executor.RunFromScript(pluginMaster.Plugins[0]);
                 }
             }
-            catch(Exception) { }
+            catch (Exception) { }
 
             Assert.IsTrue(executor.WaitForEmptyPool(), "WaitForEmptyPool should have returned true");
         }

@@ -1,17 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace server.serverFile
 {
-    class ServerDateComparer
+    internal class ServerDateComparer
     {
         public static int Compare(DateTime serverDate, DateTime clientDate)
         {
             var serverDateTime = SimpleDateConverter(serverDate);
             var clientDateTime = SimpleDateConverter(clientDate);
-            if (serverDateTime.CompareTo(clientDateTime) == 0) return 0;
-            if (serverDateTime.CompareTo(clientDateTime) > 0) return 1;
+            if (serverDateTime.CompareTo(clientDateTime) == 0)
+            {
+                return 0;
+            }
+
+            if (serverDateTime.CompareTo(clientDateTime) > 0)
+            {
+                return 1;
+            }
 
             return -1;
         }

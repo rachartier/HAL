@@ -130,7 +130,7 @@ namespace HAL.Storage.Configuration
                     val = pluginMaster.ExtensionsNames[fileType];
                 }
 
-                if(!pluginMaster.ExtensionsNames.ContainsKey(key))
+                if (!pluginMaster.ExtensionsNames.ContainsKey(key))
                 {
                     pluginMaster.AddScriptExtension(key, val);
                 }

@@ -1,8 +1,8 @@
+using HAL.Plugin;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Server;
-using HAL.Plugin;
-using System.IO;
 using System;
+using System.IO;
 
 namespace ServerTest
 {
