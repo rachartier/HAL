@@ -25,6 +25,7 @@ namespace HAL.Plugin
             FilePath = Path.GetFullPath(path);
             FileExtension = Path.GetExtension(FileName);
             Name = Path.GetFileNameWithoutExtension(FilePath);
+            DateLastWrite = File.GetLastWriteTime(FilePath);
         }
 
         public bool Equals(PluginFileInfos other)

@@ -3,6 +3,7 @@ using server.serverFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -90,23 +91,23 @@ namespace Server
         /// <summary>
         /// Check if the plugin information passed in param are different.
         /// </summary>
-        /// <param name="serverPath">Path of the server-side plugin</param>
+        /// <param name="serverFileName">Path of the server-side plugin</param>
         /// <param name="serverDate">Date of the server-side plugin</param>
-        /// <param name="clientPath">Path of the client-side plugin</param>
+        /// <param name="clientFileName">Path of the client-side plugin</param>
         /// <param name="clientDate">Date of the client-side plugin</param>
         /// <returns>
         /// 1: if the name of the server-side plugin is different than the client-side plugin OR if the date of the server-side plugin is later than the client-side plugin
         /// 0: if the name of the server-side plugin and the date are equals to the client-side one.
         /// -1: if the date of the server-side plugin is earlier than the client-side one.
         /// </returns>
-        private int CheckPlugin(string serverPath, DateTime serverDate, string clientPath, DateTime clientDate)
+        private int CheckPlugin(string serverFileName, DateTime serverDate, string clientFileName, DateTime clientDate)
         {
-            if (!serverPath.Equals(clientPath) || ServerDateComparer.Compare(serverDate, clientDate) > 0)
+            if (ServerDateComparer.Compare(serverDate, clientDate) > 0 || !serverFileName.Equals(clientFileName))
             {
                 return 1;
             }
 
-            if (serverPath.Equals(clientPath) || ServerDateComparer.Compare(serverDate, clientDate) == 0)
+            if (ServerDateComparer.Compare(serverDate, clientDate) == 0 || serverFileName.Equals(clientFileName))
             {
                 return 0;
             }
@@ -117,8 +118,8 @@ namespace Server
         /// <summary>
         /// Check the plugins that need to be updating and return a List of these or null.
         /// </summary>
-        /// <param name="serverPlugins">The dictionary that contain all the path (Key) and the last writen date (Value) of the server-side plugins</param>
-        /// <param name="clientPlugins">The dictionary that contain all the path (Key) and the last writen date (Value) of the client-side plugins</param>
+        /// <param name="serverPlugins">The dictionary that contain all the plugins of the server-side plugins</param>
+        /// <param name="clientPlugins">The List that contain all the plugins of the client-side plugins</param>
         /// <returns> A list of the path that need to be updating OR null if none</returns>
         private List<PluginFileInfos> CheckAllPlugins(List<PluginFileInfos> serverPlugins, List<PluginFileInfos> clientPlugins)
         {
@@ -127,16 +128,17 @@ namespace Server
             //TODO: Faire une vérif de taille
             //TODO: récupérer la différence de présence entre les deux dossiers plugins (LINQ?)
 
-            for (int i = 0; i < serverPlugins.Count; i++)
+            if (clientPlugins.Count > serverPlugins.Count)
             {
-                if (CheckPlugin(serverPlugins[i].FileName,
-                            serverPlugins[i].DateLastWrite,
-                            clientPlugins[i].FilePath,
-                            clientPlugins[i].DateLastWrite) > 0)
-                {
-                    pluginToUpdate.Add(serverPlugins[i]);
-                }
+                //Si le client possède un plugin de plus que le server, cela veux dire qu'il s'agit d'un plugin qui à été déposé
+                //Directement sur le client, le serveur veut peut être essayé de le récupérer?
+                Console.WriteLine("Client possède {0} alors que le Serveur en possède {1}", clientPlugins.Count, serverPlugins.Count);
             }
+
+            var result = serverPlugins.Where(sp => !clientPlugins.Any(cp => CheckPlugin(sp.FileName, sp.DateLastWrite,
+                                                                                        cp.FileName, cp.DateLastWrite) > 0));
+
+            pluginToUpdate = result.ToList();
 
             if (pluginToUpdate.Count == 0)
             {
