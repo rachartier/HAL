@@ -135,8 +135,7 @@ namespace Server
                 Console.WriteLine("Client possède {0} alors que le Serveur en possède {1}", clientPlugins.Count, serverPlugins.Count);
             }
 
-            var result = serverPlugins.Where(sp => !clientPlugins.Any(cp => CheckPlugin(sp.FileName, sp.DateLastWrite,
-                                                                                        cp.FileName, cp.DateLastWrite) > 0));
+            var result = serverPlugins.Except(clientPlugins);
 
             pluginToUpdate = result.ToList();
 

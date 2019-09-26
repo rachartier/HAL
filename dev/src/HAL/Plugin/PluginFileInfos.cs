@@ -40,8 +40,11 @@ namespace HAL.Plugin
                 return false;
             }
 
-            return FileName.Equals(other.FileName) &&
-                DateLastWrite.CompareTo(other.DateLastWrite) == 0;
+            return FileName.Equals(other.FileName);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FileName);
         }
     }
 }
