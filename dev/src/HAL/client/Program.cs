@@ -13,7 +13,6 @@ namespace HAL
     {
         private static void Main(string[] args)
         {
-            Directory.SetCurrentDirectory("..//..//..");
             ClientFile client = new ClientFile();
             IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
             configFile.Load("config/config.json");
