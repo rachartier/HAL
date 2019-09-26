@@ -214,6 +214,31 @@ Puis build la librairie:
 
 Finalement, copier et renommer si besoin plugin.dll et le mettre ensuite dans le dossier plugins
 
+### Exemple en GO
+
+Go génère des dll/so un peu particulier, puisque ces derniers ont obligés d'avoir un main.
+Il faut alors utiliser un "export" sur la fonction run pour qu'elle soit appelée par le système de plugin.
+
+La fonction run doit être compatible C, donc il faut utiliser les types de retour en C (char *).
+
+Exemple d'un plugin renvoyant "Hello World!"
+
+``` go
+package main
+
+import "C"
+
+func main() {
+}
+
+//export run
+func run() *C.char {
+	return C.CString("Hello World!")
+}
+```
+
+Pour créer le .so/.dll: `go build -o helloworld.dll -buildmode=c-shared`
+
 Add another file extension
 ---------------------
 

@@ -6,7 +6,6 @@ namespace HAL.Plugin
     {
         IDictionary<PluginFileInfos.FileType, List<string>> AcceptedFilesTypes { get; set; }
         IDictionary<string, string> ExtensionsNames { get; set; }
-
         IReadOnlyList<APlugin> Plugins { get; }
 
         void AddScriptExtension(string extension, string name);

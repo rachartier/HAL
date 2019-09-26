@@ -66,7 +66,6 @@ namespace HAL.Plugin.Mananger
                     Run(plugin);
                     Log.Instance?.Info($"{plugin.Infos.FileName} correctly executed.");
                 });
-
             }
             catch (Exception e)
             {
