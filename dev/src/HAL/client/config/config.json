@@ -6,11 +6,18 @@
     "linux": {
       "python": "/usr/bin/python3",
       "ruby": "/usr/bin/ruby",
-      "bash": "/bin/sh"
+      "bash": "/bin/bash"
     }
   },
 
   "plugins": {
+    "testadmin.sh": {
+      "activated": true,
+      "hearthbeat": 0.001,
+      "admin_rights":  true,
+			"admin_username": "rachartier",
+      "os": [ "linux" ]
+    },
     "tictactoe.dll": {
       "activated": true,
       "hearthbeat": 0.001,

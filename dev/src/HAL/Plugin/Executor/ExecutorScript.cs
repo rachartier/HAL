@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using HAL.Loggin;
 
 namespace HAL.Plugin.Executor
 {
@@ -49,7 +50,10 @@ namespace HAL.Plugin.Executor
             {
                 if (OSData.OSAttribute.IsLinux)
                 {
-                    args = string.Format($" -c \"sudo {file} {args}\"");
+                    args = $"-u {plugin.AdministratorUsername} --shell {file} {args}";
+                    file = $"sudo";
+
+                    Console.WriteLine($"{file} {args}");
                 }
                 /*              
                                else if (OSData.OSAttribute.IsWindows)
@@ -75,6 +79,15 @@ namespace HAL.Plugin.Executor
                 using (var reader = process.StandardOutput)
                 {
                     plugin.RaiseOnExecutionFinished(reader.ReadToEnd());
+                }
+                using (var reader = process.StandardError)
+                {
+                    string err = reader.ReadToEnd();
+
+                    if (!string.IsNullOrEmpty(err))
+                    {
+                        Log.Instance?.Error(err);
+                    }
                 }
             }
         }
