@@ -5,6 +5,13 @@ Cahier des charges
 1- Contexte
 -----------
 
+La récolte de données d'un parc informatique peut s'avéré studieux, bien que des outils tels que Ansible ou Asset Vie existent. En effet, ces derniers peuvent être complexes à utiliser, prennent du temps à être installés et surtout, ce sont des logiciels payant.
+
+HAL quand à lui, permet de faire très facilement de la remonté de données avec son système de plugin, et d'ajouter, mettre à jour ou bien supprimer ces derniers tout aussi facilement. Le logiciel est totalement libre et se compose d'un client et d'un serveur totalement customisable aux besoins des utilisateurs.
+
+2- Objectifs
+----------
+
 HAL est un projet de supervision destiné à récupérer différentes donnés d'un parc informatique et à les envoyer sur un serveur, dans le but d'agréger les données en vue de les traiters.
 
 Il utilise un système de plugins, qui sont chargés automatiquement au démarrage du client. Plusieurs langages pour écrire les plugins sont supportés:
@@ -22,11 +29,12 @@ Les plugins sont déposés dans le dossier "plugins", qui est un dossier spécia
 
 HAL est destiné à tout utilisateur voulant superviser les ordinateurs sur un réseau.
 
+
 2- Besoins
 ----------
 
 **Besoins**: Récolter des données de façon générique \
-**Contrantes**: donnéées obligatoirement récoltées au format JSON pouvant être stockées de manière générique, sur base de données, en locale...
+**Contraintes**: donnéées obligatoirement récoltées au format JSON pouvant être stockées de manière générique, sur base de données, en locale...
 
 **Besoins**: \
 **Contraintes**:
@@ -52,7 +60,7 @@ Chaque script doit, sur sa sortie standard, envoyer a format JSON tous les  él�
 Chaque .dll, .so doit quand à eux retourner via le point d'entrée un string au format JSON.
 
 **Besoin**: Configurer les plugins \
-**Contrantes**: Créer un fichier de configuration, permettant de renseigner diverses informations sur les plugins:
+**Contraintes**: Créer un fichier de configuration, permettant de renseigner diverses informations sur les plugins:
 
 	- activated (booléen): permet de savoir si le plugin est actif ou non, par conséquent si il doit être executé
 	- heartbeat (double): 1 execution par heartbeat. Correspond à l'execution périodique d'un plugin où le hearthbeat défini la période.
@@ -74,10 +82,10 @@ Chaque .dll, .so doit quand à eux retourner via le point d'entrée un string au
 **Contraintes**: un dossier scanné spécifique doit être lu permettant de charger les plugins et de voir si le serveur à une nouvelle version de ce dernier, un nouveau plugin, ou une suppression et faire les opérations correspondantes
 
 **Besoins**: API REST permettant de metre à jour, récupérer ou supprimer des données \
-**Contraintes**:
+**Contraintes**: doit être accessible depuis un serveur et faire des requêtes sur une base de données
 
 **Besoins**: Inteface WEB adminstrateur \
-**Contraintes**:
+**Contraintes**: utilisation simple et permet de très facilement visualiser les différentes informations sur les différents ordinateurs
 
 **Besoins**: Interface mobile de visualisation \
 **Contraintes**:
@@ -85,3 +93,19 @@ Chaque .dll, .so doit quand à eux retourner via le point d'entrée un string au
 **Besoins**: \
 **Contraintes**:
 
+### Contraintes materiels
+
+**Besoins**: doit être compatible Windows/Linux\
+**Contraintes**: implémenter une gestion de plugins permettant l'utilisation soit sur Windows, soit sur Linux, soit sur les deux.
+
+
+**Besoins**: doit posséder un client et un serveur\
+**Contraintes**: la multitude de clients doit se connecter automatiquement au serveur et communiquer de manière asynchrone
+
+#### Contraintes de performances
+
+**Besoins**: doit tourner sous forme de daemon \
+**Contraintes**: l'application ne doit pas consommer beaucoup de ressources et se doit d'être rapide
+
+**Besoins**: \
+**Contraintes**:
