@@ -55,6 +55,18 @@ namespace HAL.Storage.Configuration
             {
                 bool? needAdministratorRights = pluginConfig["admin_rights"]?.Value<bool>();
                 plugin.AdministratorRights = needAdministratorRights.GetValueOrDefault();
+
+                if (needAdministratorRights == true)
+                {
+                    string administratorUsername = pluginConfig["admin_username"]?.Value<string>();
+
+                    if (string.IsNullOrEmpty(administratorUsername))
+                    {
+                        throw new ArgumentException($"Adminstrator username must be specified in {plugin.Infos.FileName}'.");
+                    }
+
+                    plugin.AdministratorUsername = administratorUsername;
+                }
             }
 
             // if no os is specified then all of them are authorized
