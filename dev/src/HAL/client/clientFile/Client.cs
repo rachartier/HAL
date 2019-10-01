@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HAL.CheckSum;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -30,11 +31,12 @@ namespace HAL.Client
 
                     //Get all the path of the plugins available on the current machine (plugins/)
                     string[] filePaths = Directory.GetFiles("plugins");
-                    foreach (string s in filePaths)
+                    foreach (string path in filePaths)
                     {
+                        var file = new FileStream(path, FileMode.Open);
                         //Encode the data to send to the server
                         byte[] data = Encoding.ASCII.GetBytes(string.Format(" {0} : {1};",
-                            s, File.GetLastWriteTime(s)));
+                            path, CheckSumGenerator.HashOf(path)));
                         client.Send(data);
                     }
 

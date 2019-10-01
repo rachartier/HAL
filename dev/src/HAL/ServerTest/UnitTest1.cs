@@ -1,3 +1,4 @@
+using HAL.CheckSum;
 using HAL.Plugin;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Server;
@@ -12,25 +13,30 @@ namespace ServerTest
         [TestMethod]
         public void Parser_ValidParsing()
         {
-            string data = "C:\\plugins\\test.c : 21/09/2019 12:18:00";
-            PluginFileInfos pluginSent = new PluginSocketInfo(Path.GetFileName("C:\\plugins\\test.c"),
-                                                 new DateTime(2019, 09, 21, 12, 18, 0));
+            var path = "test/script.py";
+
+            var data = string.Format(" {0} : {1}", path, CheckSumGenerator.HashOf(path));
+            PluginFileInfos pluginSent = new PluginSocketInfo(Path.GetFileName(path),
+                                                 CheckSumGenerator.HashOf(path));
             PluginFileInfos pluginReceive = Parser.ParseOnePluginFromData(data);
 
             bool equal = pluginSent.Equals(pluginReceive);
-            Assert.IsTrue(equal);
+            Assert.IsTrue(equal, "Plugin are supposed to be equals");
         }
 
         [TestMethod]
         public void Parser_InvalidParsing()
         {
-            string data = " C:\\plugins\\test.c : 12/09/2019 12:18:00";
-            PluginFileInfos pluginSent = new PluginSocketInfo(Path.GetFileName("C:\\plugins\\test.c"),
-                                                 new DateTime(2019, 09, 21, 12, 18, 0));
+            var pathRb = "test/script.rb";
+            var pathPy = "test/script.py";
+
+            string data = string.Format(" {0} : {1}", pathPy, CheckSumGenerator.HashOf(pathPy));
+            PluginFileInfos pluginSent = new PluginSocketInfo(Path.GetFileName(pathRb),
+                                                 CheckSumGenerator.HashOf(pathRb));
             PluginFileInfos pluginReceive = Parser.ParseOnePluginFromData(data);
 
             bool equal = pluginSent.Equals(pluginReceive);
-            Assert.IsFalse(equal);
+            Assert.IsFalse(equal, "Plugin aren't supposed to be equals");
         }
     }
 }

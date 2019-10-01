@@ -67,8 +67,8 @@ namespace CheckSumTest
             string data1 = "dataTest";
             string data2 = "dataTest";
 
-            var hash1 = CheckSumGenerator.HashOf(data1);
-            var hash2 = CheckSumGenerator.HashOf(data2);
+            var hash1 = CheckSumGenerator.HashOfASimpleString(data1);
+            var hash2 = CheckSumGenerator.HashOfASimpleString(data2);
 
             Assert.AreEqual(hash1, hash2, "Hashes are supposed to be equals");
         }
@@ -79,8 +79,8 @@ namespace CheckSumTest
             string data1 = "dataTest";
             string data2 = "data";
 
-            var hash1 = CheckSumGenerator.HashOf(data1);
-            var hash2 = CheckSumGenerator.HashOf(data2);
+            var hash1 = CheckSumGenerator.HashOfASimpleString(data1);
+            var hash2 = CheckSumGenerator.HashOfASimpleString(data2);
 
             Assert.AreNotEqual(hash1, hash2, "Hashes aren't supposed to be equals");
         }

@@ -5,11 +5,11 @@ namespace HAL.Plugin
     public class PluginSocketInfo : PluginFileInfos
     {
 
-        public PluginSocketInfo(string path, DateTime date)
+        public PluginSocketInfo(string path, string checksum)
             : base(path)
         {
             FilePath = path;
-            DateLastWrite = date;
+            CheckSum = checksum;
         }
     }
 }

@@ -13,8 +13,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CheckSum\CheckSum.csproj" />
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
     <ProjectReference Include="..\server\server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="test\script.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="test\script.rb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

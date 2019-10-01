@@ -33,6 +33,7 @@
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
     <ProjectReference Include="..\Schelduler\Schelduler.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
+    <ProjectReference Include="..\CheckSum\CheckSum.csproj" />
   </ItemGroup>
 
   <ItemGroup>

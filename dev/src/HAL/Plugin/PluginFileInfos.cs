@@ -17,7 +17,7 @@ namespace HAL.Plugin
         public string FilePath { get; protected set; }
         public string FileExtension { get; protected set; }
         public string Name { get; protected set; }
-        public DateTime DateLastWrite { get; protected set; }
+        public string CheckSum { get; protected set; }
 
         public PluginFileInfos(string path)
         {
@@ -25,7 +25,6 @@ namespace HAL.Plugin
             FilePath = Path.GetFullPath(path);
             FileExtension = Path.GetExtension(FileName);
             Name = Path.GetFileNameWithoutExtension(FilePath);
-            DateLastWrite = File.GetLastWriteTime(FilePath);
         }
 
         public bool Equals(PluginFileInfos other)
@@ -40,11 +39,11 @@ namespace HAL.Plugin
                 return false;
             }
 
-            return FileName.Equals(other.FileName);
+            return FileName.Equals(other.FileName) && CheckSum.Equals(other.CheckSum);
         }
         public override int GetHashCode()
         {
-            return HashCode.Combine(FileName);
+            return HashCode.Combine(FileName, CheckSum);
         }
     }
 }
