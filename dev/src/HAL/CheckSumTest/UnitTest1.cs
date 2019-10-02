@@ -7,7 +7,6 @@ namespace CheckSumTest
     [TestClass]
     public class UnitTest1
     {
-
         [TestMethod]
         public void CheckSum_HashIsAString()
         {
@@ -21,7 +20,7 @@ namespace CheckSumTest
         [TestMethod]
         public void CheckSum_StringHashReturnIsNotNull()
         {
-            using(var fs = new FileStream("test/script.pl", FileMode.Open))
+            using (var fs = new FileStream("test/script.pl", FileMode.Open))
             {
                 var hash = CheckSumGenerator.HashOf(fs);
                 Assert.IsNotNull(hash, "Hash is not supposed to be null");
@@ -31,7 +30,7 @@ namespace CheckSumTest
         [TestMethod]
         public void CheckSum_HashIsEqual()
         {
-            using(var fs1 = new FileStream("test/script.pl", FileMode.Open))
+            using (var fs1 = new FileStream("test/script.pl", FileMode.Open))
             {
                 using (var fs2 = new FileStream("test2/script.pl", FileMode.Open))
                 {
@@ -43,7 +42,6 @@ namespace CheckSumTest
                 }
             }
         }
-
 
         [TestMethod]
         public void CheckSum_HashIsNotEqual()
@@ -67,8 +65,8 @@ namespace CheckSumTest
             string data1 = "dataTest";
             string data2 = "dataTest";
 
-            var hash1 = CheckSumGenerator.HashOf(data1);
-            var hash2 = CheckSumGenerator.HashOf(data2);
+            var hash1 = CheckSumGenerator.HashOfASimpleString(data1);
+            var hash2 = CheckSumGenerator.HashOfASimpleString(data2);
 
             Assert.AreEqual(hash1, hash2, "Hashes are supposed to be equals");
         }
@@ -79,8 +77,8 @@ namespace CheckSumTest
             string data1 = "dataTest";
             string data2 = "data";
 
-            var hash1 = CheckSumGenerator.HashOf(data1);
-            var hash2 = CheckSumGenerator.HashOf(data2);
+            var hash1 = CheckSumGenerator.HashOfASimpleString(data1);
+            var hash2 = CheckSumGenerator.HashOfASimpleString(data2);
 
             Assert.AreNotEqual(hash1, hash2, "Hashes aren't supposed to be equals");
         }

@@ -33,6 +33,7 @@ namespace HAL.Storage.Configuration
          *      plugin will be executed only on the specified OS
          *
          */
+
         public override void SetPluginConfiguration(APlugin plugin)
         {
             if (Root == null)
@@ -65,6 +66,14 @@ namespace HAL.Storage.Configuration
                         throw new ArgumentException($"Adminstrator username must be specified in {plugin.Infos.FileName}'.");
                     }
 
+                    JObject usersConfig = Root["account"].Value<JObject>(administratorUsername);
+
+                    if(usersConfig == null)
+                    {
+                        throw new ArgumentException($"{administratorUsername} need to have an entry in account.");
+                    }
+
+                    plugin.AdministratorPassword = usersConfig["password"].Value<string>();
                     plugin.AdministratorUsername = administratorUsername;
                 }
             }

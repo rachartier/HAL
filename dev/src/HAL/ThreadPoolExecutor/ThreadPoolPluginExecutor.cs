@@ -1,15 +1,17 @@
+using HAL.Plugin;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace HAL.Plugin.Executor
+namespace HAL.Executor.ThreadPoolExecutor
 {
-    public partial class PluginExecutor
+    public partial class ThreadPoolPluginExecutor : IPluginExecutor
     {
         /// <summary>
         /// default method entry point to execute the plugin's code
         /// </summary>
         public string MethodEntryPointName { get; set; } = "Run";
+
         public uint QueueLength { get; private set; } = 0u;
 
         private bool waitForComplete = false;
@@ -17,16 +19,18 @@ namespace HAL.Plugin.Executor
 
         private readonly IPluginMaster refPluginMaster;
 
-        public PluginExecutor(IPluginMaster pluginMaster)
+        public ThreadPoolPluginExecutor(IPluginMaster pluginMaster)
         {
             refPluginMaster = pluginMaster;
         }
 
         /*
-         * libreadso allow to run multiple instance of classic dll or .so 
+         * libreadso allow to run multiple instance of classic dll or .so
          */
+
         [DllImport("./lib/libreadso")]
         private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
+
         private readonly object key = new object();
 
         /// <summary>
@@ -45,7 +49,6 @@ namespace HAL.Plugin.Executor
                 return Marshal.PtrToStringAnsi(ptrResult);
             }
         }
-
 
         /// <summary>
         /// wait until all workers have finished their jobs

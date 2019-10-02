@@ -1,11 +1,12 @@
 ﻿using HAL.OSData;
+using HAL.Plugin;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace HAL.Plugin.Executor
+namespace HAL.Executor.ThreadPoolExecutor
 {
-    public partial class PluginExecutor
+    public partial class ThreadPoolPluginExecutor : IPluginExecutor
     {
         /// <summary>
         /// run a code from a shared object fille

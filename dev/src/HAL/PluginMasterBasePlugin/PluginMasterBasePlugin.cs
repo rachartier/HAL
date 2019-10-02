@@ -17,6 +17,7 @@ namespace Plugin.Manager
             AddScriptExtension(".pl", "perl");
             AddScriptExtension(".lua", "lua");
             AddScriptExtension(".sh", "bash");
+            AddScriptExtension(".ps", "bash");
         }
 
         /// <summary>

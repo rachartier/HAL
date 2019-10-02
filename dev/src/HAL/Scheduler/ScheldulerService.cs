@@ -3,28 +3,28 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace HAL.Plugin.Schelduler
+namespace HAL.Scheduler
 {
-    public class ScheldulerService
+    public class SchedulerService
     {
         public static uint NB_MILLIS_IN_HOURS = 3_600_000U;
 
-        public static ScheldulerService Instance => instance ?? (instance = new ScheldulerService());
-        private static ScheldulerService instance;
+        public static SchedulerService Instance => instance ?? (instance = new SchedulerService());
+        private static SchedulerService instance;
 
         private readonly IDictionary<string, Timer> timers = new Dictionary<string, Timer>();
 
-        private ScheldulerService()
+        private SchedulerService()
         {
         }
 
         /// <summary>
-        /// scheldule a task, it will be repeated each interval
+        /// schedule a task, it will be repeated each interval
         /// </summary>
         /// <param name="taskName">task's name to be identified</param>
         /// <param name="intervalHours">interval hours, meaning the task will be repeated at an interval</param>
         /// <param name="task">the specific task</param>
-        public void SchelduleTask(string taskName, double intervalHours, Action task)
+        public void ScheduleTask(string taskName, double intervalHours, Action task)
         {
             var timer = new Timer(t =>
             {
@@ -36,21 +36,21 @@ namespace HAL.Plugin.Schelduler
                 throw new ArgumentException("Task name already in use.");
             }
 
-            Log.Instance?.Info($"{taskName} schelduled each {intervalHours} heartbeats.");
+            Log.Instance?.Info($"{taskName} scheduled each {intervalHours} heartbeats.");
         }
 
         /// <summary>
-        /// unscheldule a task
+        /// unschedule a task
         /// </summary>
         /// <param name="taskName">task's name identifier</param>
         /// <returns></returns>
-        public bool UnschelduleTask(string taskName)
+        public bool UnscheduleTask(string taskName)
         {
             if (timers.TryGetValue(taskName, out Timer timer))
             {
                 timer.Dispose();
 
-                Log.Instance?.Info($"{taskName} unschelduled");
+                Log.Instance?.Info($"{taskName} unscheduled");
 
                 return timers.Remove(taskName);
             }

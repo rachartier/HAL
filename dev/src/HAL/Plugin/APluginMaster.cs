@@ -19,7 +19,6 @@ namespace HAL.Plugin
         };
 
         public IDictionary<string, string> ExtensionsNames { get; set; } = new Dictionary<string, string>();
-
         public IReadOnlyList<APlugin> Plugins => plugins.AsReadOnly();
 
         protected readonly List<TPlugin> plugins = new List<TPlugin>();

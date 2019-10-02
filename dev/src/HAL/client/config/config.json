@@ -1,4 +1,9 @@
 {
+  "account": {
+    "rachartier": {
+      "password": "aaa"
+    }
+  },
   "interpreter": {
     "windows": {
       "python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
@@ -14,8 +19,8 @@
     "testadmin.sh": {
       "activated": true,
       "hearthbeat": 0.001,
-      "admin_rights":  true,
-			"admin_username": "rachartier",
+      "admin_rights": true,
+      "admin_username": "rachartier",
       "os": [ "linux" ]
     },
     "tictactoe.dll": {
@@ -50,7 +55,7 @@
     "ping.sh": {
       "activated": true,
       "hearthbeat": 0.001,
-      "admin_right":  true,
+      "admin_right": true,
       "os": [ "linux" ]
     },
     "cputemp.sh": {

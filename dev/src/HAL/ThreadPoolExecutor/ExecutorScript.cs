@@ -1,11 +1,12 @@
-﻿using System;
+﻿using HAL.Loggin;
+using HAL.Plugin;
+using System;
 using System.Diagnostics;
 using System.Threading;
-using HAL.Loggin;
 
-namespace HAL.Plugin.Executor
+namespace HAL.Executor.ThreadPoolExecutor
 {
-    public partial class PluginExecutor
+    public partial class ThreadPoolPluginExecutor : IPluginExecutor
     {
         /// <summary>
         /// run a code from a script language
@@ -45,6 +46,8 @@ namespace HAL.Plugin.Executor
         private void startProcess(APlugin plugin, string file, string args)
         {
             string verb = "";
+            string password = "";
+            string username = "";
 
             if (plugin.AdministratorRights)
             {
@@ -55,12 +58,12 @@ namespace HAL.Plugin.Executor
 
                     Console.WriteLine($"{file} {args}");
                 }
-                /*              
-                               else if (OSData.OSAttribute.IsWindows)
-                               {
-                                   verb = "runas";
-                               }
-               */
+                else if (OSData.OSAttribute.IsWindows)
+                {
+                    password = plugin.AdministratorPassword;
+                    username = plugin.AdministratorUsername;
+                    verb = "runas";
+                }
             }
 
             var start = new ProcessStartInfo()
@@ -68,6 +71,8 @@ namespace HAL.Plugin.Executor
                 FileName = file,
                 Arguments = args,
                 Verb = verb,
+                PasswordInClearText = password,
+                UserName = username,
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,

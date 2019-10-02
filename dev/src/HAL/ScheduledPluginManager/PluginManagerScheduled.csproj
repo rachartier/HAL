@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Executor\Executor.csproj" />
+    <ProjectReference Include="..\PluginManager\PluginManager.csproj" />
+    <ProjectReference Include="..\ThreadPoolExecutor\ExecutorThreadPool.csproj" />
+  </ItemGroup>
+
+</Project>

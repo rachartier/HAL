@@ -9,6 +9,7 @@ namespace HAL.Plugin
         IReadOnlyList<APlugin> Plugins { get; }
 
         void AddScriptExtension(string extension, string name);
+
         void AddPlugin(string path);
     }
 }
