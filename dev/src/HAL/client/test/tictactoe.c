@@ -67,7 +67,7 @@ static int check_col(int x, char player) {
 // check the all diagonals and inverse diagonals to see if 'player' has win
 static int check_dia(char player) {
 	int winner = 1;
-	
+
 	for (int i = 0; i < 3; ++i) {
 		if (board[i][i] != player)
 			return 0;
@@ -77,17 +77,17 @@ static int check_dia(char player) {
 		return 1;
 
 	for (int i = 0; i < 3; ++i) {
-		if(board[i][2 - i] != player)
+		if (board[i][2 - i] != player)
 			return 0;
 	}
 
 	return 1;
 }
 
-// make a player do a random placement 
+// make a player do a random placement
 static void make_turn(int player_index) {
 	char pc = player_char[player_index];
-	
+
 	int x = rand() % 3;
 	int y = rand() % 3;
 
@@ -98,8 +98,8 @@ static void make_turn(int player_index) {
 	board[y][x] = pc;
 
 	if (check_row(y, pc)
-	||  check_col(x, pc)
-	||  check_dia(pc)) {
+		|| check_col(x, pc)
+		|| check_dia(pc)) {
 		victory = player_index;
 	}
 }
@@ -142,7 +142,7 @@ void json_delete_last_comma() {
 char* run() {
 	int turn = 0;
 	int winner;
-	
+
 	srand(time(NULL));
 
 	json_write("{ \"history\": [");
@@ -151,7 +151,7 @@ char* run() {
 		make_turn(turn % 2);
 
 		char one_line_board[32];
-	
+
 		sprintf(one_line_board, "\%s%s%s", board[0], board[1], board[2]);
 		json_write_value(one_line_board);
 

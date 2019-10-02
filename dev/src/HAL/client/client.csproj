@@ -29,10 +29,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ConfigJSON\ConfigJSON.csproj" />
     <ProjectReference Include="..\Loggin\Loggin.csproj" />
+    <ProjectReference Include="..\PluginManager\PluginManager.csproj" />
+    <ProjectReference Include="..\PluginMasterBasePlugin\PluginMasterBasePlugin.csproj" />
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
-    <ProjectReference Include="..\Schelduler\Schelduler.csproj" />
+    <ProjectReference Include="..\ScheduledPluginManager\PluginManagerScheduled.csproj" />
+    <ProjectReference Include="..\Scheduler\Scheduler.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
+    <ProjectReference Include="..\TextStorage\StorageText.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,5 +90,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

@@ -9,6 +9,7 @@ namespace HAL.OSData
         /*
          * Supported Familly OS type
          */
+
         [Flags]
         public enum TargetFlag
         {
@@ -41,7 +42,7 @@ namespace HAL.OSData
         };
 
         /// <summary>
-        /// get the running os familly name 
+        /// get the running os familly name
         /// it can be: windows, linux or osx
         /// </summary>
         /// <returns>the os name</returns>

@@ -25,6 +25,7 @@ namespace HAL.Plugin
         /// <param name="result">plugin's resultat</param>
 
         public delegate void PluginResultHandler(object sender, PluginResultArgs e);
+
         public event PluginResultHandler OnExecutionFinished;
 
         public PluginFileInfos.FileType Type { get; protected set; }
@@ -32,6 +33,7 @@ namespace HAL.Plugin
 
         public double Hearthbeat { get; set; } = 1;
         public string AdministratorUsername { get; set; }
+        public string AdministratorPassword{ get; set; }
         public bool AdministratorRights { get; set; } = false;
         public bool Activated { get; set; } = false;
 

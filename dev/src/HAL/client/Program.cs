@@ -18,7 +18,7 @@ namespace HAL
             IStoragePlugin storage = new TextStorage();
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
-            var pluginManager = new PluginManager(pluginMaster);
+            APluginManager pluginManager = new ScheduledPluginManager(pluginMaster);
 
             configFile.SetScriptExtensionsConfiguration(pluginMaster);
             configFile.SetInterpreterNameConfiguration(pluginMaster);
@@ -38,7 +38,7 @@ namespace HAL
                 });
             }
 
-            pluginManager.ScheldulePlugins(pluginMaster.Plugins);
+            (pluginManager as ScheduledPluginManager).SchedulePlugins(pluginMaster.Plugins);
 
             while (true) { }
         }

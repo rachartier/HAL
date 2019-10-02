@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BasePlugin\PluginBase.csproj" />
     <ProjectReference Include="..\client\client.csproj" />
     <ProjectReference Include="..\Loggin\Loggin.csproj" />
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
@@ -23,5 +24,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>
