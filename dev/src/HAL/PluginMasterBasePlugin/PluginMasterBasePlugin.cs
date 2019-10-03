@@ -12,9 +12,8 @@ namespace Plugin.Manager
             // all officialy supported extensions
             AddScriptExtension(".py", "python");
             AddScriptExtension(".rb", "ruby");
-            AddScriptExtension(".pl", "perl");
             AddScriptExtension(".sh", "bash");
-            AddScriptExtension(".ps", "bash");
+            AddScriptExtension(".ps", "powershell");
         }
 
         /// <summary>
