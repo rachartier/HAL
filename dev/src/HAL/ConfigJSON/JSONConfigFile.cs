@@ -66,14 +66,6 @@ namespace HAL.Storage.Configuration
                         throw new ArgumentException($"Adminstrator username must be specified in {plugin.Infos.FileName}'.");
                     }
 
-                    JObject usersConfig = Root["account"].Value<JObject>(administratorUsername);
-
-                    if(usersConfig == null)
-                    {
-                        throw new ArgumentException($"{administratorUsername} need to have an entry in account.");
-                    }
-
-                    plugin.AdministratorPassword = usersConfig["password"].Value<string>();
                     plugin.AdministratorUsername = administratorUsername;
                 }
             }

@@ -121,8 +121,8 @@ Exemple de configuration:
 
 	"plugins": {
 		"info_machine.py": {
-			"activated": true,
-			"heartbeat": 0.5,
+			"activated": "true",
+			"heartbeat": "0.5",
 			"os": ["windows", "linux"]
 		}
 	}
@@ -131,6 +131,27 @@ Exemple de configuration:
 
 Ce dernier sera alors activé, aura une execution toutes les demie-heure et sera lancer uniquement sur les plateformes windows et linux.
 
+##### Ajout du mode administrateur
+
+Un plugin peut potentiellement avoir besoin d'être éxecuté avec un utilisateur différent que celui actuellement sur la machine.
+
+Pour cela, il faut rajouter mettre "admin_rights" à "true" et spécifier un utilisateur: "admin_username" avec le nom d'utilisateur.
+
+Exemple:
+
+``` json 
+"plugins": {
+	"script.sh": {
+		"activated": "true",
+		"heartbeat": "0.5",
+		"admin_rights": "true",
+		"admin_username": "specificuser",
+		"os": ["linux"]
+	}
+}
+```
+
+Le plugin sera alors lancé avec la commande suivant: `sudo -u specificuser -s <shell specifié dans interpreteur> -c script.sh`
 
 #### Rédaction d'un plugin AssemblyDLL, classique DLL, Shared object
 
