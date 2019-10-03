@@ -20,7 +20,6 @@ Il utilise un système de plugins, qui sont chargés automatiquement au démarra
 	- Python (.py)
 	- Ruby (.rb)
 	- Shell (.sh)
-	- Perl (.pl)
 	- Lua (.lua)
 
 Et d'autres peuvent être ajoutés manuellement si besoin.
