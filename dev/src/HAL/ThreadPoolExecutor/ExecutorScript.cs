@@ -43,24 +43,28 @@ namespace HAL.Executor.ThreadPoolExecutor
             }));
         }
 
+        private string base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
         private void startProcess(APlugin plugin, string file, string args)
         {
             string verb = "";
-            string password = "";
             string username = "";
 
             if (plugin.AdministratorRights)
             {
                 if (OSData.OSAttribute.IsLinux)
                 {
-                    args = $"-u {plugin.AdministratorUsername} --shell {file} {args}";
-                    file = $"sudo";
+                    string result = UseLaunchCommand($"sudo -u {plugin.AdministratorUsername} -s {file} -c {args}");
+                    plugin.RaiseOnExecutionFinished(result);
 
-                    Console.WriteLine($"{file} {args}");
+                    return;
                 }
                 else if (OSData.OSAttribute.IsWindows)
                 {
-                    password = plugin.AdministratorPassword;
                     username = plugin.AdministratorUsername;
                     verb = "runas";
                 }
@@ -71,7 +75,6 @@ namespace HAL.Executor.ThreadPoolExecutor
                 FileName = file,
                 Arguments = args,
                 Verb = verb,
-                PasswordInClearText = password,
                 UserName = username,
                 UseShellExecute = false,
                 CreateNoWindow = true,

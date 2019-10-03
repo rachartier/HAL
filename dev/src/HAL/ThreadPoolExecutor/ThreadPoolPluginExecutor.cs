@@ -31,6 +31,10 @@ namespace HAL.Executor.ThreadPoolExecutor
         [DllImport("./lib/libreadso")]
         private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
 
+
+        [DllImport("./lib/liblaunchcmdunix")]
+        private static extern IntPtr launch_command(IntPtr command);
+
         private readonly object key = new object();
 
         /// <summary>
@@ -46,6 +50,22 @@ namespace HAL.Executor.ThreadPoolExecutor
                 IntPtr ptrResult = run_entrypoint_sharedobject(ptrString);
 
                 // result need to be converted to a string type, otherwise it can't be read and memory will be corrupted
+                return Marshal.PtrToStringAnsi(ptrResult);
+            }
+        }
+
+        /// <summary>
+        /// launch a command from the shell (unix) 
+        /// </summary>
+        /// <param name="command">command to be executedpath</param>
+        /// <returns>the command's result</returns>
+        private string UseLaunchCommand(string command)
+        {
+            lock (key)
+            {
+                IntPtr ptrString = Marshal.StringToHGlobalAnsi(command);
+                IntPtr ptrResult = launch_command(ptrString);
+
                 return Marshal.PtrToStringAnsi(ptrResult);
             }
         }

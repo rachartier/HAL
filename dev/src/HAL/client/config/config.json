@@ -1,9 +1,4 @@
 {
-  "account": {
-    "rachartier": {
-      "password": "aaa"
-    }
-  },
   "interpreter": {
     "windows": {
       "python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
@@ -19,8 +14,8 @@
     "testadmin.sh": {
       "activated": true,
       "hearthbeat": 0.001,
-      "admin_rights": true,
-      "admin_username": "rachartier",
+  //    "admin_rights":  true,
+	//		"admin_username": "root",
       "os": [ "linux" ]
     },
     "tictactoe.dll": {
