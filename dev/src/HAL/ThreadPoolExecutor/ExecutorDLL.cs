@@ -19,6 +19,7 @@ namespace HAL.Executor.ThreadPoolExecutor
 
             ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
             {
+                // TODO: verifier si il y a un moyen de connaitre si c est une dll dotnet
                 try
                 {
                     tryRunAssemblyDLL(plugin);

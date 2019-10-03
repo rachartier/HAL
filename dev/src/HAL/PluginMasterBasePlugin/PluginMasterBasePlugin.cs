@@ -13,7 +13,7 @@ namespace Plugin.Manager
             AddScriptExtension(".py", "python");
             AddScriptExtension(".rb", "ruby");
             AddScriptExtension(".sh", "bash");
-            AddScriptExtension(".ps", "powershell");
+            AddScriptExtension(".ps1", "powershell");
         }
 
         /// <summary>
