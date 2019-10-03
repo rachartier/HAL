@@ -70,6 +70,13 @@ namespace HAL.Executor.ThreadPoolExecutor
                 }
             }
 
+            // if the plugin is a powershell scripts, it needs some tweeks to execute it
+            if (plugin.Infos.FileExtension.Equals(".ps1"))
+            {
+                file = "Powershell.exe";
+                args = $"-executionpolicy remotesigned -File {args}";
+            }
+
             var start = new ProcessStartInfo()
             {
                 FileName = file,
