@@ -1,4 +1,5 @@
-﻿using HAL.Plugin;
+﻿using HAL.CheckSum;
+using HAL.Plugin;
 using server.serverFile;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,9 @@ namespace Server
             try
             {
                 // Create a TCP Socket
-                Socket listener = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                Socket listener = new Socket(ipAddr.AddressFamily,
+                                             SocketType.Stream,
+                                             ProtocolType.Tcp);
 
                 listener.Bind(iPEndPoint);
 
@@ -157,7 +160,7 @@ namespace Server
 
             foreach (var file in Directory.GetFiles("plugins"))
             {
-                pluginsInfo.Add(new PluginFileInfos(file));
+                pluginsInfo.Add(new PluginSocketInfo(file, CheckSumGenerator.HashOf(file as string)));
             }
 
             return pluginsInfo;

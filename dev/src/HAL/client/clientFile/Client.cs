@@ -33,7 +33,6 @@ namespace HAL.Client
                     string[] filePaths = Directory.GetFiles("plugins");
                     foreach (string path in filePaths)
                     {
-                        var file = new FileStream(path, FileMode.Open);
                         //Encode the data to send to the server
                         byte[] data = Encoding.ASCII.GetBytes(string.Format(" {0} : {1};",
                             path, CheckSumGenerator.HashOf(path)));
