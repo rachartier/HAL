@@ -16,12 +16,11 @@ HAL est un projet de supervision destiné à récupérer différentes donnés d'
 
 Il utilise un système de plugins, qui sont chargés automatiquement au démarrage du client. Plusieurs langages pour écrire les plugins sont supportés:
 
-	- C/C++ (.dll / .so)
+	- C/C++/Go (.dll / .so)
 	- Python (.py)
 	- Ruby (.rb)
 	- Shell (.sh)
-	- Perl (.pl)
-	- Lua (.lua)
+	- PowerShell (.ps1)
 
 Et d'autres peuvent être ajoutés manuellement si besoin.
 
@@ -45,8 +44,6 @@ HAL est destiné à tout utilisateur voulant superviser les ordinateurs sur un r
 	- Python
 	- Bash
 	- Powershell
-	- Lua
-	- Perl
 
 ou des langages bas/haut niveau 
 
@@ -98,14 +95,16 @@ Chaque .dll, .so doit quand à eux retourner via le point d'entrée un string au
 **Besoins**: doit être compatible Windows/Linux\
 **Contraintes**: implémenter une gestion de plugins permettant l'utilisation soit sur Windows, soit sur Linux, soit sur les deux.
 
-
 **Besoins**: doit posséder un client et un serveur\
 **Contraintes**: la multitude de clients doit se connecter automatiquement au serveur et communiquer de manière asynchrone
 
-#### Contraintes de performances
+**Besoins**: ne doit pas consommer trop de ressources\
+**Contraintes**: 
+
+### Contraintes de performances
 
 **Besoins**: doit tourner sous forme de daemon \
 **Contraintes**: l'application ne doit pas consommer beaucoup de ressources et se doit d'être rapide
 
-**Besoins**: \
-**Contraintes**:
+**Besoins**: les plugins doivent être rapidement téléchargés\
+**Contraintes**: envoit en asynchrones à tous les clients
