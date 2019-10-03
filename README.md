@@ -73,9 +73,6 @@ Le fichier de configuratin doit être modifier pour accepter un interpreter
 		"linux": {
 			"python": "/usr/bin/python3",
 		},
-		"osx": {
-			"python": "/usr/bin/python3",
-		}
 	},
 
 	"plugins": {
@@ -87,9 +84,8 @@ Le fichier de configuratin doit être modifier pour accepter un interpreter
 	
 	- windows (Windows 7, 8, 10...)
 	- linux (toutes distribution utilisant le noyaux linux)
-	- osx (macos)
 
-Pour linux et osx, des intepréteurs par défaut sont déjà configurés, il n'est pas alors obligé de les spécifier pour les types de scripts supportés, bien que cela soit très recommandés.
+Pour linux, des intepréteurs par défaut sont déjà configurés, il n'est pas alors obligé de les spécifier pour les types de scripts supportés, bien que cela soit très recommandés.
 
 Par la suite, il faut ajouter la configuration du plugin portant le nom et extension (nom.extension) dans la branche "plugins":
 
