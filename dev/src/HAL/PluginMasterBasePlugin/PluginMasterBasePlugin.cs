@@ -1,8 +1,6 @@
 ﻿using HAL.Loggin;
 using HAL.Plugin;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Plugin.Manager
 {
@@ -15,7 +13,6 @@ namespace Plugin.Manager
             AddScriptExtension(".py", "python");
             AddScriptExtension(".rb", "ruby");
             AddScriptExtension(".pl", "perl");
-            AddScriptExtension(".lua", "lua");
             AddScriptExtension(".sh", "bash");
             AddScriptExtension(".ps", "bash");
         }

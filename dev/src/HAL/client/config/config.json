@@ -1,8 +1,5 @@
 {
   "interpreter": {
-    "windows": {
-      "python": "C:\\Users\\Le_Bu\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
-    },
     "linux": {
       "python": "/usr/bin/python3",
       "ruby": "/usr/bin/ruby",
@@ -11,77 +8,40 @@
   },
 
   "plugins": {
-    "testadmin.sh": {
-      "activated": true,
-      "hearthbeat": 0.001,
-  //    "admin_rights":  true,
-	//		"admin_username": "root",
-      "os": [ "linux" ]
-    },
-    "tictactoe.dll": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "windows" ]
-    },
-    "tictactoe.so": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "os_informations.py": {
-      "activated": true,
-      "hearthbeat": 0.001
-    },
-    "ip_address.so": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "disk_usage.py": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "whois.rb": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "ping.sh": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "admin_right": true,
-      "os": [ "linux" ]
-    },
-    "cputemp.sh": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "date.pl": {
-      "activated": false,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "last_weekend.pl": {
-      "activated": false,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "random_numbers.lua": {
-      "activated": false,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "guid.rb": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "date.dll": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux", "windows" ]
-    }
-  }
+	"simple_c.so": {
+		"activated": "true",
+		"hearthbeat": "0.001",
+		"os": ["linux"]
+	},
+	"simple.dll": {
+		"activated": "true",
+		"hearthbeat": "0.001",
+		"os": ["linux"]
+	},
+	"simple_go.dll": {
+		"activated": "true",
+		"hearthbeat": "0.001",
+		"os": ["linux"]
+	},
+	"simple.pl": {
+		"activated": "true",
+		"hearthbeat": "0.001",
+		"os": ["linux"]
+	},
+	"simple.py": {
+		"activated": "true",
+		"hearthbeat": "0.001",
+		"os": ["linux"]
+	},
+	"simple.rb": {
+		"activated": "true",
+		"hearthbeat": "0.001",
+		"os": ["linux"]
+	},
+	"simple.sh": {
+		"activated": "true",
+		"hearthbeat": "0.001",
+		"os": ["linux"]
+	}
+	}
 }
