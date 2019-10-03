@@ -17,6 +17,7 @@ namespace HAL.Plugin
             }
         }
 
+
         public PluginFileInfos Infos { get; private set; }
 
         /// <summary>

@@ -14,6 +14,8 @@ namespace HAL.Executor.ThreadPoolExecutor
 
         public uint QueueLength { get; private set; } = 0u;
 
+        public event EventHandler OnAllPluginsExecuted;
+
         private bool waitForComplete = false;
         private ManualResetEvent manualResetEvent;
 
@@ -95,10 +97,14 @@ namespace HAL.Executor.ThreadPoolExecutor
         {
             QueueLength--;
 
-            if (waitForComplete && QueueLength == 0)
+            if (QueueLength == 0)
             {
-                waitForComplete = false;
-                manualResetEvent.Set();
+                OnAllPluginsExecuted?.Invoke(this, null);
+                if (waitForComplete)
+                {
+                    waitForComplete = false;
+                    manualResetEvent.Set();
+                }
             }
         }
     }
