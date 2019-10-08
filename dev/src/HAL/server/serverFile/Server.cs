@@ -177,7 +177,12 @@ namespace Server
             {
                 foreach (var path in fileSendingList)
                 {
-                    handler.SendFile(path.FilePath);
+                    // The preBuffer which is send, matching with the name of the plugins
+                    var preBuffer = Encoding.ASCII.GetBytes(String.Format("<FILE>{0}</FILE><PATH>/plugins</PATH>", path.FileName));
+                    // The postBuffer is the path of where to save it on the client machine
+                    var postBuffer = Encoding.ASCII.GetBytes(String.Format("<CHECKSUM>{0}</CHECKSUM><EOT>", path.CheckSum));
+                    Console.WriteLine(preBuffer.Length);
+                    handler.SendFile(path.FilePath, preBuffer, postBuffer, TransmitFileOptions.UseDefaultWorkerThread);
                 }
             }
             catch (SocketException se)

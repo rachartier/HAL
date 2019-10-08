@@ -43,9 +43,10 @@ namespace HAL.Client
                     // Send the data EOF through the socket.    
                     int bytesSent = client.Send(eof);
 
-                    // Receive the response from the remote device. (OPTIONNAL) 
+                    // Receive the response from the remote device. (OPTIONNAL)
+
                     int bytesRec = client.Receive(bytes);
-                    Console.WriteLine("Echoed test = {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
+                    Console.WriteLine("{0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
 
                     // Release the socket.    
                     client.Shutdown(SocketShutdown.Both);
