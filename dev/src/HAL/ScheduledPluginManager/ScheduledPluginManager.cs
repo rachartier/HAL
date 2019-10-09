@@ -31,8 +31,15 @@ namespace HAL.Plugin.Mananger
                 // the scheduler is called to run the plugin each heartbeat
                 SchedulerService.Instance.ScheduleTask($"task_{plugin.Infos.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
                 {
-                    Run(plugin);
-                    Log.Instance?.Info($"{plugin.Infos.FileName} correctly executed.");
+                    try
+                    {
+                        Run(plugin);
+                        Log.Instance?.Info($"{plugin.Infos.FileName} correctly executed.");
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Instance?.Error($"{plugin.Infos.FileName} had a problem: {e.Message}");
+                    }
                 });
             }
             catch (Exception e)

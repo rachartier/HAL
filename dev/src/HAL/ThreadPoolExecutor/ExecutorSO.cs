@@ -1,5 +1,6 @@
 ﻿using HAL.OSData;
 using HAL.Plugin;
+using HAL.Loggin;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -21,11 +22,17 @@ namespace HAL.Executor.ThreadPoolExecutor
 
                 ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
                 {
-                    var result = UseRunEntryPointSharedObject(plugin.Infos.FilePath, out IntPtr ptrString);
-                    plugin.RaiseOnExecutionFinished(result);
+                    try
+                    {
+                        var result = UseRunEntryPointSharedObject(plugin.Infos.FilePath, out IntPtr ptrString);
+                        plugin.RaiseOnExecutionFinished(result);
 
-                    Marshal.FreeHGlobal(ptrString);
-
+                        Marshal.FreeHGlobal(ptrString);
+                    }
+                    catch (AccessViolationException)
+                    {
+                        throw;
+                    }
                     Consume();
                 }));
             }
