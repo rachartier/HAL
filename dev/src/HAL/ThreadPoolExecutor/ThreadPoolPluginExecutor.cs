@@ -48,11 +48,18 @@ namespace HAL.Executor.ThreadPoolExecutor
         {
             lock (key)
             {
-                ptrString = Marshal.StringToHGlobalAnsi(InputFile);
-                IntPtr ptrResult = run_entrypoint_sharedobject(ptrString);
+                try
+                {
+                    ptrString = Marshal.StringToHGlobalAnsi(InputFile);
+                    IntPtr ptrResult = run_entrypoint_sharedobject(ptrString);
 
-                // result need to be converted to a string type, otherwise it can't be read and memory will be corrupted
-                return Marshal.PtrToStringAnsi(ptrResult);
+                    // result need to be converted to a string type, otherwise it can't be read and memory will be corrupted
+                    return Marshal.PtrToStringAnsi(ptrResult);
+                }
+                catch (AccessViolationException)
+                {
+                    throw;
+                }
             }
         }
 
