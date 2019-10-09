@@ -38,7 +38,7 @@ Write your own plugin
 
 Les informations retournées par le plugin doivent être sous un format JSON.
 
-??? NORMALISER LES SORTIES
+Pour une efficacité optimal, il convient de normaliser les soties de vos plugins. C'est à dire, respecté une convention de nommage définit selon vos principes.
 
 ## Rédaction d'un plugin
 #### Rédaction d'un plugin avec un langage de script
