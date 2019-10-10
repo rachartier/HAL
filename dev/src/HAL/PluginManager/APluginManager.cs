@@ -41,7 +41,7 @@ namespace HAL.Plugin.Mananger
             }
             catch (Exception e)
             {
-                Log.Instance?.Error(e.Message);
+                Log.Instance?.Error($"{plugin.Infos.FileName} encountered a problem: {e.Message}");
             }
         }
     }
