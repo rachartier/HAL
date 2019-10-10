@@ -4,10 +4,13 @@ using HAL.Loggin;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Security;
+using System.Runtime.ExceptionServices;
 
 namespace HAL.Executor.ThreadPoolExecutor
 {
     public partial class ThreadPoolPluginExecutor : IPluginExecutor
+
     {
         /// <summary>
         /// run a code from a shared object fille
@@ -29,11 +32,14 @@ namespace HAL.Executor.ThreadPoolExecutor
 
                         Marshal.FreeHGlobal(ptrString);
                     }
-                    catch (AccessViolationException)
+                    catch (Exception)
                     {
                         throw;
                     }
-                    Consume();
+                    finally
+                    {
+                        Consume();
+                    }
                 }));
             }
         }

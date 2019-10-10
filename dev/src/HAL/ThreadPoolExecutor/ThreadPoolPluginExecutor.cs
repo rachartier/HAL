@@ -2,6 +2,7 @@ using HAL.Plugin;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace HAL.Executor.ThreadPoolExecutor
 {
@@ -27,8 +28,8 @@ namespace HAL.Executor.ThreadPoolExecutor
         }
 
         /*
-         * libreadso allow to run multiple instance of classic dll or .so
-         */
+		 * libreadso allow to run multiple instance of classic dll or .so
+		 */
 
         [DllImport("./lib/libreadso")]
         private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
@@ -37,7 +38,8 @@ namespace HAL.Executor.ThreadPoolExecutor
         [DllImport("./lib/liblaunchcmdunix")]
         private static extern IntPtr launch_command(IntPtr command);
 
-        private readonly object key = new object();
+        private readonly object keyUseRunEntryPoint = new object();
+        private readonly object keyLauncCmd = new object();
 
         /// <summary>
         /// run_entrypoint_sharedobject wrapper, to allocate the memory needed for the correct execution
@@ -46,23 +48,17 @@ namespace HAL.Executor.ThreadPoolExecutor
         /// <returns>the converted result string</returns>
         private string UseRunEntryPointSharedObject(string InputFile, out IntPtr ptrString)
         {
-            lock (key)
+            ptrString = Marshal.StringToHGlobalAnsi(InputFile);
+            IntPtr ptrResult;
+
+            lock (keyUseRunEntryPoint)
             {
-                try
-                {
-                    ptrString = Marshal.StringToHGlobalAnsi(InputFile);
-                    IntPtr ptrResult = run_entrypoint_sharedobject(ptrString);
-
-                    // result need to be converted to a string type, otherwise it can't be read and memory will be corrupted
-                    return Marshal.PtrToStringAnsi(ptrResult);
-                }
-                catch (AccessViolationException)
-                {
-                    throw;
-                }
+                ptrResult = run_entrypoint_sharedobject(ptrString);
             }
-        }
 
+            // result need to be converted to a string type, otherwise it can't be read and memory will be corrupted
+            return Marshal.PtrToStringAnsi(ptrResult);
+        }
         /// <summary>
         /// launch a command from the shell (unix) 
         /// </summary>
@@ -70,7 +66,7 @@ namespace HAL.Executor.ThreadPoolExecutor
         /// <returns>the command's result</returns>
         private string UseLaunchCommand(string command)
         {
-            lock (key)
+            lock (keyLauncCmd)
             {
                 IntPtr ptrString = Marshal.StringToHGlobalAnsi(command);
                 IntPtr ptrResult = launch_command(ptrString);
