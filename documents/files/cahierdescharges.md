@@ -42,6 +42,7 @@ HAL est destiné à tout utilisateur voulant superviser les ordinateurs sur un r
 **Contraintes**: Une lise de langages doit être supportées, que ce soit des langages de script 
 
 	- Python
+	- Ruby
 	- Bash
 	- Powershell
 
@@ -59,18 +60,20 @@ Chaque .dll, .so doit quand à eux retourner via le point d'entrée un string au
 **Besoin**: Configurer les plugins \
 **Contraintes**: Créer un fichier de configuration, permettant de renseigner diverses informations sur les plugins:
 
-	- activated (booléen): permet de savoir si le plugin est actif ou non, par conséquent si il doit être executé
-	- heartbeat (double): 1 execution par heartbeat. Correspond à l'execution périodique d'un plugin où le hearthbeat défini la période.
-		- plus le heartbeat est petit, plus nombreux seront les executions par heure, et donc par conséquent une plus grande charge système.
-	- os (array de string):
-		- optionnel, permet de lancer le plugin uniquement sur un ou plusieurs famille de système d'exploitation
-		- si rien n'est spécifié, le plugin sera disponible sur toutes les familles (linux, windows, osx)
-	- si l'OS cible est linux:
-		- admin_rights (booléen): si le script doit être exécuté en administrateur, 
-				- si non spécifié, alors false par défaut
-		- si admin_rights est vrai et que l'os cible est sous linux:
-			- un uername doit être renseigné permettant de lancer la commande "su <username> <commande>"
-			- userame (string): l'username passer en argument de "su" 
+	* activated (booléen): 
+		permet de savoir si le plugin doit être executé
+	* heartbeat (double): 
+		heure/heartbeat execution
+	* os (array de string):
+		* optionnel, lance le plugin sur une ou plusieurs famille d'os 
+		* si rien de spécifié, le plugin sera disponible sur tous les os 
+	* si l'OS cible est linux:
+		* admin_rights (booléen): 
+			si le script doit être exécuté en administrateur, 
+				* si non spécifié, alors false par défaut
+		* si admin_rights est vrai et que l'os cible est sous linux:
+			* un username doit être renseigné
+			* userame (string): l'username passer en argument de "sudo" 
 
 **Besoins**: Configurer les intépréteurs pour l'exécution des scripts \
 **Contraintes**: Un intépréteur par défaut est défini pour tous les langages de script supportés pour le logiciel, mais peut être changé si besoin.
@@ -87,10 +90,13 @@ Chaque .dll, .so doit quand à eux retourner via le point d'entrée un string au
 **Besoins**: Interface mobile de visualisation \
 **Contraintes**:
 
+**Besoins**: doit avoir une couche d'abstraction permettant l'implémentation d'une BDD\
+**Contraintes**: prévoir l'abstraction dans le model
+
 **Besoins**: \
 **Contraintes**:
 
-### Contraintes materiels
+### Besoins materiels
 
 **Besoins**: doit être compatible Windows/Linux\
 **Contraintes**: implémenter une gestion de plugins permettant l'utilisation soit sur Windows, soit sur Linux, soit sur les deux.
@@ -99,12 +105,42 @@ Chaque .dll, .so doit quand à eux retourner via le point d'entrée un string au
 **Contraintes**: la multitude de clients doit se connecter automatiquement au serveur et communiquer de manière asynchrone
 
 **Besoins**: ne doit pas consommer trop de ressources\
-**Contraintes**: 
+**Contraintes**: éviter d'allouer trop de threads par lancement de plugin
 
-### Contraintes de performances
+### Besoin de performances
 
 **Besoins**: doit tourner sous forme de daemon \
 **Contraintes**: l'application ne doit pas consommer beaucoup de ressources et se doit d'être rapide
 
 **Besoins**: les plugins doivent être rapidement téléchargés\
 **Contraintes**: envoit en asynchrones à tous les clients
+
+3- Contraintes
+--------------
+
+### Délais
+Un premier livrable est prévu en décembre, qui sera uniquement le cient/serveur.
+Un second, début avril, implémentera une interface web permettantde visualiser les données des cients en temps réel.
+un dernier, début juillet, vec une application mobile permettant de visualiser les données des clients depuis n'importe quel endroit.
+
+4- Déroulement du projet 
+------------------------
+
+### Planification
+
+##### Fin aout - Début Décembre
+Création du client/serveur en daemon, les plugins pourront être éxécutés avec un fichier config et un possible déploiement sur le campus sera effectué pour avoir une remontée de données et faire les modifications nécessaires.
+
+##### Décembre - Début Avril
+Création du site web permettant de gérer l'administration et d voir en temps réel les données remontées par les plugins.
+
+##### Avril - Debut Juillet
+Création d'une application mobile affichant aussi les données en temps réel remontées par les plugins.
+
+##### Juillet
+Maintenance et ajouts de fonctionnalitées si besoin
+
+### Plan d'assurance qualité
+Pour s'assurer de la qualité, chaque livrable à la fin de sa conception aura une phase de test en condition réel, sur le campus de l'université.
+
+De pus, le client est très souvent mit à jour des avancées du projet, ce qui permet d'avoir des retours rapides si des fonctionnalitées doivent changer.
