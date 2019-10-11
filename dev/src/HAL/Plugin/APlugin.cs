@@ -55,5 +55,31 @@ namespace HAL.Plugin
         /// </summary>
         /// <returns>true if it can be run, false otherwise</returns>
         public abstract bool CanBeRun();
+
+        public bool Equals(APlugin other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (this == other)
+            {
+                return true;
+            }
+
+            if (this.GetType() != other.GetType())
+            {
+                return false;
+            }
+
+            return Infos.Equals(other.Infos)
+                && Type == other.Type
+                && OsAuthorized == other.OsAuthorized
+                && Heartbeat == other.Heartbeat
+                && AdministratorRights.Equals(other.AdministratorRights)
+                && AdministratorUsername.Equals(other.AdministratorUsername)
+                && Activated == other.Activated;
+        }
     }
 }
