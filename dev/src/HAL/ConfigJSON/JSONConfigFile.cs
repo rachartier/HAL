@@ -1,15 +1,25 @@
 using HAL.Loggin;
+using HAL.MagicString;
 using HAL.OSData;
 using HAL.Plugin;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 
 namespace HAL.Storage.Configuration
 {
     public class JSONConfigFile : IConfigFile<JObject, JToken>
     {
+        private ResourceManager ResourceManager => resourceManager ?? (resourceManager = new ResourceManager("Resource1", Assembly.GetExecutingAssembly()));
+        private ResourceManager resourceManager;
+
+        public JSONConfigFile()
+        {
+        }
+
         public override void Load(string file)
         {
             if (!File.Exists(file))
@@ -41,7 +51,7 @@ namespace HAL.Storage.Configuration
                 return;
             }
 
-            JObject pluginConfig = Root["plugins"].Value<JObject>(plugin.Infos.FileName);
+            JObject pluginConfig = Root[MagicStringEnumerator.JSONPlugins].Value<JObject>(plugin.Infos.FileName);
 
             // plugin needs to have a specific configuration, otherwise it can't be run
             if (pluginConfig == null)
@@ -49,17 +59,17 @@ namespace HAL.Storage.Configuration
                 throw new NullReferenceException($"Plugin {plugin.Infos.FileName} does not have any configuration.");
             }
 
-            plugin.Hearthbeat = pluginConfig["hearthbeat"].Value<double>();
-            plugin.Activated = pluginConfig["activated"].Value<bool>();
+            plugin.Heartbeat = pluginConfig[MagicStringEnumerator.JSONHeartbeat].Value<double>();
+            plugin.Activated = pluginConfig[MagicStringEnumerator.JSONActivated].Value<bool>();
 
             if (OSAttribute.IsLinux)
             {
-                bool? needAdministratorRights = pluginConfig["admin_rights"]?.Value<bool>();
+                bool? needAdministratorRights = pluginConfig[MagicStringEnumerator.JSONAdminRights]?.Value<bool>();
                 plugin.AdministratorRights = needAdministratorRights.GetValueOrDefault();
 
                 if (needAdministratorRights == true)
                 {
-                    string administratorUsername = pluginConfig["admin_username"]?.Value<string>();
+                    string administratorUsername = pluginConfig[MagicStringEnumerator.JSONAdminUsername]?.Value<string>();
 
                     if (string.IsNullOrEmpty(administratorUsername))
                     {
@@ -98,7 +108,7 @@ namespace HAL.Storage.Configuration
 
             try
             {
-                JToken[] extensionsConfig = Root["custom_extensions"].Values<JToken>().ToArray();
+                JToken[] extensionsConfig = Root[MagicStringEnumerator.JSONCustomExtensions].Values<JToken>().ToArray();
 
                 foreach (var ext in extensionsConfig)
                 {
@@ -126,7 +136,7 @@ namespace HAL.Storage.Configuration
                 string val = "";
 
                 // an interpreter is needed to interpret the code
-                var interpreterConfig = Root["interpreter"];
+                var interpreterConfig = Root[MagicStringEnumerator.JSONIntepreter];
 
                 if (interpreterConfig == null)
                 {

@@ -1,5 +1,4 @@
 ﻿using HAL.OSData;
-using System;
 using static HAL.Plugin.PluginFileInfos;
 
 namespace HAL.Plugin
@@ -9,7 +8,7 @@ namespace HAL.Plugin
         public BasePlugin(IPluginMaster pluginMaster, string path)
         : base(path)
         {
-            Type = getPluginType(pluginMaster);
+            Type = GetPluginType(pluginMaster);
         }
 
         public override bool CanBeRunOnOS()
@@ -24,7 +23,7 @@ namespace HAL.Plugin
             return (Activated && CanBeRunOnOS());
         }
 
-        private FileType getPluginType(IPluginMaster pluginMaster)
+        private FileType GetPluginType(IPluginMaster pluginMaster)
         {
             foreach (var pair in pluginMaster.AcceptedFilesTypes)
             {

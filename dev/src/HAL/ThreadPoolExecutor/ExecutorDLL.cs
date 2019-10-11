@@ -22,14 +22,14 @@ namespace HAL.Executor.ThreadPoolExecutor
                 // TODO: verifier si il y a un moyen de connaitre si c est une dll dotnet
                 try
                 {
-                    tryRunAssemblyDLL(plugin);
+                    TryRunAssemblyDLL(plugin);
                 }
                 catch (Exception e)
                 {
                     // if it can't load assembly, it need to try a classic type file dll
                     if (e is System.BadImageFormatException || e is System.DllNotFoundException)
                     {
-                        runClassicDLL(plugin);
+                        RunClassicDLL(plugin);
                     }
                 }
 
@@ -37,7 +37,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             }));
         }
 
-        private void tryRunAssemblyDLL(APlugin plugin)
+        private void TryRunAssemblyDLL(APlugin plugin)
         {
             var assembly = Assembly.LoadFrom(plugin.Infos.FilePath);
             var type = assembly.GetTypes().FirstOrDefault();
@@ -57,7 +57,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             }
         }
 
-        private void runClassicDLL(APlugin plugin)
+        private void RunClassicDLL(APlugin plugin)
         {
             var result = UseRunEntryPointSharedObject(plugin.Infos.FilePath, out IntPtr ptrString);
 
