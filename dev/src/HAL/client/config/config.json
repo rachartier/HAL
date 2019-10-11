@@ -13,58 +13,58 @@
   "plugins": {
     "simple_c.so": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux" ]
     },
     "simple_cs.dll": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux", "windows" ]
     },
     "simple_go.dll": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux" ]
     },
     "simple.py": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux", "windows" ]
     },
     "simple.rb": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux" ]
     },
     "simple.sh": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux" ]
     },
 
     "complex_c.so": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux" ]
     },
     "complex_cs.dll": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux", "windows" ]
     },
     "complex_go.dll": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux" ]
     },
     "complex.py": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux", "windows" ]
     },
     "complex.rb": {
       "activated": "true",
-      "hearthbeat": "0.001",
+      "heartbeat": "0.001",
       "os": [ "linux" ]
     }
   }

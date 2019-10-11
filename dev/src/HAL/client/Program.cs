@@ -34,7 +34,7 @@ namespace HAL
 
             foreach (var plugin in pluginMaster.Plugins)
             {
-                plugin.OnExecutionFinished += new BasePlugin.PluginResultHandler((o, e) =>
+                plugin.OnExecutionFinished += new System.EventHandler<APlugin.PluginResultArgs>((o, e) =>
                 {
                     storage.Save(e.Plugin, e.Result);
                 });

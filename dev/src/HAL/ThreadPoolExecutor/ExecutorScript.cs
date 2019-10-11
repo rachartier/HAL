@@ -37,19 +37,13 @@ namespace HAL.Executor.ThreadPoolExecutor
                     throw new ArgumentNullException($"Value {refPluginMaster.ExtensionsNames[fileExtension]} from interpreter object in json file not found.");
                 }
 
-                startProcess(plugin, file, args);
+                StartProcess(plugin, file, args);
 
                 Consume();
             }));
         }
 
-        private string base64Decode(string base64EncodedData)
-        {
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-        }
-
-        private void startProcess(APlugin plugin, string file, string args)
+        private void StartProcess(APlugin plugin, string file, string args)
         {
             string verb = "";
             string username = "";

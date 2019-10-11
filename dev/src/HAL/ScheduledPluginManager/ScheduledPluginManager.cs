@@ -29,7 +29,7 @@ namespace HAL.Plugin.Mananger
             try
             {
                 // the scheduler is called to run the plugin each heartbeat
-                SchedulerService.Instance.ScheduleTask($"task_{plugin.Infos.FileName}_{Guid.NewGuid()}", plugin.Hearthbeat, () =>
+                SchedulerService.Instance.ScheduleTask($"task_{plugin.Infos.FileName}_{Guid.NewGuid()}", plugin.Heartbeat, () =>
                 {
                     try
                     {

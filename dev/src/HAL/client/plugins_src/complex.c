@@ -12,7 +12,7 @@ typedef struct {
 	Point point;
 } Cube;
 
-char *run() {
+char* run() {
 	Cube cube = {
 		.name = "cube",
 		.point = {
@@ -22,7 +22,7 @@ char *run() {
 		}
 	};
 
-	char *data = malloc(256 * sizeof(char));
+	char* data = malloc(256 * sizeof(char));
 
 	sprintf(data, "{\"name\":\"%s\",\n\"point\": {\n\"x\": %d,\n\"y\": %d,\n\"z\": %d,\n}}", cube.name, cube.point.x, cube.point.y, cube.point.z);
 
