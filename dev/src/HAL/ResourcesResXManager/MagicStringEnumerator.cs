@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HAL.MagicString
+﻿namespace HAL.MagicString
 {
     public static class MagicStringEnumerator
     {

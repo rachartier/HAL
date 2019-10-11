@@ -1,5 +1,3 @@
-using HAL.Executor;
-using HAL.Executor.ThreadPoolExecutor;
 using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

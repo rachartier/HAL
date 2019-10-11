@@ -1,8 +1,6 @@
 ﻿using HAL.Executor;
 using HAL.Loggin;
-using HAL.Scheduler;
 using System;
-
 using System.Collections.Generic;
 
 namespace HAL.Plugin.Mananger
@@ -43,6 +41,14 @@ namespace HAL.Plugin.Mananger
             {
                 Log.Instance?.Error($"{plugin.Infos.FileName} encountered a problem: {e.Message}");
             }
+        }
+
+        public virtual void SchedulePlugin(APlugin plugin)
+        {
+        }
+
+        public virtual void SchedulePlugins(IEnumerable<APlugin> plugins)
+        {
         }
     }
 }

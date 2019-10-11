@@ -1,5 +1,4 @@
-﻿using HAL.Executor;
-using HAL.Executor.ThreadPoolExecutor;
+﻿using HAL.Executor.ThreadPoolExecutor;
 using HAL.Loggin;
 using HAL.Scheduler;
 using System;
@@ -19,7 +18,7 @@ namespace HAL.Plugin.Mananger
         /// schedule a plugin to be executed at each heartbeat
         /// </summary>
         /// <param name="plugin">the plugin to be scheduled</param>
-        public void SchedulePlugin(APlugin plugin)
+        public override void SchedulePlugin(APlugin plugin)
         {
             if (!plugin.CanBeRun())
             {
@@ -52,7 +51,7 @@ namespace HAL.Plugin.Mananger
         /// schedule a list of plugins to be executed
         /// </summary>
         /// <param name="plugins">a collection of plugins</param>
-        public void SchedulePlugins(IEnumerable<APlugin> plugins)
+        public override void SchedulePlugins(IEnumerable<APlugin> plugins)
         {
             foreach (var plugin in plugins)
             {
