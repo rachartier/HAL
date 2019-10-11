@@ -26,8 +26,6 @@ namespace HAL
             foreach (var file in Directory.GetFiles("plugins"))
             {
                 pluginMaster.AddPlugin(file);
-                pluginMaster.AddPlugin(file);
-                pluginMaster.AddPlugin(file);
             }
 
             configFile.SetPluginsConfiguration(pluginMaster.Plugins);

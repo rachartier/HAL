@@ -24,5 +24,28 @@ namespace HAL.Plugin
             FileExtension = Path.GetExtension(FileName);
             Name = Path.GetFileNameWithoutExtension(FilePath);
         }
+
+        public bool Equals(PluginFileInfos other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (this == other)
+            {
+                return true;
+            }
+
+            if (this.GetType() != other.GetType())
+            {
+                return false;
+            }
+
+            return FileName.Equals(other.FileName)
+                && FilePath.Equals(other.FilePath)
+                && FileExtension.Equals(other.FileExtension)
+                && Name.Equals(other.Name);
+        }
     }
 }
