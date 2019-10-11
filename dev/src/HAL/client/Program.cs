@@ -40,7 +40,7 @@ namespace HAL
                 });
             }
 
-            (pluginManager as ScheduledPluginManager).SchedulePlugins(pluginMaster.Plugins);
+            pluginManager.SchedulePlugins(pluginMaster.Plugins);
 
             while (true) { }
         }
