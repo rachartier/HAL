@@ -1,4 +1,5 @@
-﻿using System.IO;
+using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -35,24 +36,13 @@ namespace HAL.CheckSum
         public static string HashOf(string path)
         {
             StringBuilder sb = new StringBuilder();
-            var checksum = new StringBuilder();
-
-            var lines = File.ReadAllLines(path);
-            using (var mySha256 = SHA256.Create())
+	    var lines = File.ReadAllLines(path);
+            foreach (var line in lines)
             {
-                foreach (var line in lines)
-                {
-                    sb.Append(line);
-                }
-
-                var hash = mySha256.ComputeHash(Encoding.UTF8.GetBytes(sb.ToString()));
-
-                for (int i = 0; i < hash.Length; i++)
-                {
-                    checksum.Append(hash[i].ToString("x2"));
-                }
-                return checksum.ToString();
+                sb.Append(line);
             }
+
+            return CheckSumComputeHash(Encoding.UTF8.GetBytes(sb.ToString()));
         }
 
         /// <summary>
@@ -62,11 +52,16 @@ namespace HAL.CheckSum
         /// <returns>A sha256 checksum in string format</returns>
         public static string HashOfASimpleString(string data)
         {
-            StringBuilder sb = new StringBuilder();
+            return CheckSumComputeHash(Encoding.UTF8.GetBytes(data));
+        }
+
+        private static string CheckSumComputeHash(byte[] data)
+        {
+            var sb = new StringBuilder();
 
             using (var mySha256 = SHA256.Create())
             {
-                var hash = mySha256.ComputeHash(Encoding.UTF8.GetBytes(data));
+                var hash = mySha256.ComputeHash(data);
 
                 for (int i = 0; i < hash.Length; i++)
                 {

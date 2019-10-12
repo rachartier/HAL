@@ -142,7 +142,6 @@ void json_delete_last_comma() {
 char* run() {
 	int turn = 0;
 	int winner;
-
 	srand(time(NULL));
 
 	json_write("{ \"history\": [");

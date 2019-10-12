@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -13,15 +13,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BasePlugin\PluginBase.csproj" />
-    <ProjectReference Include="..\client\client.csproj" />
-    <ProjectReference Include="..\Loggin\Loggin.csproj" />
+    <ProjectReference Include="..\CheckSum\CheckSum.csproj" />
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
+    <ProjectReference Include="..\server\server.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="nlog.config">
+    <None Update="test\script.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="test\script.rb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
 </Project>

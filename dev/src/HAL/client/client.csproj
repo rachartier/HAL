@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConfigJSON\ConfigJSON.csproj" />
+    <ProjectReference Include="..\FileParser\FileParser.csproj" />
     <ProjectReference Include="..\Loggin\Loggin.csproj" />
     <ProjectReference Include="..\PluginManager\PluginManager.csproj" />
     <ProjectReference Include="..\PluginMasterBasePlugin\PluginMasterBasePlugin.csproj" />
@@ -38,6 +39,7 @@
     <ProjectReference Include="..\Scheduler\Scheduler.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
     <ProjectReference Include="..\TextStorage\StorageText.csproj" />
+    <ProjectReference Include="..\CheckSum\CheckSum.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,9 +68,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="plugins\date.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="plugins\date.pl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="plugins\disk_usage.py">

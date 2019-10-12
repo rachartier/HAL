@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace HAL.Plugin
 {
-    public class PluginFileInfos
+    public class PluginFileInfos : IEquatable<PluginFileInfos>
     {
         public enum FileType
         {
@@ -12,10 +13,11 @@ namespace HAL.Plugin
             SharedObject
         }
 
-        public readonly string FileName;
-        public readonly string FilePath;
-        public readonly string FileExtension;
-        public readonly string Name;
+        public string FileName { get; protected set; }
+        public string FilePath { get; protected set; }
+        public string FileExtension { get; protected set; }
+        public string Name { get; protected set; }
+        public string CheckSum { get; protected set; }
 
         public PluginFileInfos(string path)
         {
@@ -37,15 +39,16 @@ namespace HAL.Plugin
                 return true;
             }
 
-            if (this.GetType() != other.GetType())
+            if (other == null)
             {
                 return false;
             }
 
-            return FileName.Equals(other.FileName)
-                && FilePath.Equals(other.FilePath)
-                && FileExtension.Equals(other.FileExtension)
-                && Name.Equals(other.Name);
+            return FileName.Equals(other.FileName) && CheckSum.Equals(other.CheckSum);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FileName, CheckSum);
         }
     }
 }

@@ -3,4 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CheckSum\CheckSum.csproj" />
+  </ItemGroup>
+
 </Project>

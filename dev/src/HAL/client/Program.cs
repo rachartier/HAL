@@ -1,4 +1,5 @@
-﻿using HAL.Plugin;
+﻿using HAL.Client;
+using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using HAL.Storage;
 using HAL.Storage.Configuration;
@@ -13,6 +14,7 @@ namespace HAL
     {
         private static void Main(string[] args)
         {
+            ClientFile client = new ClientFile();
             IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
             configFile.Load("config/config.json");
 
@@ -40,6 +42,8 @@ namespace HAL
             }
 
             pluginManager.SchedulePlugins(pluginMaster.Plugins);
+
+            client.StartClient();
 
             while (true) { }
         }
