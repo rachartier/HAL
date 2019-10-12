@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace HAL.Plugin
+﻿namespace HAL.Plugin
 {
     public class PluginSocketInfo : PluginFileInfos
     {
-
         public PluginSocketInfo(string path, string checksum)
             : base(path)
         {

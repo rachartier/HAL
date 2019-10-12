@@ -20,7 +20,7 @@ namespace CheckSumTest
         [TestMethod]
         public void CheckSum_StringHashReturnIsNotNull()
         {
-            using(var fs = new FileStream("test/script.pl", FileMode.Open))
+            using (var fs = new FileStream("test/script.pl", FileMode.Open))
             {
                 var hash = CheckSumGenerator.HashOf(fs);
                 Assert.IsNotNull(hash, "Hash is not supposed to be null");
@@ -30,7 +30,7 @@ namespace CheckSumTest
         [TestMethod]
         public void CheckSum_HashIsEqual()
         {
-            using(var fs1 = new FileStream("test/script.pl", FileMode.Open))
+            using (var fs1 = new FileStream("test/script.pl", FileMode.Open))
             {
                 using (var fs2 = new FileStream("test2/script.pl", FileMode.Open))
                 {

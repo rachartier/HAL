@@ -36,7 +36,6 @@ namespace Server
                 // Specify how many requests a Socket can listen before it gives Server busy response.
                 listener.Listen(nbMaxClient);
 
-
                 Console.WriteLine("Waiting for a connection...");
                 Socket handler = listener.Accept();
 
@@ -79,7 +78,6 @@ namespace Server
 
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
-
             }
             catch (Exception e)
             {
@@ -148,7 +146,7 @@ namespace Server
         }
 
         /// <summary>
-        /// Get all the plugin available on the server-side 
+        /// Get all the plugin available on the server-side
         /// </summary>
         /// <returns>A List of PluginFileInfos</returns>
         private List<PluginFileInfos> PluginsOnServer()
@@ -189,7 +187,5 @@ namespace Server
                 Console.WriteLine(se.StackTrace);
             }
         }
-
-
     }
 }

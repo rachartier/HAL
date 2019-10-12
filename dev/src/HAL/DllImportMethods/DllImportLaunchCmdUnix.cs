@@ -19,9 +19,9 @@ namespace HAL.DllImportMethods
             {
                 ptr = Marshal.StringToHGlobalAnsi(command);
                 IntPtr ptrResult = launch_command(ptr);
-
-                return Marshal.PtrToStringAnsi(ptrResult);
             }
+
+            return Marshal.PtrToStringAnsi(ptr);
         }
     }
 }

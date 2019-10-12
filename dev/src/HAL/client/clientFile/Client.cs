@@ -9,13 +9,11 @@ namespace HAL.Client
 {
     internal class ClientFile
     {
-
         private const int Port = 11000;
 
         public void StartClient()
         {
             byte[] bytes = new byte[1024];
-
 
             try
             {
@@ -40,7 +38,7 @@ namespace HAL.Client
                     }
 
                     byte[] eof = Encoding.UTF8.GetBytes("<EOF>");
-                    // Send the data EOF through the socket.    
+                    // Send the data EOF through the socket.
                     int bytesSent = client.Send(eof);
 
                     // Receive
@@ -49,8 +47,7 @@ namespace HAL.Client
                                                                               out string pathFileName);
                     // TODO: Compare the Equality of the Checksum (receive one and send one)
 
-
-                    // Release the socket.    
+                    // Release the socket.
                     client.Shutdown(SocketShutdown.Both);
                     client.Close();
                 }
@@ -58,15 +55,11 @@ namespace HAL.Client
                 {
                     Console.WriteLine(e.Message);
                 }
-
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-
         }
-
     }
 }

@@ -1,7 +1,6 @@
 {
   "interpreter": {
     "windows": {
-      "python": "C:\\Users\\BuddyNeet\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
     },
     "linux": {
       "bash": "/bin/bash"
