@@ -1,7 +1,10 @@
-﻿using HAL.Loggin;
+﻿using HAL.DllImportMethods;
+using HAL.Loggin;
 using HAL.Plugin;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace HAL.Executor.ThreadPoolExecutor
@@ -37,7 +40,14 @@ namespace HAL.Executor.ThreadPoolExecutor
                     throw new ArgumentNullException($"Value {refPluginMaster.ExtensionsNames[fileExtension]} from interpreter object in json file not found.");
                 }
 
-                StartProcess(plugin, file, args);
+                try
+                {
+                    StartProcess(plugin, file, args);
+                }
+                catch
+                {
+                    throw;
+                }
 
                 Consume();
             }));
@@ -52,9 +62,11 @@ namespace HAL.Executor.ThreadPoolExecutor
             {
                 if (OSData.OSAttribute.IsLinux)
                 {
-                    string result = UseLaunchCommand($"sudo -u {plugin.AdministratorUsername} -s {file} -c {args}");
-                    plugin.RaiseOnExecutionFinished(result);
-
+                    using (var dllimport = new DllImportLaunchCmdUnix())
+                    {
+                        string result = dllimport.UseLaunchCommand($"sudo -u {plugin.AdministratorUsername} -s {file} -c {args}");
+                        plugin.RaiseOnExecutionFinished(result);
+                    }
                     return;
                 }
                 else if (OSData.OSAttribute.IsWindows)
@@ -82,7 +94,6 @@ namespace HAL.Executor.ThreadPoolExecutor
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
-
             using (var process = Process.Start(start))
             {
                 using (var reader = process.StandardOutput)

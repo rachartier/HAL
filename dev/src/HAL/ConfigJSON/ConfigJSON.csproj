@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DllImportMethods\DllImportMethods.csproj" />
     <ProjectReference Include="..\ResourcesResXManager\MagicStringEnumerator.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
   </ItemGroup>

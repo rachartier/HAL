@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DllImportMethods\DllImportMethods.csproj" />
     <ProjectReference Include="..\Executor\Executor.csproj" />
   </ItemGroup>
 

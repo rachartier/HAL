@@ -1,3 +1,4 @@
+using HAL.DllImportMethods;
 using HAL.Plugin;
 using System;
 using System.Runtime.InteropServices;
@@ -29,50 +30,6 @@ namespace HAL.Executor.ThreadPoolExecutor
         /*
 		 * libreadso allow to run multiple instance of classic dll or .so
 		 */
-
-        [DllImport("./lib/libreadso")]
-        private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
-
-        [DllImport("./lib/liblaunchcmdunix")]
-        private static extern IntPtr launch_command(IntPtr command);
-
-        private readonly object keyUseRunEntryPoint = new object();
-        private readonly object keyLauncCmd = new object();
-
-        /// <summary>
-        /// run_entrypoint_sharedobject wrapper, to allocate the memory needed for the correct execution
-        /// </summary>
-        /// <param name="InputFile">dll/so path</param>
-        /// <returns>the converted result string</returns>
-        private string UseRunEntryPointSharedObject(string InputFile, out IntPtr ptrString)
-        {
-            ptrString = Marshal.StringToHGlobalAnsi(InputFile);
-            IntPtr ptrResult;
-
-            lock (keyUseRunEntryPoint)
-            {
-                ptrResult = run_entrypoint_sharedobject(ptrString);
-            }
-
-            // result need to be converted to a string type, otherwise it can't be read and memory will be corrupted
-            return Marshal.PtrToStringAnsi(ptrResult);
-        }
-
-        /// <summary>
-        /// launch a command from the shell (unix)
-        /// </summary>
-        /// <param name="command">command to be executedpath</param>
-        /// <returns>the command's result</returns>
-        private string UseLaunchCommand(string command)
-        {
-            lock (keyLauncCmd)
-            {
-                IntPtr ptrString = Marshal.StringToHGlobalAnsi(command);
-                IntPtr ptrResult = launch_command(ptrString);
-
-                return Marshal.PtrToStringAnsi(ptrResult);
-            }
-        }
 
         /// <summary>
         /// wait until all workers have finished their jobs
