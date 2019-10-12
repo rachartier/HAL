@@ -16,11 +16,11 @@ HAL est un projet de supervision destiné à récupérer différentes donnés d'
 
 Il utilise un système de plugins, qui sont chargés automatiquement au démarrage du client. Plusieurs langages pour écrire les plugins sont supportés:
 
-	- C/C++ (.dll / .so)
+	- C/C++/Go/C# (.dll / .so)
 	- Python (.py)
 	- Ruby (.rb)
 	- Shell (.sh)
-	- Lua (.lua)
+	- Powershell (.ps1)
 
 Et d'autres peuvent être ajoutés manuellement si besoin.
 
@@ -37,8 +37,9 @@ Write your own plugin
 ---------------------
 
 Les informations retournées par le plugin doivent être sous un format JSON.
-
 Pour une efficacité optimal, il convient de normaliser les soties de vos plugins. C'est à dire, respecté une convention de nommage définit selon vos principes.
+
+Chaque plugin doit être mit dans le dossier "plugins" du serveur, qui se chargera de les transmettres aux clients. De plus, une entrée doit être écrite dans le fichier config.json pour avoir les informations nécéssaire au bon déroulement du plugin. 
 
 ## Rédaction d'un plugin
 #### Rédaction d'un plugin avec un langage de script
@@ -62,9 +63,7 @@ osInfo = {
 print(json.dumps(osInfo));
 ```
 
-Le fichier de configuratin doit être modifier pour accepter un intepréteur
-Il existe aussi la possibilité de configurer une variable d'environnement (en fonction de votre OS), contenant alors le chemin vers l'intepréteur. Il n'est donc pas obligé de modifier le fichier de configuration avec cette méthode.
-La variable d'environnement doit avoir comme clé le nom en majuscule (ex: PYTHON, RUBY, POWERSHELL...) et comme valeur le chemin vers l'intepréteur
+Le fichier de configuratin peut être modifier pour accepter un intepréteur différent de celui par défaut.
 
 ``` json
 {
@@ -86,6 +85,9 @@ La variable d'environnement doit avoir comme clé le nom en majuscule (ex: PYTHO
 	
 	- windows (Windows 7, 8, 10...)
 	- linux (toutes distribution utilisant le noyaux linux)
+
+Il existe aussi la possibilité de configurer une variable d'environnement (en fonction de votre OS), contenant alors le chemin vers l'intepréteur. Il n'est donc pas obligé de modifier le fichier de configuration avec cette méthode.
+La variable d'environnement doit avoir comme clé le nom en majuscule (ex: PYTHON, RUBY, POWERSHELL...) et comme valeur le chemin vers l'intepréteur
 
 Pour linux, des intepréteurs par défaut sont déjà configurés, il n'est pas alors obligé de les spécifier pour les types de scripts supportés, bien que cela soit très recommandés.
 
@@ -110,9 +112,6 @@ Exemple de configuration:
 		},
 		"linux": {
 			"python": "/usr/bin/python3",
-		},
-		"osx": {
-			"python": "/usr/bin/python3",
 		}
 	},
 
@@ -126,13 +125,13 @@ Exemple de configuration:
 }
 ```
 
-Ce dernier sera alors activé, aura une execution toutes les demie-heure et sera lancer uniquement sur les plateformes windows et linux.
+Ce dernier sera alors activé, aura une execution toutes les demie-heure et sera lancé uniquement sur les plateformes windows et linux.
 
 ##### Ajout du mode administrateur
 
 Un plugin peut potentiellement avoir besoin d'être éxecuté avec un utilisateur différent que celui actuellement sur la machine.
 
-Pour cela, il faut rajouter mettre "admin_rights" à "true" et spécifier un utilisateur: "admin_username" avec le nom d'utilisateur.
+Pour cela, il faut rajouter mettre "admin\_rights" à "true" et spécifier un utilisateur: "admin_username" avec le nom d'utilisateur.
 
 Exemple:
 
@@ -142,13 +141,13 @@ Exemple:
 		"activated": "true",
 		"heartbeat": "0.5",
 		"admin_rights": "true",
-		"admin_username": "specificuser",
+		"admin_username": "user",
 		"os": ["linux"]
 	}
 }
 ```
 
-Le plugin sera alors lancé avec la commande suivant: `sudo -u specificuser -s <shell specifié dans interpreteur> -c script.sh`
+Le plugin sera alors lancé automatiquement avec la commande suivant: `sudo -u user -s <shell specifié dans interpreteur> -c script.sh`
 
 #### Rédaction d'un plugin AssemblyDLL, classique DLL, Shared object
 
@@ -189,16 +188,38 @@ Compilation en .so sous linux:
 Compilation en .dll sous windows (si plugin compatible) avec utilisation de [MinGW](http://www.mingw.org/)
 	`gcc -Wall -Wextra -fPIC -shared fichier.c -o fichier.dll`
 
-puis copier ip_infos.so dans le dossier plugins
+puis copier ip_infos.so dans le dossier plugins et rajouter une entrée dans config.json:
+
+``` json
+ ...
+	"plugins": {
+	    ...
+		"ip\_infos.c.dll": {
+			"activated": "true",
+			"heartbeat": "0.5",
+			"os": ["windows"]
+		},
+	    "ip\_infos.c.so": {
+			"activated": "true",
+			"heartbeat": "0.5",
+			"os": ["linux"]
+		}
+		...
+	}
+ ...
+```
 
 ##### Exemple en C# (AssemblyDLL)
 
 Un point d'entrée est aussi obligatoire pour l'execution du plugin. Le retour du point d'entrée sera alors sauvegardé par le client. Il doit impérativement être en JSON.
 
 ``` cs
-namespace Plugin {
-	public class NomPlugin {
-	    public string Run() {
+namespace Plugin 
+{
+	public class NomPlugin 
+	{
+	    public string Run() 
+	    {
 
 	    }
 	}
@@ -230,7 +251,20 @@ Puis build la librairie:
 
 `dotnet build`
 
-Finalement, copier et renommer si besoin plugin.dll et le mettre ensuite dans le dossier plugins
+Finalement, copier et renommer si besoin plugin.dll et le mettre ensuite dans le dossier plugins et ajouter une entrée dans config.json:
+
+``` json
+ ...
+	"plugins": {
+	    ...
+		"plugin.dll": {
+			"activated": "true",
+			"heartbeat": "0.5"
+		}
+		...
+	}
+ ...
+```
 
 ### Exemple en GO
 
@@ -281,7 +315,7 @@ Par exemple, pour ajouter une extension de PHP (.php):
 }
 ```
 
-Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini par défaut.
+Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini par défaut, que ce soit via config.json ou les variables d'environnements.
 
 ### Schema récapitulatif du projet
 ![](documents/schemas/Schema_recap_fleche_png.png)
