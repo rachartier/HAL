@@ -1,4 +1,5 @@
 ﻿using HAL.OSData;
+using System.Linq;
 using static HAL.Plugin.PluginFileInfos;
 
 namespace HAL.Plugin
@@ -13,9 +14,9 @@ namespace HAL.Plugin
 
         public override bool CanBeRunOnOS()
         {
-            return ((((OsAuthorized & OSAttribute.TargetFlag.Linux) != 0) && OSAttribute.IsLinux
+            return ((OsAuthorized & OSAttribute.TargetFlag.Linux) != 0) && OSAttribute.IsLinux
                 || ((OsAuthorized & OSAttribute.TargetFlag.Windows) != 0) && OSAttribute.IsWindows
-                || ((OsAuthorized & OSAttribute.TargetFlag.OSX) != 0) && OSAttribute.IsOSX));
+                || ((OsAuthorized & OSAttribute.TargetFlag.OSX) != 0) && OSAttribute.IsOSX;
         }
 
         public override bool CanBeRun()

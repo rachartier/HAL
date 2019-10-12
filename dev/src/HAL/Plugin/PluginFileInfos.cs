@@ -46,6 +46,7 @@ namespace HAL.Plugin
 
             return FileName.Equals(other.FileName) && CheckSum.Equals(other.CheckSum);
         }
+
         public override int GetHashCode()
         {
             return HashCode.Combine(FileName, CheckSum);

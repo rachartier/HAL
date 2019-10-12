@@ -9,7 +9,7 @@ namespace HAL.Scheduler
     {
         public static uint NB_MILLIS_IN_HOURS = 3_600_000U;
 
-        public static SchedulerService Instance => instance ?? (instance = new SchedulerService());
+        public static SchedulerService Instance => instance ??= new SchedulerService();
 
         private static SchedulerService instance;
 

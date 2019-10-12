@@ -46,8 +46,10 @@ namespace HAL.Executor.ThreadPoolExecutor
                 {
                     throw;
                 }
-
-                Consume();
+                finally
+                {
+                    Consume();
+                }
             }));
         }
 
@@ -60,11 +62,11 @@ namespace HAL.Executor.ThreadPoolExecutor
             {
                 if (OSData.OSAttribute.IsLinux)
                 {
-                    using (var dllimport = new DllImportLaunchCmdUnix())
-                    {
-                        string result = dllimport.UseLaunchCommand($"sudo -u {plugin.AdministratorUsername} -s {file} -c {args}");
-                        plugin.RaiseOnExecutionFinished(result);
-                    }
+                    using var dllimport = new DllImportLaunchCmdUnix();
+
+                    string result = dllimport.UseLaunchCommand($"sudo -u {plugin.AdministratorUsername} -s {file} -c {args}");
+                    plugin.RaiseOnExecutionFinished(result);
+
                     return;
                 }
                 else if (OSData.OSAttribute.IsWindows)
@@ -92,22 +94,19 @@ namespace HAL.Executor.ThreadPoolExecutor
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
-            using (var process = Process.Start(start))
-            {
-                using (var reader = process.StandardOutput)
-                {
-                    plugin.RaiseOnExecutionFinished(reader.ReadToEnd());
-                }
-                using (var reader = process.StandardError)
-                {
-                    string err = reader.ReadToEnd();
 
-                    if (!string.IsNullOrEmpty(err))
-                    {
-                        Log.Instance?.Error(err);
-                    }
-                }
+            using var process = Process.Start(start);
+            using var readerOutput = process.StandardOutput;
+            using var readerInput = process.StandardError;
+
+            string err = readerInput.ReadToEnd();
+
+            if (!string.IsNullOrEmpty(err))
+            {
+                Log.Instance?.Error(err);
             }
+
+            plugin.RaiseOnExecutionFinished(readerOutput.ReadToEnd());
         }
     }
 }

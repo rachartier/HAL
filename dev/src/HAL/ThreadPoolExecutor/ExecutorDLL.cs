@@ -27,13 +27,15 @@ namespace HAL.Executor.ThreadPoolExecutor
                 catch (Exception e)
                 {
                     // if it can't load assembly, it need to try a classic type file dll
-                    if (e is System.BadImageFormatException || e is System.DllNotFoundException)
+                    if (e is BadImageFormatException || e is DllNotFoundException)
                     {
                         RunClassicDLL(plugin);
                     }
                 }
-
-                Consume();
+                finally
+                {
+                    Consume();
+                }
             }));
         }
 
