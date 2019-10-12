@@ -64,6 +64,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicStringEnumerator", "ResourcesResXManager\MagicStringEnumerator.csproj", "{6F1C0F19-86FD-4223-B2A1-60F105CA6F4F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DllImportMethods", "DllImportMethods\DllImportMethods.csproj", "{9AF8F25F-8713-41BB-B22E-B77645DA71DE}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileParserTest", "FileParserTest\FileParserTest.csproj", "{6E3F92DE-41D7-4CB5-9937-9E7BF100F6A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileParser", "FileParser\FileParser.csproj", "{B727B060-1953-4DD9-A533-61DD28C2822A}"
