@@ -62,7 +62,9 @@ osInfo = {
 print(json.dumps(osInfo));
 ```
 
-Le fichier de configuratin doit être modifier pour accepter un interpreter
+Le fichier de configuratin doit être modifier pour accepter un intepréteur
+Il existe aussi la possibilité de configurer une variable d'environnement (en fonction de votre OS), contenant alors le chemin vers l'intepréteur. Il n'est donc pas obligé de modifier le fichier de configuration avec cette méthode.
+La variable d'environnement doit avoir comme clé le nom en majuscule (ex: PYTHON, RUBY, POWERSHELL...) et comme valeur le chemin vers l'intepréteur
 
 ``` json
 {

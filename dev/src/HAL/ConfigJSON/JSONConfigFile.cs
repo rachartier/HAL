@@ -1,3 +1,4 @@
+using HAL.DllImportMethods;
 using HAL.Loggin;
 using HAL.MagicString;
 using HAL.OSData;
@@ -13,9 +14,6 @@ namespace HAL.Storage.Configuration
 {
     public class JSONConfigFile : IConfigFile<JObject, JToken>
     {
-        private ResourceManager ResourceManager => resourceManager ?? (resourceManager = new ResourceManager("Resource1", Assembly.GetExecutingAssembly()));
-        private ResourceManager resourceManager;
-
         public JSONConfigFile()
         {
         }
@@ -130,6 +128,11 @@ namespace HAL.Storage.Configuration
 
         public override void SetInterpreterNameConfiguration(IPluginMaster pluginMaster)
         {
+            if (Root == null)
+            {
+                return;
+            }
+
             foreach (var fileType in pluginMaster.AcceptedFilesTypes[PluginFileInfos.FileType.Script])
             {
                 string key = fileType;
@@ -138,15 +141,36 @@ namespace HAL.Storage.Configuration
                 // an interpreter is needed to interpret the code
                 var interpreterConfig = Root[MagicStringEnumerator.JSONIntepreter];
 
-                if (interpreterConfig == null)
-                {
-                    Log.Instance?.Error("intepreter is not set in the configuration file.");
-                    throw new NullReferenceException("intepreter is not set in the configuration file.");
-                }
-
                 // an intepreter can change depending the os
-                val = interpreterConfig[OSAttribute.GetOSFamillyName()].Value<string>(pluginMaster.ExtensionsNames[fileType]);
+                val = interpreterConfig[OSAttribute.GetOSFamillyName()]?.Value<string>(pluginMaster.ExtensionsNames[fileType]);
 
+                // if we cant find one we need to search in the environment variables
+                if (val == null)
+                {
+                    var extensionName = pluginMaster.ExtensionsNames[fileType].ToUpper();
+
+                    if (OSAttribute.IsWindows)
+                    {
+                        foreach (EnvironmentVariableTarget enumValue in Enum.GetValues(typeof(EnvironmentVariableTarget)))
+                        {
+                            val = Environment.GetEnvironmentVariable(extensionName, enumValue);
+
+                            if (val != null)
+                            {
+                                Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
+                                break;
+                            }
+                        }
+                    }
+                    else if (OSAttribute.IsLinux)
+                    {
+                        using (var dllimport = new DllImportLaunchCmdUnix())
+                        {
+                            val = dllimport.UseLaunchCommand($"printenv | grep {extensionName} | cut -d '=' -f 2").Trim();
+                            Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
+                        }
+                    }
+                }
                 // if it can't be found, the default one is choose
                 if (string.IsNullOrEmpty(val))
                 {

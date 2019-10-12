@@ -59,7 +59,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{A64F45
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigJSON", "ConfigJSON\ConfigJSON.csproj", "{76356878-782C-42DA-94D8-4ECA68B152AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicStringEnumerator", "ResourcesResXManager\MagicStringEnumerator.csproj", "{6F1C0F19-86FD-4223-B2A1-60F105CA6F4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicStringEnumerator", "ResourcesResXManager\MagicStringEnumerator.csproj", "{6F1C0F19-86FD-4223-B2A1-60F105CA6F4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DllImportMethods", "DllImportMethods\DllImportMethods.csproj", "{9AF8F25F-8713-41BB-B22E-B77645DA71DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +149,10 @@ Global
 		{6F1C0F19-86FD-4223-B2A1-60F105CA6F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F1C0F19-86FD-4223-B2A1-60F105CA6F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F1C0F19-86FD-4223-B2A1-60F105CA6F4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AF8F25F-8713-41BB-B22E-B77645DA71DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF8F25F-8713-41BB-B22E-B77645DA71DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF8F25F-8713-41BB-B22E-B77645DA71DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF8F25F-8713-41BB-B22E-B77645DA71DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +182,7 @@ Global
 		{A64F45D5-68D1-4B88-9EBD-DD422D9DB65F} = {CD422F44-9228-437B-A65D-DFE6C59C6233}
 		{76356878-782C-42DA-94D8-4ECA68B152AA} = {A64F45D5-68D1-4B88-9EBD-DD422D9DB65F}
 		{6F1C0F19-86FD-4223-B2A1-60F105CA6F4F} = {ED49E0DE-BF39-4CC6-B3DE-0B800C4AEE1A}
+		{9AF8F25F-8713-41BB-B22E-B77645DA71DE} = {ED49E0DE-BF39-4CC6-B3DE-0B800C4AEE1A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {90B83D02-F3EA-4240-8D4C-366E65296CB4}

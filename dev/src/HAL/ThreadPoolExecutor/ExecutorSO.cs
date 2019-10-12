@@ -1,4 +1,5 @@
-﻿using HAL.OSData;
+﻿using HAL.DllImportMethods;
+using HAL.OSData;
 using HAL.Plugin;
 using System;
 using System.Runtime.InteropServices;
@@ -24,10 +25,12 @@ namespace HAL.Executor.ThreadPoolExecutor
                 {
                     try
                     {
-                        var result = UseRunEntryPointSharedObject(plugin.Infos.FilePath, out IntPtr ptrString);
-                        plugin.RaiseOnExecutionFinished(result);
+                        using (var dllimport = new DllImportEntryPoint())
+                        {
+                            var result = dllimport.UseRunEntryPointSharedObject(plugin.Infos.FilePath);
 
-                        Marshal.FreeHGlobal(ptrString);
+                            plugin.RaiseOnExecutionFinished(result);
+                        }
                     }
                     catch (Exception)
                     {

@@ -1,4 +1,5 @@
 ﻿using HAL.Plugin;
+using HAL.DllImportMethods;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -59,11 +60,12 @@ namespace HAL.Executor.ThreadPoolExecutor
 
         private void RunClassicDLL(APlugin plugin)
         {
-            var result = UseRunEntryPointSharedObject(plugin.Infos.FilePath, out IntPtr ptrString);
+            using (var dllimport = new DllImportEntryPoint())
+            {
+                var result = dllimport.UseRunEntryPointSharedObject(plugin.Infos.FilePath);
 
-            plugin.RaiseOnExecutionFinished(result);
-
-            Marshal.FreeHGlobal(ptrString);
+                plugin.RaiseOnExecutionFinished(result);
+            }
         }
     }
 }

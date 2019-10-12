@@ -4,6 +4,7 @@ using HAL.Storage;
 using HAL.Storage.Configuration;
 using Newtonsoft.Json.Linq;
 using Plugin.Manager;
+using System;
 using System.IO;
 
 namespace HAL
