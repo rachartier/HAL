@@ -13,14 +13,15 @@ namespace FileParserTest
         [TestMethod]
         public void FileParser_ValidChecksumParsing()
         {
-            var pluginSocketInfo = new PluginSocketInfo("plugins/script.rb", CheckSumGenerator.HashOf("plugins/script.rb"));
+            var pluginSocketInfo = new PluginSocketInfo("plugins/date.pl", CheckSumGenerator.HashOf("plugins/date.pl"));
 
             var preBuffer = string.Format("<FILE>{0}</FILE><PATH>{1}</PATH>", pluginSocketInfo.FileName, "test/");
             var postBuffer = string.Format("<CHECKSUM>{0}</CHECKSUM><EOT>", pluginSocketInfo.CheckSum);
 
             var sb = new StringBuilder();
 
-            var lines = File.ReadAllLines(pluginSocketInfo.FilePath);
+            var lines = File.ReadAllText(pluginSocketInfo.FilePath, Encoding.UTF8);
+
             foreach (var line in lines)
             {
                 sb.Append(line);
@@ -28,9 +29,9 @@ namespace FileParserTest
 
             var data = string.Concat(preBuffer, sb.ToString(), postBuffer);
 
-            var returnCheckSum = FileParser.ParseAReceiveData(data);
+            var checksum = FileParser.ParseAReceiveData(data, out string pathFileName);
 
-            Assert.AreEqual(pluginSocketInfo.CheckSum, returnCheckSum);
+            Assert.AreEqual(checksum, CheckSumGenerator.HashOf(pathFileName));
         }
     }
 }

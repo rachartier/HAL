@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FileParser\FileParser.csproj" />
     <ProjectReference Include="..\Loggin\Loggin.csproj" />
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
     <ProjectReference Include="..\Schelduler\Schelduler.csproj" />

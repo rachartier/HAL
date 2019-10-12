@@ -34,19 +34,21 @@ namespace HAL.Client
                     foreach (string path in filePaths)
                     {
                         //Encode the data to send to the server
-                        byte[] data = Encoding.ASCII.GetBytes(string.Format(" {0} : {1};",
+                        byte[] data = Encoding.UTF8.GetBytes(string.Format(" {0} : {1};",
                             path, CheckSumGenerator.HashOf(path)));
                         client.Send(data);
                     }
 
-                    byte[] eof = Encoding.ASCII.GetBytes("<EOF>");
+                    byte[] eof = Encoding.UTF8.GetBytes("<EOF>");
                     // Send the data EOF through the socket.    
                     int bytesSent = client.Send(eof);
 
-                    // Receive the response from the remote device. (OPTIONNAL)
-
+                    // Receive
                     int bytesRec = client.Receive(bytes);
-                    Console.WriteLine("{0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
+                    var checksumRec = FileParser.FileParser.ParseAReceiveData(Encoding.UTF8.GetString(bytes, 0, bytesRec),
+                                                                              out string pathFileName);
+                    // TODO: Compare the Equality of the Checksum (receive one and send one)
+
 
                     // Release the socket.    
                     client.Shutdown(SocketShutdown.Both);

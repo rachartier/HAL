@@ -50,7 +50,7 @@ namespace Server
                 {
                     bytes = new byte[1024];
                     int bytesRec = handler.Receive(bytes);
-                    data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
+                    data += Encoding.UTF8.GetString(bytes, 0, bytesRec);
                     if (data.IndexOf("<EOF>") > -1)
                     {
                         break;
@@ -77,9 +77,6 @@ namespace Server
                     SendFileToClient(handler, pluginToUpdate);
                 }
 
-                //Optionnal echo message.
-                byte[] msg = Encoding.ASCII.GetBytes(data);
-                handler.Send(msg);
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
 
@@ -178,9 +175,10 @@ namespace Server
                 foreach (var path in fileSendingList)
                 {
                     // The preBuffer which is send, matching with the name of the plugins
-                    var preBuffer = Encoding.ASCII.GetBytes(String.Format("<FILE>{0}</FILE><PATH>/plugins</PATH>", path.FileName));
+                    // TODO: Generify the path were to save plugin
+                    var preBuffer = Encoding.UTF8.GetBytes(String.Format("<FILE>{0}</FILE><PATH>plugins/</PATH>", path.FileName));
                     // The postBuffer is the path of where to save it on the client machine
-                    var postBuffer = Encoding.ASCII.GetBytes(String.Format("<CHECKSUM>{0}</CHECKSUM><EOT>", path.CheckSum));
+                    var postBuffer = Encoding.UTF8.GetBytes(String.Format("<CHECKSUM>{0}</CHECKSUM>", path.CheckSum));
                     Console.WriteLine(preBuffer.Length);
                     handler.SendFile(path.FilePath, preBuffer, postBuffer, TransmitFileOptions.UseDefaultWorkerThread);
                 }
@@ -192,10 +190,6 @@ namespace Server
             }
         }
 
-        private string GetPathFromRoot(string filePath)
-        {
-            int lenght = filePath.Split("\\", StringSplitOptions.RemoveEmptyEntries).Length;
-            return string.Format("plugins\\{0}", filePath.Split("\\", StringSplitOptions.RemoveEmptyEntries).GetValue(lenght - 1).ToString());
-        }
+
     }
 }

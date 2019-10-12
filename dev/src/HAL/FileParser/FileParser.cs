@@ -1,4 +1,5 @@
 ﻿using HAL.CheckSum;
+using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,48 +16,66 @@ namespace HAL.FileParser
         /// <EOT> is the End Of Transmission mark
         /// </summary>
         /// <param name="data">The data to parse</param>
-        /// <returns></returns>
-        public static string ParseAReceiveData(string data)
+        /// <returns>The checksum of the receive file</returns>
+        public static string ParseAReceiveData(string data, out string pathFileName)
         {
-            string path, fileName, checksum, content;
+            string path, fileName, checksum;
 
             var regFile = new Regex("(?<=<FILE>)(.*)(?=</FILE>)");
+            var regFilePart = new Regex("(.*)(?=<PATH>)");
+
             var regPath = new Regex("(?<=<PATH>)(.*)(?=</PATH>)");
-            var regFileContent = new Regex("(?<=</PATH>)(.*\\s*)(?=<CHECKSUM>)");
+            var regPathPart = new Regex("(.*)(</PATH>)");
+
             var regChecksum = new Regex("(?<=<CHECKSUM>)(.*)(?=</CHECKSUM>)");
+            var regChecksumPart = new Regex("(<CHECKSUM>)(.*)");
 
-            fileName = MatchingRegex(regFile, data);
-            path = MatchingRegex(regPath, data);
-            checksum = MatchingRegex(regChecksum, data);
+            fileName = MatchingRegex(regFile, regFilePart, ref data);
+            path = MatchingRegex(regPath, regPathPart, ref data);
+            checksum = MatchingRegex(regChecksum, regChecksumPart, ref data);
 
-            var pathFileName = string.Concat(path, fileName);
+            pathFileName = string.Concat(path, fileName);
 
             if (File.Exists(pathFileName))
             {
                 File.Delete(pathFileName);
             }
 
-            content = MatchingRegex(regFileContent, data);
-
             using (var fs = File.Create(pathFileName))
             {
-                var text = Encoding.ASCII.GetBytes(content);
+                var text = Encoding.UTF8.GetBytes(data);
                 fs.Write(text, 0, text.Length);
             }
 
-            return CheckSumGenerator.HashOf(pathFileName);
+            return checksum;
         }
 
-        private static string MatchingRegex(Regex regex, string data)
+        private static string MatchingRegex(Regex regexFind, Regex regexDel, ref string data)
         {
-            var match = regex.Match(data);
+            var match = regexFind.Match(data);
             if (match.Success)
             {
+                if (regexDel != null)
+                {
+                    data = DeleteStringFromRegex(regexDel, data);
+                }
                 return match.ToString();
-            } else
+            }
+            else
             {
                 return null;
             }
+        }
+
+        private static string DeleteStringFromRegex(Regex regex, string data)
+        {
+            var matchDel = regex.Match(data);
+            if (matchDel.Success)
+            {
+                data = data.Remove(matchDel.Index, matchDel.Length);
+            }
+
+            return data;
         }
     }
 }
