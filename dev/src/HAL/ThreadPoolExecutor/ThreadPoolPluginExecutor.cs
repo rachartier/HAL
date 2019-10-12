@@ -6,6 +6,11 @@ namespace HAL.Executor.ThreadPoolExecutor
 {
     public partial class ThreadPoolPluginExecutor : IPluginExecutor
     {
+        private readonly IPluginMaster refPluginMaster;
+        private ManualResetEvent manualResetEvent;
+
+        public event EventHandler OnAllPluginsExecuted;
+
         /// <summary>
         /// default method entry point to execute the plugin's code
         /// </summary>
@@ -13,12 +18,7 @@ namespace HAL.Executor.ThreadPoolExecutor
 
         public uint QueueLength { get; private set; } = 0u;
 
-        public event EventHandler OnAllPluginsExecuted;
-
         private bool waitForComplete = false;
-        private ManualResetEvent manualResetEvent;
-
-        private readonly IPluginMaster refPluginMaster;
 
         public ThreadPoolPluginExecutor(IPluginMaster pluginMaster)
         {

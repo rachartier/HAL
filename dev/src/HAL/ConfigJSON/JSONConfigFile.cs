@@ -162,11 +162,10 @@ namespace HAL.Storage.Configuration
                     }
                     else if (OSAttribute.IsLinux)
                     {
-                        using (var dllimport = new DllImportLaunchCmdUnix())
-                        {
-                            val = dllimport.UseLaunchCommand($"printenv | grep {extensionName} | cut -d '=' -f 2").Trim();
-                            Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
-                        }
+                        using var dllimport = new DllImportLaunchCmdUnix();
+
+                        val = dllimport.UseLaunchCommand($"printenv | grep {extensionName} | cut -d '=' -f 2").Trim();
+                        Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
                     }
                 }
                 // if it can't be found, the default one is choose
