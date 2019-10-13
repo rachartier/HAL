@@ -16,11 +16,11 @@ HAL est un projet de supervision destiné à récupérer différentes donnés d'
 
 Il utilise un système de plugins, qui sont chargés automatiquement au démarrage du client. Plusieurs langages pour écrire les plugins sont supportés:
 
-	- C/C++/Go/C# (.dll / .so)
-	- Python (.py)
-	- Ruby (.rb)
-	- Shell (.sh)
-	- Powershell (.ps1)
+* C/C++/Go/C# (.dll / .so)
+* Python (.py)
+* Ruby (.rb)
+* Shell (.sh)
+* Powershell (.ps1)
 
 Et d'autres peuvent être ajoutés manuellement si besoin.
 
@@ -83,8 +83,8 @@ Le fichier de configuratin peut être modifier pour accepter un intepréteur dif
 
 3 familles de système d'exploitation sont disponibles:
 	
-	- windows (Windows 7, 8, 10...)
-	- linux (toutes distribution utilisant le noyaux linux)
+* windows (Windows 7, 8, 10...)
+* linux (toutes distribution utilisant le noyaux linux)
 
 Il existe aussi la possibilité de configurer une variable d'environnement (en fonction de votre OS), contenant alors le chemin vers l'intepréteur. Il n'est donc pas obligé de modifier le fichier de configuration avec cette méthode.
 La variable d'environnement doit avoir comme clé le nom en majuscule (ex: PYTHON, RUBY, POWERSHELL...) et comme valeur le chemin vers l'intepréteur
@@ -93,14 +93,15 @@ Pour linux, des intepréteurs par défaut sont déjà configurés, il n'est pas 
 
 Par la suite, il faut ajouter la configuration du plugin portant le nom et extension (nom.extension) dans la branche "plugins":
 
-	- activated (booléen): permet de savoir si le plugin est actif ou non, par conséquent si il doit être executé
-	- heartbeat (double): 1 execution par heartbeat. Correspond à l'execution périodique d'un plugin où le hearthbeat défini la période.
-		- plus le heartbeat est petit, plus nombreux seront les executions par heure, et donc par conséquent une plus grande charge système.
-	- os (array de string): 
-		- optionnel, permet de lancer le plugin uniquement sur un ou plusieurs famille de système d'exploitation
-		- si rien n'est spécifié, le plugin sera disponible sur toutes les familles
-	- si l'OS cible est linux, une autre option peut être spécifiée:
-		- admin_rights (booléen): si le script doit être exécuté en administrateur (sudo), si non spécifié, alors false par défaut
+* activated (booléen): permet de savoir si le plugin est actif ou non, par conséquent si il doit être executé
+* heartbeat (double): 1 execution par heartbeat. Correspond à l'execution périodique d'un plugin où le hearthbeat défini la période.
+    * plus le heartbeat est petit, plus nombreux seront les executions par heure, et donc par conséquent une plus grande charge système.
+* os (array de string): 
+    * optionnel, permet de lancer le plugin uniquement sur un ou plusieurs famille de système d'exploitation
+    * si rien n'est spécifié, le plugin sera disponible sur toutes les familles
+    * si l'OS cible est linux, une autre option peut être spécifiée:
+* admin_rights (booléen): si le script doit être exécuté en administrateur (sudo), si non spécifié, alors false par défaut
+
 
 Exemple de configuration:
 
@@ -199,7 +200,7 @@ puis copier ip_infos.so dans le dossier plugins et rajouter une entrée dans con
 			"heartbeat": "0.5",
 			"os": ["windows"]
 		},
-	    "ip\_infos.c.so": {
+	    "ip_infos.c.so": {
 			"activated": "true",
 			"heartbeat": "0.5",
 			"os": ["linux"]
