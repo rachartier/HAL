@@ -1,20 +1,25 @@
 {
-  "interpreter": {
-    "windows": {
-    },
-    "linux": {
-      "bash": "/bin/bash"
-    }
-  },
+	"interpreter": {
+		"windows": {
+		},
+		"linux": {
+			"bash": "/bin/bash"
+		}
+	},
 
-  "plugins": {
-    "kernel_version.py": {
-      "activated": "true",
-      "heartbeat": "1"
-    },
-    "connected_user.py": {
-      "activated": "true",
-      "heartbeat": "0.01666"
-    }
-  }
+	"plugins": {
+		"upgrades_available.sh": {
+			"activated": "true",
+			"heartbeat": "1",
+			"os": ["linux"]
+		},
+		"kernel_version.py": {
+			"activated": "true",
+			"heartbeat": "1"
+		},
+		"connected_user.py": {
+			"activated": "true",
+			"heartbeat": "0.01666"
+		}
+	}
 }
