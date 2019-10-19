@@ -9,5 +9,6 @@
         public static readonly string JSONAdminRights = "admin_rights";
         public static readonly string JSONActivated = "activated";
         public static readonly string JSONCustomExtensions = "custom_extensions";
+        public static readonly string JSONOs = "os";
     }
 }

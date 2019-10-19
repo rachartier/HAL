@@ -4,6 +4,8 @@ using HAL.Plugin;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace HAL.Executor.ThreadPoolExecutor
 {
@@ -116,6 +118,17 @@ namespace HAL.Executor.ThreadPoolExecutor
             else
             {
                 result = dllimport.UseLaunchCommand($"{file} {args}");
+            }
+
+            // if it's not a valid json
+            try
+            {
+                JObject.Parse(result);
+            }
+            catch (JsonReaderException)
+            {
+                Log.Instance?.Error(result);
+                return;
             }
 
             plugin.RaiseOnExecutionFinished(result);

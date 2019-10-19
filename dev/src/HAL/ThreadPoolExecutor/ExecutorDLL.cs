@@ -20,6 +20,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
             {
                 // TODO: verifier si il y a un moyen de connaitre si c est une dll dotnet
+				
                 try
                 {
                     TryRunAssemblyDLL(plugin);
@@ -27,7 +28,7 @@ namespace HAL.Executor.ThreadPoolExecutor
                 catch (Exception e)
                 {
                     // if it can't load assembly, it need to try a classic type file dll
-                    if (e is BadImageFormatException || e is DllNotFoundException)
+                    if (e is BadImageFormatException)
                     {
                         RunClassicDLL(plugin);
                     }
