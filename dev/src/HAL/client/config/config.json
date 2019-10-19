@@ -11,6 +11,10 @@
     "kernel_version.py": {
       "activated": "true",
       "heartbeat": "1"
+    },
+    "connected_user.py": {
+      "activated": "true",
+      "heartbeat": "0.01666"
     }
   }
 }
