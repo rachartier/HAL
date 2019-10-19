@@ -8,61 +8,9 @@
   },
 
   "plugins": {
-    "simple_c.so": {
+    "kernel_version.py": {
       "activated": "true",
-      "heartbeat": "0.001",
-      "os": [ "linux" ]
-    },
-    "simple_cs.dll": {
-      "activated": "true",
-      "heartbeat": "0.001",
-      "os": [ "linux", "windows" ]
-    },
-    "simple_go.dll": {
-      "activated": "true",
-      "heartbeat": "0.001",
-      "os": [ "linux" ]
-    },
-    "simple.py": {
-      "activated": "true",
-      "heartbeat": "0.001",
-      "os": [ "linux", "windows" ]
-    },
-    "simple.rb": {
-      "activated": "false",
-      "heartbeat": "0.001",
-      "os": [ "linux" ]
-    },
-    "simple.sh": {
-      "activated": "true",
-      "heartbeat": "0.001",
-      "os": [ "linux" ]
-    },
-
-    "complex_c.so": {
-      "activated": "true",
-      "heartbeat": "0.001",
-      "os": [ "linux" ]
-    },
-    "complex_cs.dll": {
-      "activated": "true",
-      "heartbeat": "0.001",
-      "os": [ "linux", "windows" ]
-    },
-    "complex_go.dll": {
-      "activated": "true",
-      "heartbeat": "0.001",
-      "os": [ "linux" ]
-    },
-    "complex.py": {
-      "activated": "true",
-      "heartbeat": "0.001",
-      "os": [ "linux", "windows" ]
-    },
-    "complex.rb": {
-      "activated": "false",
-      "heartbeat": "0.001",
-      "os": [ "linux" ]
+      "heartbeat": "1"
     }
   }
 }

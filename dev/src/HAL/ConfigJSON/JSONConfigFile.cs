@@ -165,7 +165,13 @@ namespace HAL.Storage.Configuration
                         using var dllimport = new DllImportLaunchCmdUnix();
 
                         val = dllimport.UseLaunchCommand($"printenv | grep {extensionName} | cut -d '=' -f 2").Trim();
+
+						if(string.IsNullOrEmpty(val)) {
+                        Log.Instance?.Info($"Environment variable not found: {extensionName}");
+						}
+						else {
                         Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
+								}
                     }
                 }
                 // if it can't be found, the default one is choose

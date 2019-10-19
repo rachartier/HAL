@@ -55,26 +55,20 @@ namespace HAL.Executor.ThreadPoolExecutor
 
         private void StartProcess(APlugin plugin, string file, string args)
         {
+            if (OSData.OSAttribute.IsLinux)
+            {
+                ExecuteScriptLinux(plugin, file, args);
+            }
+            else if (OSData.OSAttribute.IsWindows)
+            {
+                ExecuteScriptWindows(plugin, file, args);
+            }
+        }
+
+        private void ExecuteScriptWindows(APlugin plugin, string file, string args)
+        {
             string verb = "";
             string username = "";
-
-            if (plugin.AdministratorRights)
-            {
-                if (OSData.OSAttribute.IsLinux)
-                {
-                    using var dllimport = new DllImportLaunchCmdUnix();
-
-                    string result = dllimport.UseLaunchCommand($"sudo -u {plugin.AdministratorUsername} -s {file} -c {args}");
-                    plugin.RaiseOnExecutionFinished(result);
-
-                    return;
-                }
-                else if (OSData.OSAttribute.IsWindows)
-                {
-                    username = plugin.AdministratorUsername;
-                    verb = "runas";
-                }
-            }
 
             // if the plugin is a powershell scripts, it needs some tweeks to execute it
             if (plugin.Infos.FileExtension.Equals(".ps1"))
@@ -104,9 +98,27 @@ namespace HAL.Executor.ThreadPoolExecutor
             if (!string.IsNullOrEmpty(err))
             {
                 Log.Instance?.Error(err);
+                return;
             }
 
             plugin.RaiseOnExecutionFinished(readerOutput.ReadToEnd());
+        }
+
+        private void ExecuteScriptLinux(APlugin plugin, string file, string args)
+        {
+            using var dllimport = new DllImportLaunchCmdUnix();
+            string result = "";
+
+            if (plugin.AdministratorRights)
+            {
+                result = dllimport.UseLaunchCommand($"sudo -u {plugin.AdministratorUsername} -s {file} -c {args}");
+            }
+            else
+            {
+                result = dllimport.UseLaunchCommand($"{file} {args}");
+            }
+
+            plugin.RaiseOnExecutionFinished(result);
         }
     }
 }
