@@ -15,13 +15,14 @@ namespace HAL.DllImportMethods
         /// <returns>the command's result</returns>
         public string UseLaunchCommand(string command)
         {
+            IntPtr ptrResult;
             lock (key)
             {
                 ptr = Marshal.StringToHGlobalAnsi(command);
-                IntPtr ptrResult = launch_command(ptr);
+                ptrResult = launch_command(ptr);
             }
 
-            return Marshal.PtrToStringAnsi(ptr);
+            return Marshal.PtrToStringAnsi(ptrResult);
         }
     }
 }
