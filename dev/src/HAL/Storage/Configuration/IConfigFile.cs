@@ -1,5 +1,7 @@
 ﻿using HAL.Plugin;
+using HAL.Loggin;
 using System.Collections.Generic;
+using System;
 
 namespace HAL.Storage.Configuration
 {
@@ -47,7 +49,14 @@ namespace HAL.Storage.Configuration
         {
             foreach (var plugin in plugins)
             {
-                SetPluginConfiguration(plugin);
+                try
+                {
+                    SetPluginConfiguration(plugin);
+                }
+                catch (Exception e)
+                {
+                    Log.Instance?.Error($"{e.Message} Plugin ignored.");
+                }
             }
         }
     }

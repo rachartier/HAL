@@ -49,14 +49,32 @@ namespace HAL.Storage.Configuration
 
             JObject pluginConfig = Root[MagicStringEnumerator.JSONPlugins].Value<JObject>(plugin.Infos.FileName);
 
+            void _SetAttribute<T>(out T attr, string name, T fallback) where T : struct
+            {
+                T? val = pluginConfig[name]?.Value<T?>();
+
+                if (val == null)
+                {
+                    Log.Instance?.Error($"{plugin.Infos.FileName} has not \"{name}\" set. Default value used \"{fallback}\".");
+                    attr = fallback;
+                }
+                else
+                {
+                    attr = val.Value;
+                }
+            }
+
             // plugin needs to have a specific configuration, otherwise it can't be run
             if (pluginConfig == null)
             {
                 throw new NullReferenceException($"Plugin {plugin.Infos.FileName} does not have any configuration.");
             }
 
-            plugin.Heartbeat = pluginConfig[MagicStringEnumerator.JSONHeartbeat].Value<double>();
-            plugin.Activated = pluginConfig[MagicStringEnumerator.JSONActivated].Value<bool>();
+            _SetAttribute(out double heartbeat, MagicStringEnumerator.JSONHeartbeat, 1);
+            _SetAttribute(out bool activated, MagicStringEnumerator.JSONActivated, false);
+
+            plugin.Heartbeat = heartbeat;
+            plugin.Activated = activated;
 
             if (OSAttribute.IsLinux)
             {
@@ -77,13 +95,13 @@ namespace HAL.Storage.Configuration
             }
 
             // if no os is specified then all of them are authorized
-            if (pluginConfig["os"] == null)
+            if (pluginConfig[MagicStringEnumerator.JSONOs] == null)
             {
                 plugin.OsAuthorized |= OSAttribute.TargetFlag.All;
             }
             else
             {
-                foreach (var os in pluginConfig["os"].ToObject<string[]>())
+                foreach (var os in pluginConfig[MagicStringEnumerator.JSONOs].ToObject<string[]>())
                 {
                     if (!OSAttribute.OSNameToTargetFlag.ContainsKey(os))
                     {
@@ -131,20 +149,21 @@ namespace HAL.Storage.Configuration
                 return;
             }
 
+            var interpreterConfig = Root[MagicStringEnumerator.JSONIntepreter];
+
             foreach (var fileType in pluginMaster.AcceptedFilesTypes[PluginFileInfos.FileType.Script])
             {
                 string key = fileType;
                 string val = "";
 
-                // an interpreter is needed to interpret the code
-                var interpreterConfig = Root[MagicStringEnumerator.JSONIntepreter];
-
-                // an intepreter can change depending the os
-                val = interpreterConfig[OSAttribute.GetOSFamillyName()]?.Value<string>(pluginMaster.ExtensionsNames[fileType]);
-
-                // if we cant find one we need to search in the environment variables
-                if (val == null)
+                try
                 {
+                    // an intepreter can change depending the os
+                    val = interpreterConfig[OSAttribute.GetOSFamillyName()]?.Value<string>(pluginMaster.ExtensionsNames[fileType]);
+                }
+                catch (NullReferenceException)
+                {
+                    // if we cant find one we need to search in the environment variables
                     var extensionName = pluginMaster.ExtensionsNames[fileType].ToUpper();
 
                     if (OSAttribute.IsWindows)
@@ -166,12 +185,14 @@ namespace HAL.Storage.Configuration
 
                         val = dllimport.UseLaunchCommand($"printenv | grep {extensionName} | cut -d '=' -f 2").Trim();
 
-						if(string.IsNullOrEmpty(val)) {
-                        Log.Instance?.Info($"Environment variable not found: {extensionName}");
-						}
-						else {
-                        Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
-								}
+                        if (string.IsNullOrEmpty(val))
+                        {
+                            Log.Instance?.Info($"Environment variable not found: {extensionName}");
+                        }
+                        else
+                        {
+                            Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
+                        }
                     }
                 }
                 // if it can't be found, the default one is choose

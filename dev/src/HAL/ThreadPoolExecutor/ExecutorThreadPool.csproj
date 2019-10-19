@@ -6,11 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DllImportMethods\DllImportMethods.csproj" />
     <ProjectReference Include="..\Executor\Executor.csproj" />
   </ItemGroup>
-
 </Project>
