@@ -36,12 +36,13 @@ XXXXXXXXXXXXXXXX
 Write your own plugin
 ---------------------
 
+### Rédaction d'un plugin
+
 Les informations retournées par le plugin doivent être sous un format JSON.
 Pour une efficacité optimal, il convient de normaliser les soties de vos plugins. C'est à dire, respecté une convention de nommage définit selon vos principes.
 
 Chaque plugin doit être mit dans le dossier "plugins" du serveur, qui se chargera de les transmettres aux clients. De plus, une entrée doit être écrite dans le fichier config.json pour avoir les informations nécéssaire au bon déroulement du plugin. 
 
-## Rédaction d'un plugin
 #### Rédaction d'un plugin avec un langage de script
 
 Toutes les sorties sur l'entrée standard seront sauvegardées par le client.
@@ -187,8 +188,8 @@ char *run(void) {
 }
 ```
 
+Il faut impérativement que la variable de retour soit allouée en mémoire (via malloc, calloc...)  
 Des fonctions peuvent bien sûr être faites pour clarifier le code.
-
 
 Compilation en .so sous linux:
 	`gcc -Wall -Wextra -fPIC -shared ip_infos.c -o ip_infos.so`
@@ -248,7 +249,8 @@ namespace plugin
 {
     public class MachineName 
     {
-	    public string Run() {
+	    public string Run() 
+	    {
 		    return $"{{\"machinename\": {Environment.MachineName}}}";
 	    }
     }
