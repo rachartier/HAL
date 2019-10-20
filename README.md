@@ -12,10 +12,8 @@ Contents
 Intro
 ------------
 
-HAL est un projet de supervision destiné à récupérer différentes donnés d'un parc informatique et à les envoyer sur un serveur, dans le but d'agréger les données en vue de les traiters.
-
+HAL est un projet de supervision destiné à récupérer différents donnés d'un parc informatique et à les envoyer sur un serveur, dans le but d'agréger les données en vue des traitres.
 Il utilise un système de plugins, qui sont chargés automatiquement au démarrage du client. Plusieurs langages pour écrire les plugins sont supportés:
-
 * C/C++/Go/C# (.dll / .so)
 * Python (.py)
 * Ruby (.rb)
@@ -24,7 +22,7 @@ Il utilise un système de plugins, qui sont chargés automatiquement au démarra
 
 Et d'autres peuvent être ajoutés manuellement si besoin.
 
-Les plugins sont déposés dans le dossier "plugins", qui est un dossier spéciale scanné permettant de charger automatiquement tous les plugins qui s'y trouvent. 
+Les plugins sont déposés dans le dossier "plugins", qui est un dossier spécial scanné permettant de charger automatiquement tous les plugins qui s'y trouvent. 
 
 HAL est destiné à tout utilisateur voulant superviser les ordinateurs sur un réseau.
 
