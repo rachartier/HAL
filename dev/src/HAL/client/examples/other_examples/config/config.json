@@ -10,24 +10,29 @@
       "bash": "/bin/bash"
     }
   },
-
   "plugins": {
     "testadmin.sh": {
       "activated": true,
       "hearthbeat": 0.001,
       //    "admin_rights":  true,
       //		"admin_username": "root",
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "tictactoe.dll": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "windows" ]
+      "os": [
+        "windows"
+      ]
     },
     "tictactoe.so": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "os_informations.py": {
       "activated": true,
@@ -36,82 +41,74 @@
     "ip_address.so": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "disk_usage.py": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "whois.rb": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "ping.sh": {
       "activated": true,
       "hearthbeat": 0.001,
       "admin_right": true,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "cputemp.sh": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "date.pl": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "last_weekend.pl": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "random_numbers.lua": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "guid.rb": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "date.dll": {
       "activated": true,
       "hearthbeat": 0.001,
-      "os": [ "linux", "windows" ]
+      "os": [
+        "linux",
+        "windows"
+      ]
     },
-    "script.pl": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "script.py": {
-      "activated": true,
-      "hearthbeat": 0.001
-    },
-    "script.ps1": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "windows" ]
-    },
-    "script.rb": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "script.sh": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    },
-    "testso.so": {
-      "activated": true,
-      "hearthbeat": 0.001,
-      "os": [ "linux" ]
-    }
   }
 }
