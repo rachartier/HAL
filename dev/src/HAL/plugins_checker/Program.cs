@@ -1,14 +1,14 @@
-﻿using HAL.Executor.ThreadPoolExecutor;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using HAL.Executor.ThreadPoolExecutor;
 using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using HAL.Storage.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Manager;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
 
 namespace plugins_checker
 {
@@ -47,13 +47,14 @@ namespace plugins_checker
                     {
                         bool valid = IsValidJSON(e.Result, out string error);
 
-                        lock (key)
+                        lock(key)
                         {
                             PrintPluginLine(e.Plugin, valid, error);
                         }
                     });
 
                     pluginManager.Run(plugin);
+
                 }
 
                 (pluginManager.Executor as ThreadPoolPluginExecutor).WaitForEmptyPool();

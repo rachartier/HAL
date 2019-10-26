@@ -1,7 +1,5 @@
-﻿using HAL.Executor;
-using HAL.Loggin;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using HAL.Executor;
 
 namespace HAL.Plugin.Mananger
 {
@@ -20,35 +18,24 @@ namespace HAL.Plugin.Mananger
                 return;
             }
 
-            try
+            switch (plugin.Type)
             {
-                switch (plugin.Type)
-                {
-                    case PluginFileInfos.FileType.DLL:
-                        Executor.RunFromDLL(plugin);
-                        break;
+                case PluginFileInfos.FileType.DLL:
+                    Executor.RunFromDLL(plugin);
+                    break;
 
-                    case PluginFileInfos.FileType.Script:
-                        Executor.RunFromScript(plugin);
-                        break;
+                case PluginFileInfos.FileType.Script:
+                    Executor.RunFromScript(plugin);
+                    break;
 
-                    case PluginFileInfos.FileType.SharedObject:
-                        Executor.RunFromSO(plugin);
-                        break;
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Instance?.Error($"{plugin.Infos.FileName} encountered a problem: {e.Message}");
+                case PluginFileInfos.FileType.SharedObject:
+                    Executor.RunFromSO(plugin);
+                    break;
             }
         }
 
-        public virtual void SchedulePlugin(APlugin plugin)
-        {
-        }
+        public virtual void SchedulePlugin(APlugin plugin) { }
 
-        public virtual void SchedulePlugins(IEnumerable<APlugin> plugins)
-        {
-        }
+        public virtual void SchedulePlugins(IEnumerable<APlugin> plugins) { }
     }
 }
