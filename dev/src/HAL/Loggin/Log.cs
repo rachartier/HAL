@@ -17,7 +17,7 @@ namespace HAL.Loggin
             }
             catch (Exception)
             {
-                Console.Error.WriteLine("nlog.config not found. No loggin will be used.");
+                //Console.Error.WriteLine("nlog.config not found. No loggin will be used.");
             }
         }
     }

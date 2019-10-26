@@ -1,0 +1,6 @@
+﻿{
+  "paths": [
+    "../client/examples/simple_complex",
+    "../client/examples/other_examples"
+  ]
+}

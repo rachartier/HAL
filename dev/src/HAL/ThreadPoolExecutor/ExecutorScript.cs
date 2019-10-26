@@ -99,7 +99,7 @@ namespace HAL.Executor.ThreadPoolExecutor
 
             if (!string.IsNullOrEmpty(err))
             {
-                Log.Instance?.Error(err);
+                //Log.Instance?.Error(err);
                 return;
             }
 
@@ -127,7 +127,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             }
             catch (JsonReaderException)
             {
-                Log.Instance?.Error(result);
+                //Log.Instance?.Error(result);
                 return;
             }
 
