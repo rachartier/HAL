@@ -345,8 +345,10 @@ Il faut alors tout simplement modifier le fichier "config.json" de plugins_check
   ]
 }
 ```
-Puis finalement executer le programme:
+Puis finalement executer le programme.
 
+
+Démonstration avec les plugins dans client et client/examples
 <a href="https://asciinema.org/a/J80BBg2GtqJgNCegzcDFCqgkW"><img src="https://asciinema.org/a/J80BBg2GtqJgNCegzcDFCqgkW.png" width="836"/></a>
 
 L'erreur: "Error reading JToken from JsonReader. Path '', line 0, position 0."
