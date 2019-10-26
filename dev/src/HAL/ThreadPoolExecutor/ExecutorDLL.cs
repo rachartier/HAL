@@ -1,9 +1,10 @@
-﻿using HAL.DllImportMethods;
-using HAL.Plugin;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using HAL.DllImportMethods;
+using HAL.Loggin;
+using HAL.Plugin;
 
 namespace HAL.Executor.ThreadPoolExecutor
 {
@@ -20,7 +21,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
             {
                 // TODO: verifier si il y a un moyen de connaitre si c est une dll dotnet
-				
+
                 try
                 {
                     TryRunAssemblyDLL(plugin);
@@ -56,13 +57,13 @@ namespace HAL.Executor.ThreadPoolExecutor
             }
             else
             {
-                throw new MethodAccessException($"Method '{MethodEntryPointName}' from DLL {plugin.Infos.FileName} not found.");
+                Log.Instance?.Error($"Method '{MethodEntryPointName}' from DLL {plugin.Infos.FileName} not found.");
             }
         }
 
         private void RunClassicDLL(APlugin plugin)
         {
-            using (var dllimport = new DllImportEntryPoint())
+            using(var dllimport = new DllImportEntryPoint())
             {
                 var result = dllimport.UseRunEntryPointSharedObject(plugin.Infos.FilePath);
 

@@ -1,9 +1,9 @@
 {
   "interpreter": {
-    "windows": {
-    },
     "linux": {
-      "bash": "/bin/bash"
+      "bash": "/bin/bash",
+      "python": "/usr/bin/python3",
+      "ruby": "/usr/bin/ruby"
     }
   },
 
@@ -29,7 +29,7 @@
       "os": [ "linux", "windows" ]
     },
     "simple.rb": {
-      "activated": "false",
+      "activated": "true",
       "heartbeat": "0.001",
       "os": [ "linux" ]
     },

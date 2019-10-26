@@ -15,13 +15,20 @@ char* EXPORT launch_command(const char *command) {
 
 	FILE* fp = NULL;
 	fp = popen(command, "r");
+	
+	if(!fp) {
+		char* 	error_msg = "aaaaaaaaaa";
+		size_t 	len_msg = strlen(error_msg) + 1;
+		char* 	mem_error_msg = malloc(len_msg * sizeof(char));
 
-	if(!fp) return NULL;
+		memcpy(mem_error_msg, error_msg, len_msg);
+		return mem_error_msg;
+	}
 
 	size_t 	block_read = 0U;
 	size_t 	data_size = 0U;
 
-	char*		data_result = malloc((BLOCK_SIZE + 1) * sizeof(*data_result));
+	char*	data_result = malloc((BLOCK_SIZE + 1) * sizeof(*data_result));
 
 	if(!data_result) return NULL;
 
@@ -46,6 +53,8 @@ char* EXPORT launch_command(const char *command) {
 	}
 
 	data_result[data_size] = '\0';
+
+	pclose(fp);
 
 	return data_result;
 }

@@ -27,7 +27,7 @@ namespace Plugin.Manager
             {
                 throw new ArgumentException($"{extension} is already definded.");
             }
-
+            
             AcceptedFilesTypes[PluginFileInfos.FileType.Script].Add(extension);
 
             ExtensionsNames.Add(extension, name);

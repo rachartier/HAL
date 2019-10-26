@@ -29,6 +29,14 @@ HAL est destiné à tout utilisateur voulant superviser les ordinateurs sur un r
 Installation
 ------------
 
+Pour le bon fonctionnement de HAL, il faut impérativement avoir 
+
+*  dotnet core 3.x,
+*  python3.x
+*  ruby
+
+Ou des erreurs peuvent subvenirs pendant l'éxecution des plugins.
+
 XXXXXXXXXXXXXXXX
 
 Write your own plugin
@@ -298,6 +306,53 @@ func run() *C.char {
 ```
 
 Pour créer le .so/.dll: `go build -o helloworld.dll -buildmode=c-shared`
+
+### Vérifier que les plugins ont une sortie JSON correcte
+
+Un outil a été crée dans le but de vérifier si une collection de plugins renvoient un json valide.
+Pour ça, il faut se rendre dans "plugins_checker" et modifier le fichier "config.json" pour mettre un ou plusieurs chemins de là où se trouve les plugins et le fichier de configuration de ces derniers.
+
+Il faut impérativement suivre ce schéma:
+* dossier
+    * config.json
+    * plugins
+        * nomplugin1...
+        * nomplugin2...
+        * nomplugin3...
+            ...
+
+Example:
+Un dossier "test1" contient:
+* config.json
+* plugins/
+    * cpu_temperature.py
+    * kernel_version.sh
+        
+
+et un autre dossier, test2, contient quand à lui:
+* config.json
+* plugins/
+    * connected_user.sh
+    * os_informations.rb
+
+Il faut alors tout simplement modifier le fichier "config.json" de plugins_checker comme suit:
+
+``` json
+{
+  "paths": [
+    "chemin/vers/test1",
+    "chemin/vers/test2"
+  ]
+}
+```
+Puis finalement executer le programme:
+
+<a href="https://asciinema.org/a/J80BBg2GtqJgNCegzcDFCqgkW"><img src="https://asciinema.org/a/J80BBg2GtqJgNCegzcDFCqgkW.png" width="836"/></a>
+
+L'erreur: "Error reading JToken from JsonReader. Path '', line 0, position 0."
+peut signifier plusieurs choses:
+*  un intépreteur par défaut n'est pas installer, il faut vérifier si ruby, python3 et bash sont bien installés sur la machine
+*  le retour n'est pas du format json
 
 Add another file extension
 ---------------------

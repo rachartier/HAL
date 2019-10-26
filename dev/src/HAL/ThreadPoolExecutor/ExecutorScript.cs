@@ -1,9 +1,9 @@
-﻿using HAL.DllImportMethods;
-using HAL.Loggin;
-using HAL.Plugin;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using HAL.DllImportMethods;
+using HAL.Loggin;
+using HAL.Plugin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -29,7 +29,7 @@ namespace HAL.Executor.ThreadPoolExecutor
                 // check if the extension is known
                 if (!refPluginMaster.ExtensionsNames.ContainsKey(plugin.Infos.FileExtension))
                 {
-                    throw new ArgumentException("Unknown extension.");
+                    Log.Instance?.Error("Unknown extension.");
                 }
 
                 file = refPluginMaster.ExtensionsNames[fileExtension];
@@ -37,16 +37,17 @@ namespace HAL.Executor.ThreadPoolExecutor
                 // check if the extension had been set
                 if (string.IsNullOrEmpty(file))
                 {
-                    throw new ArgumentNullException($"Value {refPluginMaster.ExtensionsNames[fileExtension]} from interpreter object in json file not found.");
+                    Log.Instance?.Error($"Value {refPluginMaster.ExtensionsNames[fileExtension]} from interpreter object in json file not found.");
+                    return;
                 }
 
                 try
                 {
                     StartProcess(plugin, file, args);
                 }
-                catch
+                catch (Exception e)
                 {
-                    throw;
+                    Log.Instance?.Error($"{plugin.Infos.FileName} encountered a problem: {e.Message}");
                 }
                 finally
                 {
@@ -65,6 +66,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             {
                 ExecuteScriptWindows(plugin, file, args);
             }
+
         }
 
         private void ExecuteScriptWindows(APlugin plugin, string file, string args)
@@ -100,7 +102,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             if (!string.IsNullOrEmpty(err))
             {
                 Log.Instance?.Error(err);
-                return;
+                throw new ApplicationException(err);
             }
 
             plugin.RaiseOnExecutionFinished(readerOutput.ReadToEnd());
@@ -113,11 +115,11 @@ namespace HAL.Executor.ThreadPoolExecutor
 
             if (plugin.AdministratorRights)
             {
-                result = dllimport.UseLaunchCommand($"sudo -u {plugin.AdministratorUsername} -s {file} -c {args}");
+                result = dllimport.UseLaunchCommand($"sudo -u {plugin.AdministratorUsername} -s {file} -c {args} 2> /dev/null");
             }
             else
             {
-                result = dllimport.UseLaunchCommand($"{file} {args}");
+                result = dllimport.UseLaunchCommand($"{file} {args} 2> /dev/null");
             }
 
             // if it's not a valid json
@@ -125,10 +127,9 @@ namespace HAL.Executor.ThreadPoolExecutor
             {
                 JObject.Parse(result);
             }
-            catch (JsonReaderException)
+            catch (JsonReaderException e)
             {
                 Log.Instance?.Error(result);
-                return;
             }
 
             plugin.RaiseOnExecutionFinished(result);
