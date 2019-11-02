@@ -137,8 +137,10 @@ namespace PluginTest
         {
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
-            BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py");
-            plugin.Activated = false;
+            BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py")
+            {
+                Activated = false
+            };
 
             Assert.AreEqual(plugin.CanBeRun(), false, "Plugin shouldn't be executable");
         }

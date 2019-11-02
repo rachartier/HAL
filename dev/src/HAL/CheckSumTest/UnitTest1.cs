@@ -10,53 +10,45 @@ namespace CheckSumTest
         [TestMethod]
         public void CheckSum_HashIsAString()
         {
-            using (var fs = new FileStream("test/script.pl", FileMode.Open))
-            {
-                var hash = CheckSumGenerator.HashOf(fs);
-                Assert.IsInstanceOfType(hash, typeof(string), "Hash is supposed to be a string");
-            }
+            using var fs = new FileStream("test/script.pl", FileMode.Open);
+
+            var hash = CheckSumGenerator.HashOf(fs);
+            Assert.IsInstanceOfType(hash, typeof(string), "Hash is supposed to be a string");
         }
 
         [TestMethod]
         public void CheckSum_StringHashReturnIsNotNull()
         {
-            using (var fs = new FileStream("test/script.pl", FileMode.Open))
-            {
-                var hash = CheckSumGenerator.HashOf(fs);
-                Assert.IsNotNull(hash, "Hash is not supposed to be null");
-            }
+            using var fs = new FileStream("test/script.pl", FileMode.Open);
+
+            var hash = CheckSumGenerator.HashOf(fs);
+            Assert.IsNotNull(hash, "Hash is not supposed to be null");
         }
 
         [TestMethod]
         public void CheckSum_HashIsEqual()
         {
-            using (var fs1 = new FileStream("test/script.pl", FileMode.Open))
-            {
-                using (var fs2 = new FileStream("test2/script.pl", FileMode.Open))
-                {
-                    var hashFs1 = CheckSumGenerator.HashOf(fs1);
-                    var hashFs2 = CheckSumGenerator.HashOf(fs2);
+            using var fs1 = new FileStream("test/script.pl", FileMode.Open);
+            using var fs2 = new FileStream("test2/script.pl", FileMode.Open);
 
-                    var equals = hashFs1.Equals(hashFs2);
-                    Assert.IsTrue(equals, "Hashes are supposed to be equals");
-                }
-            }
+            var hashFs1 = CheckSumGenerator.HashOf(fs1);
+            var hashFs2 = CheckSumGenerator.HashOf(fs2);
+
+            var equals = hashFs1.Equals(hashFs2);
+            Assert.IsTrue(equals, "Hashes are supposed to be equals");
         }
 
         [TestMethod]
         public void CheckSum_HashIsNotEqual()
         {
-            using (var fs1 = new FileStream("test/script.pl", FileMode.Open))
-            {
-                using (var fs2 = new FileStream("test2/script.py", FileMode.Open))
-                {
-                    var hashFs1 = CheckSumGenerator.HashOf(fs1);
-                    var hashFs2 = CheckSumGenerator.HashOf(fs2);
+            using var fs1 = new FileStream("test/script.pl", FileMode.Open);
+            using var fs2 = new FileStream("test2/script.py", FileMode.Open);
 
-                    var equals = hashFs1.Equals(hashFs2);
-                    Assert.IsFalse(equals, "Hashes aren't supposed to be equals");
-                }
-            }
+            var hashFs1 = CheckSumGenerator.HashOf(fs1);
+            var hashFs2 = CheckSumGenerator.HashOf(fs2);
+
+            var equals = hashFs1.Equals(hashFs2);
+            Assert.IsFalse(equals, "Hashes aren't supposed to be equals");
         }
 
         [TestMethod]

@@ -1,5 +1,4 @@
 ﻿using HAL.OSData;
-using System.Linq;
 using static HAL.Plugin.PluginFileInfos;
 
 namespace HAL.Plugin

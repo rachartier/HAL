@@ -214,6 +214,7 @@ namespace HAL.Storage.Configuration
                 }
             }
         }
+
         public override string GetDataBaseConnectionString()
         {
             if (Root == null)

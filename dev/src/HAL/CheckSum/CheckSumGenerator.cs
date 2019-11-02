@@ -15,16 +15,14 @@ namespace HAL.CheckSum
         {
             StringBuilder sb = new StringBuilder();
 
-            using (var mySha256 = SHA256.Create())
-            {
-                var data = mySha256.ComputeHash(fileStream);
+            using var mySha256 = SHA256.Create();
+            var data = mySha256.ComputeHash(fileStream);
 
-                for (int i = 0; i < data.Length; i++)
-                {
-                    sb.Append(data[i].ToString("x2"));
-                }
-                return sb.ToString();
+            for (int i = 0; i < data.Length; i++)
+            {
+                sb.Append(data[i].ToString("x2"));
             }
+            return sb.ToString();
         }
 
         /// <summary>
@@ -58,16 +56,14 @@ namespace HAL.CheckSum
         {
             var sb = new StringBuilder();
 
-            using (var mySha256 = SHA256.Create())
-            {
-                var hash = mySha256.ComputeHash(data);
+            using var mySha256 = SHA256.Create();
+            var hash = mySha256.ComputeHash(data);
 
-                for (int i = 0; i < hash.Length; i++)
-                {
-                    sb.Append(hash[i].ToString("x2"));
-                }
-                return sb.ToString();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("x2"));
             }
+            return sb.ToString();
         }
     }
 }

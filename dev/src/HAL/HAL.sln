@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginManagerScheduled", "S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "storage", "storage", "{5FDDCEF3-36D3-424F-9CCD-5E9B8B662EA6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageFile", "LocalStorageFile\LocalStorageFile.csproj", "{3ECAD985-9125-47BB-A2F6-3C90DFC838D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageLocalFile", "LocalStorageFile\StorageLocalFile.csproj", "{3ECAD985-9125-47BB-A2F6-3C90DFC838D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageText", "TextStorage\StorageText.csproj", "{91282A81-67D1-4975-A5A1-289F2CA37B4B}"
 EndProject
@@ -69,9 +69,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileParserTest", "FileParse
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileParser", "FileParser\FileParser.csproj", "{B727B060-1953-4DD9-A533-61DD28C2822A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plugins_checker", "plugins_checker\plugins_checker.csproj", "{FD1014A7-ADE3-410F-B629-85705000442B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "plugins_checker", "plugins_checker\plugins_checker.csproj", "{FD1014A7-ADE3-410F-B629-85705000442B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageMongoDB", "StorageMongoDB\StorageMongoDB.csproj", "{D427B92D-F6CD-425F-BCBE-24B30F9EA987}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageMongoDB", "StorageMongoDB\StorageMongoDB.csproj", "{D427B92D-F6CD-425F-BCBE-24B30F9EA987}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -216,6 +216,7 @@ Global
 		{9AF8F25F-8713-41BB-B22E-B77645DA71DE} = {ED49E0DE-BF39-4CC6-B3DE-0B800C4AEE1A}
 		{6E3F92DE-41D7-4CB5-9937-9E7BF100F6A1} = {8FF30488-313F-4D18-A345-EA863DA006BE}
 		{B727B060-1953-4DD9-A533-61DD28C2822A} = {ED49E0DE-BF39-4CC6-B3DE-0B800C4AEE1A}
+		{D427B92D-F6CD-425F-BCBE-24B30F9EA987} = {5FDDCEF3-36D3-424F-9CCD-5E9B8B662EA6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {90B83D02-F3EA-4240-8D4C-366E65296CB4}

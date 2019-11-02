@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using HAL.Executor;
+﻿using HAL.Executor;
+using System.Collections.Generic;
 
 namespace HAL.Plugin.Mananger
 {
@@ -34,8 +34,12 @@ namespace HAL.Plugin.Mananger
             }
         }
 
-        public virtual void SchedulePlugin(APlugin plugin) { }
+        public virtual void SchedulePlugin(APlugin plugin)
+        {
+        }
 
-        public virtual void SchedulePlugins(IEnumerable<APlugin> plugins) { }
+        public virtual void SchedulePlugins(IEnumerable<APlugin> plugins)
+        {
+        }
     }
 }

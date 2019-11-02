@@ -1,10 +1,10 @@
-﻿using System;
+﻿using HAL.DllImportMethods;
+using HAL.Loggin;
+using HAL.Plugin;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using HAL.DllImportMethods;
-using HAL.Loggin;
-using HAL.Plugin;
 
 namespace HAL.Executor.ThreadPoolExecutor
 {
@@ -63,12 +63,11 @@ namespace HAL.Executor.ThreadPoolExecutor
 
         private void RunClassicDLL(APlugin plugin)
         {
-            using(var dllimport = new DllImportEntryPoint())
-            {
-                var result = dllimport.UseRunEntryPointSharedObject(plugin.Infos.FilePath);
+            using var dllimport = new DllImportEntryPoint();
 
-                plugin.RaiseOnExecutionFinished(result);
-            }
+            var result = dllimport.UseRunEntryPointSharedObject(plugin.Infos.FilePath);
+
+            plugin.RaiseOnExecutionFinished(result);
         }
     }
 }

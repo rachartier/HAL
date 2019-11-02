@@ -1,11 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading;
-using HAL.DllImportMethods;
+﻿using HAL.DllImportMethods;
 using HAL.Loggin;
 using HAL.Plugin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Diagnostics;
+using System.Threading;
 
 namespace HAL.Executor.ThreadPoolExecutor
 {
@@ -66,7 +66,6 @@ namespace HAL.Executor.ThreadPoolExecutor
             {
                 ExecuteScriptWindows(plugin, file, args);
             }
-
         }
 
         private void ExecuteScriptWindows(APlugin plugin, string file, string args)

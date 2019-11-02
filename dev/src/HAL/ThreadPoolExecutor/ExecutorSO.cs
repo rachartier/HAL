@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using HAL.DllImportMethods;
+﻿using HAL.DllImportMethods;
 using HAL.Loggin;
 using HAL.OSData;
 using HAL.Plugin;
+using System;
+using System.Threading;
 
 namespace HAL.Executor.ThreadPoolExecutor
 {
@@ -25,12 +25,10 @@ namespace HAL.Executor.ThreadPoolExecutor
                 {
                     try
                     {
-                        using(var dllimport = new DllImportEntryPoint())
-                        {
-                            var result = dllimport.UseRunEntryPointSharedObject(plugin.Infos.FilePath);
+                        using var dllimport = new DllImportEntryPoint();
+                        var result = dllimport.UseRunEntryPointSharedObject(plugin.Infos.FilePath);
 
-                            plugin.RaiseOnExecutionFinished(result);
-                        }
+                        plugin.RaiseOnExecutionFinished(result);
                     }
                     catch (Exception e)
                     {

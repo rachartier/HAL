@@ -1,7 +1,7 @@
-﻿using HAL.Plugin;
-using HAL.Loggin;
-using System.Collections.Generic;
+﻿using HAL.Loggin;
+using HAL.Plugin;
 using System;
+using System.Collections.Generic;
 
 namespace HAL.Storage.Configuration
 {

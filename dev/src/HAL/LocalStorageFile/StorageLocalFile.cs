@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HAL.Storage
 {
-    public class LocalFileStorage : IStoragePlugin
+    public class StorageLocalFile : IStoragePlugin
     {
         public void Init(string connectionString)
         {

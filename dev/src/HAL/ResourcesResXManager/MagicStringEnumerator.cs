@@ -12,6 +12,5 @@
         public static readonly string JSONOs = "os";
         public static readonly string JSONDatabase = "database";
         public static readonly string JSONConnectionString = "connectionString";
-
     }
 }
