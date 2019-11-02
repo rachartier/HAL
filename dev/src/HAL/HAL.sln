@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginManagerScheduled", "S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "storage", "storage", "{5FDDCEF3-36D3-424F-9CCD-5E9B8B662EA6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageFile", "FileStorage\StorageFile.csproj", "{3ECAD985-9125-47BB-A2F6-3C90DFC838D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageFile", "LocalStorageFile\LocalStorageFile.csproj", "{3ECAD985-9125-47BB-A2F6-3C90DFC838D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageText", "TextStorage\StorageText.csproj", "{91282A81-67D1-4975-A5A1-289F2CA37B4B}"
 EndProject
