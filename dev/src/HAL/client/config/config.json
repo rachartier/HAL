@@ -1,9 +1,14 @@
 {
+  "database": {
+    "connectionString": "mongodb://localhost:27017/HALDB"
+  },
   "plugins": {
     "upgrades_available.sh": {
       "activated": "true",
       "heartbeat": "1",
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "kernel_version.py": {
       "activated": "true",

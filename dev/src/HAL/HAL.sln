@@ -71,6 +71,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileParser", "FileParser\Fi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plugins_checker", "plugins_checker\plugins_checker.csproj", "{FD1014A7-ADE3-410F-B629-85705000442B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageMongoDB", "StorageMongoDB\StorageMongoDB.csproj", "{D427B92D-F6CD-425F-BCBE-24B30F9EA987}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,6 +179,10 @@ Global
 		{FD1014A7-ADE3-410F-B629-85705000442B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD1014A7-ADE3-410F-B629-85705000442B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD1014A7-ADE3-410F-B629-85705000442B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D427B92D-F6CD-425F-BCBE-24B30F9EA987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D427B92D-F6CD-425F-BCBE-24B30F9EA987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D427B92D-F6CD-425F-BCBE-24B30F9EA987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D427B92D-F6CD-425F-BCBE-24B30F9EA987}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

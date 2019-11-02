@@ -127,7 +127,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             {
                 JObject.Parse(result);
             }
-            catch (JsonReaderException e)
+            catch (JsonReaderException)
             {
                 Log.Instance?.Error(result);
             }

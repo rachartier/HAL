@@ -18,10 +18,14 @@ namespace HAL
             IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
             configFile.Load("config/config.json");
 
-            IStoragePlugin storage = new TextStorage();
+            IStoragePlugin storage = new StorageMongoDB();
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
             APluginManager pluginManager = new ScheduledPluginManager(pluginMaster);
+
+            string connectionString = configFile.GetDataBaseConnectionString();
+
+            storage.Init(connectionString);
 
             configFile.SetScriptExtensionsConfiguration(pluginMaster);
             configFile.SetInterpreterNameConfiguration(pluginMaster);

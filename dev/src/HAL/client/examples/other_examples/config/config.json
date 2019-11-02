@@ -14,8 +14,6 @@
     "testadmin.sh": {
       "activated": true,
       "hearthbeat": 0.001,
-      //    "admin_rights":  true,
-      //		"admin_username": "root",
       "os": [
         "linux"
       ]
@@ -109,6 +107,6 @@
         "linux",
         "windows"
       ]
-    },
+    }
   }
 }

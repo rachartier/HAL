@@ -6,7 +6,7 @@ namespace HAL.Storage
 {
     public class TextStorage : IStoragePlugin
     {
-        public void Init()
+        public void Init(string connectionString)
         {
         }
 

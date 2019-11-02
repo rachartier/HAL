@@ -42,6 +42,12 @@ namespace HAL.Storage.Configuration
         public abstract void SetInterpreterNameConfiguration(IPluginMaster pluginMaster);
 
         /// <summary>
+        /// return the connection string if one is present
+        /// </summary>
+        /// <returns>the connection string if it exists, null otherwise</returns>
+        public abstract string GetDataBaseConnectionString();
+
+        /// <summary>
         /// set a list of plugins configuration
         /// </summary>
         /// <param name="plugins"></param>

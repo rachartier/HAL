@@ -40,6 +40,7 @@
     <ProjectReference Include="..\Storage\Storage.csproj" />
     <ProjectReference Include="..\TextStorage\StorageText.csproj" />
     <ProjectReference Include="..\CheckSum\CheckSum.csproj" />
+    <ProjectReference Include="..\StorageMongoDB\StorageMongoDB.csproj" />
   </ItemGroup>
 
   <ItemGroup>

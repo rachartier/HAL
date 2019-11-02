@@ -201,7 +201,7 @@ namespace HAL.Storage.Configuration
                     val = pluginMaster.ExtensionsNames[fileType];
                 }
 
-                if(!File.Exists(val))
+                if (!File.Exists(val))
                     return;
 
                 if (!pluginMaster.ExtensionsNames.ContainsKey(key))
@@ -213,6 +213,17 @@ namespace HAL.Storage.Configuration
                     pluginMaster.ExtensionsNames[key] = val;
                 }
             }
+        }
+        public override string GetDataBaseConnectionString()
+        {
+            if (Root == null)
+            {
+                return null;
+            }
+
+            string connectionString = Root[MagicStringEnumerator.JSONDatabase]?.Value<string>(MagicStringEnumerator.JSONConnectionString);
+
+            return connectionString;
         }
     }
 }

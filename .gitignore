@@ -3,6 +3,7 @@
 
 !sources_plugins/lib/*
 results/*
+.vscode
 
 ###################
 # compiled source #

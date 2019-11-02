@@ -54,7 +54,6 @@ namespace plugins_checker
                     });
 
                     pluginManager.Run(plugin);
-
                 }
 
                 (pluginManager.Executor as ThreadPoolPluginExecutor).WaitForEmptyPool();
