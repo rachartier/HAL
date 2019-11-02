@@ -7,6 +7,7 @@ Contents
 - [Intro](#intro)
 - [Installation](#installation)
 - [Write your own plugin](#write-your-own-plugin)
+- [Stockage](#stockage)
 - [Add another file extension](#add-another-file-extension)
 
 Intro
@@ -382,6 +383,20 @@ Par exemple, pour ajouter une extension de PHP (.php):
 ```
 
 Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini par défaut, que ce soit via config.json ou les variables d'environnements.
+
+Stockage
+--------
+
+A l'heure actuelle, 3 formes de stockage existe:
+* Format texte, sortie sur la console
+* Sauvegarde en locale sur le client
+* Sauvegarde en base de donnée (MangoDB)
+
+Le stockage sert a sauvegarder le résultat de chaque plugin pour pouvoir ensuite manipuler ces données.
+
+Pour se connecter à une base MangoDB, il faut 
+
+XXXXXXXXXXXXX ECRIRE COMMENT CHOISIR ENTRE LES DIFFERENTES METHODES VIA CONFIG.JSON
 
 ### Schema récapitulatif du projet
 ![](documents/schemas/Schema_recap_fleche_png.png)
