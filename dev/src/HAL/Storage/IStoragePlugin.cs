@@ -8,7 +8,7 @@ namespace HAL.Storage
         /// <summary>
         /// Initialize, if needed, the storage
         /// </summary>
-        void Init();
+        void Init(string connectionString);
 
         /// <summary>
         /// method to save an object

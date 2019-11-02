@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace HAL.Storage
 {
-    public class FileStorage : IStoragePlugin
+    public class LocalFileStorage : IStoragePlugin
     {
-        public void Init()
+        public void Init(string connectionString)
         {
         }
 

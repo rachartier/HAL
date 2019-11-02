@@ -23,6 +23,10 @@ namespace HAL
 
             APluginManager pluginManager = new ScheduledPluginManager(pluginMaster);
 
+            string connectionString = configFile.GetDataBaseConnectionString();
+
+            storage.Init(connectionString);
+
             configFile.SetScriptExtensionsConfiguration(pluginMaster);
             configFile.SetInterpreterNameConfiguration(pluginMaster);
 

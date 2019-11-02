@@ -3,7 +3,9 @@
     "upgrades_available.sh": {
       "activated": "true",
       "heartbeat": "1",
-      "os": [ "linux" ]
+      "os": [
+        "linux"
+      ]
     },
     "kernel_version.py": {
       "activated": "true",
