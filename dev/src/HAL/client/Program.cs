@@ -1,4 +1,5 @@
 ﻿using HAL.Client;
+using HAL.Loggin;
 using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using HAL.Storage;
