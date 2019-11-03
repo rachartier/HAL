@@ -11,6 +11,13 @@ namespace HAL.Factory
         {
         }
 
+        /*
+         * If you want to add a custom storage, you first need to add an attribute wich will defined your custom storage
+         * Example:
+         *  private const String MyCustomOracle = "oracle"
+         *
+         *  then you'll be able to specified "oracle" in config.json
+         */
         private const String Text = "text";
         private const String Local = "local";
         private const String MangoDB = "mangodb";
@@ -19,6 +26,9 @@ namespace HAL.Factory
         {
             var sanitizedStorageName = storageName?.Trim().ToLower();
 
+            /*
+             * You also need to add a case here
+             */
             switch (sanitizedStorageName)
             {
                 case Text:
@@ -29,6 +39,12 @@ namespace HAL.Factory
 
                 case MangoDB:
                     return new StorageMongoDB();
+
+                    /*
+                     * Example:
+                     * case MyCustomOracle:
+                     *  return new MyCustomOracleDB();
+                     */
             }
 
             /*

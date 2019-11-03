@@ -394,9 +394,38 @@ A l'heure actuelle, 3 formes de stockage existe:
 
 Le stockage sert a sauvegarder le résultat de chaque plugin pour pouvoir ensuite manipuler ces données.
 
-Pour se connecter à une base MangoDB, il faut 
+Pour séléctionner le stockage voulu, il faut créer un attribut dans le fichier "config.json":
+```json
+{
+	"storage": "<NOM_DU_STOCKAGE>",
 
-XXXXXXXXXXXXX ECRIRE COMMENT CHOISIR ENTRE LES DIFFERENTES METHODES VIA CONFIG.JSON
+	...
+	"plugins": {
+		...
+	}
+}
+```
+
+NOM_DU_STOCKAGE peut être:
+* "text" (sauvegarde sur la sortie console)
+* "local" (sauvegarde sur la machine client)
+* "mangodb" (sauvegarde sur une base mongodb)
+
+Attention, si vous utilisez "mangodb", il faut alors spécifier une connection string:
+```json
+{
+	"storage": "mangodb",
+	"database": {
+		"connectionString": "mongodb://mongodb0.example.com:27017/admin"
+	},
+	...
+}
+```
+
+Pour rajouter un stockage, il faut alors modifier le code source.
+Il faut impérativement créer une classe héritant de IStoragePlugin, et par la suite créer ce dont vous avez besoin.
+
+Ensuite, il faut modifier le fichier: client/factory/StorageFactory.cs pour y rajouter votre stockage personnalisé. Toutes les informations de comment procéder sont mit en commentaires dans ce fichier.
 
 ### Schema récapitulatif du projet
 ![](documents/schemas/Schema_recap_fleche_png.png)
