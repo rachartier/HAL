@@ -226,5 +226,17 @@ namespace HAL.Storage.Configuration
 
             return connectionString;
         }
+
+        public override string GetStorageName()
+        {
+            if (Root == null)
+            {
+                return null;
+            }
+
+            string storageName = Root.Value<string>(MagicStringEnumerator.JSONStorageName);
+
+            return storageName;
+        }
     }
 }

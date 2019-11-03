@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ConfigJSON\ConfigJSON.csproj" />
     <ProjectReference Include="..\FileParser\FileParser.csproj" />
+    <ProjectReference Include="..\LocalStorageFile\StorageLocalFile.csproj" />
     <ProjectReference Include="..\Loggin\Loggin.csproj" />
     <ProjectReference Include="..\PluginManager\PluginManager.csproj" />
     <ProjectReference Include="..\PluginMasterBasePlugin\PluginMasterBasePlugin.csproj" />

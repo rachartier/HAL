@@ -48,6 +48,12 @@ namespace HAL.Storage.Configuration
         public abstract string GetDataBaseConnectionString();
 
         /// <summary>
+        /// return the storage name
+        /// </summary>
+        /// <returns>return storage name or null otherwise</returns>
+        public abstract string GetStorageName();
+
+        /// <summary>
         /// set a list of plugins configuration
         /// </summary>
         /// <param name="plugins"></param>
