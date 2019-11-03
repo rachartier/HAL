@@ -1,4 +1,5 @@
 ﻿using HAL.Client;
+using HAL.Factory;
 using HAL.Loggin;
 using HAL.Plugin;
 using HAL.Plugin.Mananger;
@@ -28,15 +29,13 @@ namespace HAL
 
             /*
              * A storage is needed to save the output of the plugins
-             * here it's a text storage, it means that the output of all plugins
-             * will be redirected to the ouput of the console.
              *
              * the only purpose of text storage is to debug and do a showcase.
              *
              * you can switch on local file storage (wich will stock all the outputs on the client side)
              * or by mongodb stockage.
              */
-            IStoragePlugin storage = new TextStorage();
+            IStoragePlugin storage = StorageFactory.CreateStorage(configFile.GetStorageName());
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
             /*
