@@ -411,7 +411,7 @@ NOM_DU_STOCKAGE peut être:
 * "local" (sauvegarde sur la machine client)
 * "mangodb" (sauvegarde sur une base mongodb)
 
-Attention, si vous utilisez "mangodb", il faut alors spécifier une connection string:
+Attention, si vous utilisez "mangodb" ou tout autre base de donnée, il faut alors généralement spécifier une connection string:
 ```json
 {
 	"storage": "mangodb",
