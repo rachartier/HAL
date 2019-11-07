@@ -129,6 +129,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             catch (JsonReaderException)
             {
                 Log.Instance?.Error(result);
+				return;
             }
 
             plugin.RaiseOnExecutionFinished(result);
