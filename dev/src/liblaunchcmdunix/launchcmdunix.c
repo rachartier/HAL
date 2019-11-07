@@ -10,19 +10,22 @@
 
 #define BLOCK_SIZE 1024
 
+char* _error(const char *error_msg) {
+	size_t 	len_msg = strlen(error_msg) + 1;
+	char* 	mem_error_msg = malloc(len_msg * sizeof(char));
+
+	memcpy(mem_error_msg, error_msg, len_msg);
+	return mem_error_msg;
+}
+
 char* EXPORT launch_command(const char *command) {
 	if(!command) return NULL;
 
 	FILE* fp = NULL;
 	fp = popen(command, "r");
-	
-	if(!fp) {
-		char* 	error_msg = "aaaaaaaaaa";
-		size_t 	len_msg = strlen(error_msg) + 1;
-		char* 	mem_error_msg = malloc(len_msg * sizeof(char));
 
-		memcpy(mem_error_msg, error_msg, len_msg);
-		return mem_error_msg;
+	if(!fp) {
+		return _error("Error popen(), can't create processus.");
 	}
 
 	size_t 	block_read = 0U;
