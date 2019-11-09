@@ -49,7 +49,7 @@ namespace HAL.Client
                 try
                 {
                     client.BeginConnect(ipEndPoint, new AsyncCallback(ConnectCallBack), client);
-                    connectDone.WaitOne();
+                    if(connectDone.WaitOne()) Console.WriteLine("CONNECTION DONE");
 
                     //Get all the path of the plugins available on the current machine (plugins/)
                     string[] filePaths = Directory.GetFiles("plugins");

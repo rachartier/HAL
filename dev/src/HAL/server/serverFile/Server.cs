@@ -61,7 +61,7 @@ namespace Server
                     Console.WriteLine("Waiting for a connection...");
                     listener.BeginAccept(new AsyncCallback(AcceptCalback), listener);
 
-                    allDone.WaitOne();
+                    if (allDone.WaitOne()) Console.WriteLine("Connexion set with a remote client !");
                 }
 
             }
@@ -122,7 +122,7 @@ namespace Server
 
                     var pluginToUpdate = CheckAllPlugins(PluginsOnServer(), pluginsFound);
 
-                    SendFileAsync(handler, pluginToUpdate);
+                    if(pluginToUpdate != null) SendFileAsync(handler, pluginToUpdate);
                 } else
                 {
                     handler.BeginReceive(stateObject.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReadCallback), stateObject);
