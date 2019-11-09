@@ -122,7 +122,7 @@ namespace HAL.Client
 
                 int bytesRead = client.EndReceive(asyncResult);
 
-                if(bytesRead > 0)
+                if(bytesRead <= 0)
                 {
                     stateObject.sb.Append(Encoding.UTF8.GetString(stateObject.buffer, 0, bytesRead));
 
@@ -130,7 +130,7 @@ namespace HAL.Client
                 } else
                 {
                     // All data has arrived
-                    if (stateObject.sb.Length > 1)
+                    if (stateObject.sb.Length >= 1)
                     {
                         response = stateObject.sb.ToString();
                     }

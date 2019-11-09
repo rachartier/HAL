@@ -9,9 +9,9 @@ namespace server
         private static void Main(string[] args)
         {
 
-            ServerFile server = new ServerFile();
+            // ServerFile server = new ServerFile();
 
-            server.StartServer();
+            ServerFile.StartServer();
         }
     }
 }

@@ -34,7 +34,11 @@ namespace Server
 
         public static ManualResetEvent allDone = new ManualResetEvent(false);
 
-        public void StartServer()
+        public ServerFile()
+        {
+        }
+
+        public static void StartServer()
         {
             var pluginsFound = new List<PluginFileInfos>();
 
@@ -77,10 +81,11 @@ namespace Server
 
         public static void AcceptCalback(IAsyncResult asyncResult)
         {
-            // Signal to the .WaitOne() called in the main thread to continue
-            allDone.Set();
             var listener = (Socket)asyncResult.AsyncState;
             var handler = listener.EndAccept(asyncResult);
+
+            // Signal to the .WaitOne() called in the main thread to continue
+            allDone.Set();
 
             var stateObject = new StateObject();
             stateObject.server = handler;
@@ -122,7 +127,8 @@ namespace Server
 
                     var pluginToUpdate = CheckAllPlugins(PluginsOnServer(), pluginsFound);
 
-                    if(pluginToUpdate != null) SendFileAsync(handler, pluginToUpdate);
+                    if (pluginToUpdate.Count > 0) SendFileAsync(handler, pluginToUpdate);
+
                 } else
                 {
                     handler.BeginReceive(stateObject.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReadCallback), stateObject);
@@ -136,13 +142,49 @@ namespace Server
             {
                 // The preBuffer which is send, matching with the name of the plugins
                 // TODO: Generify the path were to save plugin
-                var preBuffer = Encoding.UTF8.GetBytes(String.Format("<FILE>{0}</FILE><PATH>plugins/</PATH>", path.FileName));
+                var preBuffer = String.Format("<FILE>{0}</FILE><PATH>plugins/</PATH>", path.FileName);
                 // The postBuffer is the path of where to save it on the client machine
-                var postBuffer = Encoding.UTF8.GetBytes(String.Format("<CHECKSUM>{0}</CHECKSUM>", path.CheckSum));
-                Console.WriteLine(preBuffer.Length);
-                handler.BeginSendFile(path.FilePath,
-                                      preBuffer, postBuffer, TransmitFileOptions.UseDefaultWorkerThread,
-                                      new AsyncCallback(SendCallback), handler);
+                var postBuffer = String.Format("<CHECKSUM>{0}</CHECKSUM>", path.CheckSum);
+                //handler.BeginSendFile(path.FilePath,
+                //                      preBuffer, postBuffer, TransmitFileOptions.UseDefaultWorkerThread,
+                //                      new AsyncCallback(SendCallback), handler);
+                var dataString = String.Format("{0}{1}{2}", preBuffer, path.FilePath, postBuffer);
+
+                //SendDataFile(handler, path.FilePath, preBuffer, postBuffer);
+                SendData(handler, "data test");
+            }
+        }
+
+        private static void SendData(Socket handler, String data)
+        {
+            var byteData = Encoding.UTF8.GetBytes(data);
+            Log.Instance?.Debug($"SendData data string: {data}");
+
+            handler.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), handler);
+        }
+
+
+        private static void SendDataFile(Socket handler, String pathName, string preBuffer, string postBuffer)
+        {
+            var preBuffBytes = Encoding.UTF8.GetBytes(preBuffer);
+            var postBufferBytes = Encoding.UTF8.GetBytes(postBuffer);
+
+            handler.BeginSendFile(pathName, preBuffBytes, postBufferBytes, TransmitFileOptions.UseDefaultWorkerThread, new AsyncCallback(SendFileCallback), handler);
+        }
+
+        private static void SendFileCallback(IAsyncResult asyncResult)
+        {
+            try
+            {
+                var handler = (Socket)asyncResult.AsyncState;
+
+                handler.EndSendFile(asyncResult);
+                Log.Instance?.Info("File Correctly sent");
+                handler.Shutdown(SocketShutdown.Both);
+                handler.Close();
+            } catch(Exception e)
+            {
+                Log.Instance?.Error($"SendCallBack in ServerFile : {e.Message}");
             }
         }
 
@@ -153,6 +195,7 @@ namespace Server
                 var handler = (Socket)asyncResult.AsyncState;
 
                 var bytesSent = handler.EndSend(asyncResult);
+                Log.Instance?.Debug($"SendCallBack dataSent : {bytesSent}");
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
             } catch(Exception e)
