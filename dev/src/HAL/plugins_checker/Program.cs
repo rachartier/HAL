@@ -1,6 +1,6 @@
-﻿using HAL.Executor.ThreadPoolExecutor;
+﻿using HAL.Configuration;
+using HAL.Executor.ThreadPoolExecutor;
 using HAL.Plugin;
-using HAL.Storage.Configuration;
 using Newtonsoft.Json.Linq;
 using Plugin.Manager;
 using System;
@@ -10,7 +10,7 @@ namespace plugins_checker
 {
     internal class Program
     {
-        private static object key = new object();
+        private static readonly object key = new object();
 
         private static void Main(string[] args)
         {
@@ -24,7 +24,7 @@ namespace plugins_checker
                 var pluginMaster = new PluginMasterBasePlugin();
                 var pluginManager = new SimplePluginManager(pluginMaster);
 
-                IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
+                IConfigFileClient<JObject, JToken> configFile = new JSONConfigFileClient();
                 configFile.Load($"{path}/config/config.json");
 
                 configFile.SetScriptExtensionsConfiguration(pluginMaster);

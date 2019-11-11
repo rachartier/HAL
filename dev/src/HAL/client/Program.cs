@@ -1,10 +1,13 @@
 ﻿using HAL.Client;
+using HAL.Configuration;
+
+using HAL.Configuration;
+
 using HAL.Factory;
 using HAL.Loggin;
 using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using HAL.Storage;
-using HAL.Storage.Configuration;
 using Newtonsoft.Json.Linq;
 using Plugin.Manager;
 using System;
@@ -24,7 +27,7 @@ namespace HAL
              *
              * All HAL's configration is here.
              */
-            IConfigFile<JObject, JToken> configFile = new JSONConfigFile();
+            IConfigFileClient<JObject, JToken> configFile = new JSONConfigFileClient();
             configFile.Load("config/config.json");
 
             /*

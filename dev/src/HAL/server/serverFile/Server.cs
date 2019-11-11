@@ -12,7 +12,6 @@ using System.Threading;
 
 namespace Server
 {
-
     /// <summary>
     /// A user-defined object that contain information about receive operation
     /// </summary>
@@ -23,7 +22,6 @@ namespace Server
 
         public Socket server = null;
         public StringBuilder sb = new StringBuilder();
-
     }
 
     public class ServerFile
@@ -73,7 +71,6 @@ namespace Server
                         Log.Instance?.Info($"Connexion set with a remote client !");
                     }
                 }
-
             }
             catch (Exception e)
             {
@@ -150,8 +147,6 @@ namespace Server
                         handler.Shutdown(SocketShutdown.Both);
                         handler.Close();
                     }
-
-
                 }
                 else
                 {

@@ -10,7 +10,6 @@ using System.Threading;
 
 namespace HAL.Client
 {
-
     /// <summary>
     /// A user-defined object that contain information about receive operation
     /// </summary>
@@ -21,7 +20,6 @@ namespace HAL.Client
 
         public Socket client = null;
         public StringBuilder sb = new StringBuilder();
-
     }
 
     internal class ClientFile
@@ -51,7 +49,7 @@ namespace HAL.Client
                 try
                 {
                     client.BeginConnect(ipEndPoint, new AsyncCallback(ConnectCallBack), client);
-                    if (connectDone.WaitOne()) Console.WriteLine("CONNECTION DONE");
+                    if (connectDone.WaitOne()) Log.Instance?.Debug("CONNECTION DONE");
 
                     //Get all the path of the plugins available on the current machine (plugins/)
                     string[] filePaths = Directory.GetFiles("plugins");
@@ -89,7 +87,7 @@ namespace HAL.Client
                         }
                     }
 
-                    // Release the socket.    
+                    // Release the socket.
                     client.Shutdown(SocketShutdown.Both);
                     client.Close();
                 }
@@ -102,7 +100,6 @@ namespace HAL.Client
             {
                 Log.Instance?.Error($"Client error: {e.Message}\n{e.StackTrace}");
             }
-
         }
 
         private static void ConnectCallBack(IAsyncResult asyncResult)
@@ -153,7 +150,6 @@ namespace HAL.Client
                     //Signal that all data have been receive
                     receiveDone.Set();
                 }
-
             }
             catch (Exception e)
             {
@@ -168,9 +164,9 @@ namespace HAL.Client
                 var client = (Socket)asyncResult.AsyncState;
                 int byteSend = client.EndReceive(asyncResult);
 
-                Log.Instance?.Info($"Sent {byteSend} bytes to server.");
+                Log.Instance?.Debug($"Sent {byteSend} bytes to server.");
 
-                // Signal that all bytes have been sent.  
+                // Signal that all bytes have been sent.
                 sendDone.Set();
             }
             catch (Exception e)

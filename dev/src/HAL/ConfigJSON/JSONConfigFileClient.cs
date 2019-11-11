@@ -8,11 +8,11 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace HAL.Storage.Configuration
+namespace HAL.Configuration
 {
-    public class JSONConfigFile : IConfigFile<JObject, JToken>
+    public class JSONConfigFileClient : IConfigFileClient<JObject, JToken>
     {
-        public JSONConfigFile()
+        public JSONConfigFileClient()
         {
         }
 
@@ -202,7 +202,9 @@ namespace HAL.Storage.Configuration
                 }
 
                 if (!File.Exists(val))
+                {
                     return;
+                }
 
                 if (!pluginMaster.ExtensionsNames.ContainsKey(key))
                 {
