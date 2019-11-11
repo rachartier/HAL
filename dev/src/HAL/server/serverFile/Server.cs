@@ -1,7 +1,6 @@
 ﻿using HAL.CheckSum;
 using HAL.Loggin;
 using HAL.Plugin;
-using server.serverFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,7 +68,10 @@ namespace Server
                     Log.Instance?.Info($"Waiting for a connection...");
                     listener.BeginAccept(new AsyncCallback(AcceptCalback), listener);
 
-                    if (allDone.WaitOne()) Log.Instance?.Info($"Connexion set with a remote client !");
+                    if (allDone.WaitOne())
+                    {
+                        Log.Instance?.Info($"Connexion set with a remote client !");
+                    }
                 }
 
             }
@@ -150,7 +152,8 @@ namespace Server
                     }
 
 
-                } else
+                }
+                else
                 {
                     handler.BeginReceive(stateObject.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReadCallback), stateObject);
                 }
@@ -172,11 +175,11 @@ namespace Server
             {
                 // The preBuffer which is send, matching with the name of the plugins
                 // TODO: Generify the path were to save plugin
-                var preBuffer = String.Format("<{1}><FILE>{0}</FILE><PATH>plugins/</PATH>", data[counterFile-1].FileName, counterFile);
+                var preBuffer = String.Format("<{1}><FILE>{0}</FILE><PATH>plugins/</PATH>", data[counterFile - 1].FileName, counterFile);
                 // The postBuffer is the path of where to save it on the client machine
-                var postBuffer = String.Format("<CHECKSUM>{0}</CHECKSUM></{1}><EOF>", data[counterFile-1].CheckSum, counterFile);
+                var postBuffer = String.Format("<CHECKSUM>{0}</CHECKSUM></{1}><EOF>", data[counterFile - 1].CheckSum, counterFile);
 
-                SendDataFile(handler, data[counterFile-1].FilePath, preBuffer, postBuffer, data.Count);
+                SendDataFile(handler, data[counterFile - 1].FilePath, preBuffer, postBuffer, data.Count);
             }
         }
 
@@ -233,7 +236,8 @@ namespace Server
                     handler.Close();
                     Log.Instance?.Debug("Connection Close");
                 }
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Log.Instance?.Error($"SendFileCallBack in ServerFile : {e.Message}");
             }
@@ -254,7 +258,8 @@ namespace Server
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
                 Log.Instance?.Debug("Connection Close");
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Log.Instance?.Error($"SendCallBack in ServerFile : {e.Message}");
             }

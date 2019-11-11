@@ -1,10 +1,9 @@
+using HAL.CheckSum;
+using HAL.FileParser;
+using HAL.Plugin;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using HAL.Plugin;
-using HAL.CheckSum;
 using System.Text;
-using HAL.FileParser;
-using System.Collections.Generic;
 
 namespace FileParserTest
 {

@@ -51,7 +51,7 @@ namespace HAL.Client
                 try
                 {
                     client.BeginConnect(ipEndPoint, new AsyncCallback(ConnectCallBack), client);
-                    if(connectDone.WaitOne()) Console.WriteLine("CONNECTION DONE");
+                    if (connectDone.WaitOne()) Console.WriteLine("CONNECTION DONE");
 
                     //Get all the path of the plugins available on the current machine (plugins/)
                     string[] filePaths = Directory.GetFiles("plugins");
@@ -117,7 +117,8 @@ namespace HAL.Client
 
                 // Signal that connection has been done
                 connectDone.Set();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Log.Instance?.Error($"Client ConnectCallBack error: {e.Message}\n{e.StackTrace}");
             }
@@ -141,12 +142,13 @@ namespace HAL.Client
                     responseNameChecksum.Add(pathFileName, checksum);
                 }
 
-                if(bytesRead > 0)
+                if (bytesRead > 0)
                 {
                     stateObject.sb.Append(content);
 
                     client.BeginReceive(stateObject.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReceiveCallBack), stateObject);
-                } else
+                }
+                else
                 {
                     // All data has arrived
                     Log.Instance?.Debug("All data has arrived");
@@ -154,7 +156,8 @@ namespace HAL.Client
                     receiveDone.Set();
                 }
 
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Log.Instance?.Error($"Client ReceiveCallback error: {e.Message}\n{e.StackTrace}");
             }
@@ -171,7 +174,8 @@ namespace HAL.Client
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Log.Instance?.Error($"Client SendCallback error: {e.Message}\n{e.StackTrace}");
             }

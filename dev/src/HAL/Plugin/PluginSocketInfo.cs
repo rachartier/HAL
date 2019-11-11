@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HAL.Plugin
+﻿namespace HAL.Plugin
 {
     public class PluginSocketInfo : PluginFileInfos
     {

@@ -2,7 +2,6 @@ using HAL.CheckSum;
 using HAL.Plugin;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Server;
-using System;
 using System.IO;
 
 namespace ServerTest
