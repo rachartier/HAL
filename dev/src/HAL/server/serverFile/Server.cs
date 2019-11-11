@@ -32,7 +32,11 @@ namespace Server
         private const int Port = 11000;
         private const int nbMaxClient = 100;
 
+        private static int counterFile;
+        private static int dataSize;
+
         public static ManualResetEvent allDone = new ManualResetEvent(false);
+        public static ManualResetEvent sendDone = new ManualResetEvent(false);
 
         public ServerFile()
         {
@@ -62,23 +66,25 @@ namespace Server
                 {
                     allDone.Reset();
 
-                    Console.WriteLine("Waiting for a connection...");
+                    Log.Instance?.Info($"Waiting for a connection...");
                     listener.BeginAccept(new AsyncCallback(AcceptCalback), listener);
 
-                    if (allDone.WaitOne()) Console.WriteLine("Connexion set with a remote client !");
+                    if (allDone.WaitOne()) Log.Instance?.Info($"Connexion set with a remote client !");
                 }
 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
                 Log.Instance?.Error($"Error in StartServer() in ServerFile : {e.Message}\n{e.StackTrace}");
             }
             Console.WriteLine("\nPress ENTER to continue...");
             Console.Read();
         }
 
+        /// <summary>
+        /// The Callback that allow the server to receive, it's the acknowledgement of a connection. Allow to begin a reception from the remote connection
+        /// </summary>
+        /// <param name="asyncResult">The asynchronous result where the states object is store</param>
         public static void AcceptCalback(IAsyncResult asyncResult)
         {
             var listener = (Socket)asyncResult.AsyncState;
@@ -92,6 +98,11 @@ namespace Server
             handler.BeginReceive(stateObject.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReadCallback), stateObject);
         }
 
+        /// <summary>
+        /// The Callback for the reading part. It's call when the receive have been done.
+        /// This method read the receives data, format them and then send it to parsing for using it as HAL.Plugin.PluginFileInfos
+        /// </summary>
+        /// <param name="asyncResult">The asynchronous result where the states object is store</param>
         public static void ReadCallback(IAsyncResult asyncResult)
         {
             var content = string.Empty;
@@ -127,7 +138,17 @@ namespace Server
 
                     var pluginToUpdate = CheckAllPlugins(PluginsOnServer(), pluginsFound);
 
-                    if (pluginToUpdate.Count > 0) SendFileAsync(handler, pluginToUpdate);
+                    if (pluginToUpdate != null)
+                    {
+                        SendFileAsync(handler, pluginToUpdate);
+                    }
+                    else
+                    {
+                        Log.Instance?.Info("Close Connection");
+                        handler.Shutdown(SocketShutdown.Both);
+                        handler.Close();
+                    }
+
 
                 } else
                 {
@@ -136,22 +157,26 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Send file asynchronously to the handler, the files are passed in args into a List of HAL.Plugin.PluginFileInfos.
+        /// Format files for sending into correct format.
+        /// <FILE></FILE><PATH></PATH>content of file<CHECKSUM></CHECKSUM><EOF>
+        /// </summary>
+        /// <param name="handler">The handler where to send file</param>
+        /// <param name="data">A list of HAL.Plugin.PluginFileInfos to send to the handler</param>
         private static void SendFileAsync(Socket handler, List<PluginFileInfos> data)
         {
-            foreach (var path in data)
+            dataSize = data.Count;
+
+            for (counterFile = 1; counterFile <= data.Count; counterFile++)
             {
                 // The preBuffer which is send, matching with the name of the plugins
                 // TODO: Generify the path were to save plugin
-                var preBuffer = String.Format("<FILE>{0}</FILE><PATH>plugins/</PATH>", path.FileName);
+                var preBuffer = String.Format("<{1}><FILE>{0}</FILE><PATH>plugins/</PATH>", data[counterFile-1].FileName, counterFile);
                 // The postBuffer is the path of where to save it on the client machine
-                var postBuffer = String.Format("<CHECKSUM>{0}</CHECKSUM>", path.CheckSum);
-                //handler.BeginSendFile(path.FilePath,
-                //                      preBuffer, postBuffer, TransmitFileOptions.UseDefaultWorkerThread,
-                //                      new AsyncCallback(SendCallback), handler);
-                var dataString = String.Format("{0}{1}{2}", preBuffer, path.FilePath, postBuffer);
+                var postBuffer = String.Format("<CHECKSUM>{0}</CHECKSUM></{1}><EOF>", data[counterFile-1].CheckSum, counterFile);
 
-                //SendDataFile(handler, path.FilePath, preBuffer, postBuffer);
-                SendData(handler, "data test");
+                SendDataFile(handler, data[counterFile-1].FilePath, preBuffer, postBuffer, data.Count);
             }
         }
 
@@ -163,15 +188,34 @@ namespace Server
             handler.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), handler);
         }
 
-
-        private static void SendDataFile(Socket handler, String pathName, string preBuffer, string postBuffer)
+        /// <summary>
+        /// Enconding the data and then begin a send to the handler
+        /// </summary>
+        /// <param name="handler">The endpoint where to send the datas</param>
+        /// <param name="pathName">The path name of the sending file</param>
+        /// <param name="preBuffer">the prebuffer of the send</param>
+        /// <param name="postBuffer">the postbuffer of the send</param>
+        /// <param name="dataSize">the full size of the data to find, usefull for sync the close connection</param>
+        private static void SendDataFile(Socket handler, string pathName, string preBuffer, string postBuffer, int dataSize)
         {
             var preBuffBytes = Encoding.UTF8.GetBytes(preBuffer);
             var postBufferBytes = Encoding.UTF8.GetBytes(postBuffer);
 
+            Log.Instance?.Debug($"SendDataFile file send: {pathName}");
+            Log.Instance?.Debug($"SendDataFile full data send: {preBuffer}{pathName}{postBuffer}");
+
             handler.BeginSendFile(pathName, preBuffBytes, postBufferBytes, TransmitFileOptions.UseDefaultWorkerThread, new AsyncCallback(SendFileCallback), handler);
+            if (counterFile == dataSize)
+            {
+                Log.Instance?.Debug("Wake up the signal to close socket");
+                sendDone.Set();
+            }
         }
 
+        /// <summary>
+        /// The Callback for the end of sending files. When all the files have been sent, close the remote connection.
+        /// </summary>
+        /// <param name="asyncResult">The asynchronous result where the states object is store</param>
         private static void SendFileCallback(IAsyncResult asyncResult)
         {
             try
@@ -180,14 +224,25 @@ namespace Server
 
                 handler.EndSendFile(asyncResult);
                 Log.Instance?.Info("File Correctly sent");
-                handler.Shutdown(SocketShutdown.Both);
-                handler.Close();
+                Log.Instance?.Debug($"datasize {dataSize} counterFile {counterFile}");
+                if (counterFile >= dataSize)
+                {
+                    Log.Instance?.Debug("Wait for the signal to come up");
+                    sendDone.WaitOne();
+                    handler.Shutdown(SocketShutdown.Both);
+                    handler.Close();
+                    Log.Instance?.Debug("Connection Close");
+                }
             } catch(Exception e)
             {
-                Log.Instance?.Error($"SendCallBack in ServerFile : {e.Message}");
+                Log.Instance?.Error($"SendFileCallBack in ServerFile : {e.Message}");
             }
         }
 
+        /// <summary>
+        /// The Callback for the end of sending data. When done, close the remote connection.
+        /// </summary>
+        /// <param name="asyncResult">The asynchronous result where the states object is store</param>
         private static void SendCallback(IAsyncResult asyncResult)
         {
             try
@@ -198,6 +253,7 @@ namespace Server
                 Log.Instance?.Debug($"SendCallBack dataSent : {bytesSent}");
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
+                Log.Instance?.Debug("Connection Close");
             } catch(Exception e)
             {
                 Log.Instance?.Error($"SendCallBack in ServerFile : {e.Message}");
@@ -215,7 +271,6 @@ namespace Server
             var pluginToUpdate = new List<PluginFileInfos>();
 
             //TODO: Faire une vérif de taille
-            //TODO: récupérer la différence de présence entre les deux dossiers plugins (LINQ?)
 
             if (clientPlugins.Count > serverPlugins.Count)
             {

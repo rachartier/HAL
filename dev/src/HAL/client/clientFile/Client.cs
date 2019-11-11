@@ -1,5 +1,7 @@
 ﻿using HAL.CheckSum;
+using HAL.Loggin;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -30,7 +32,7 @@ namespace HAL.Client
         private static ManualResetEvent sendDone = new ManualResetEvent(false);
         private static ManualResetEvent receiveDone = new ManualResetEvent(false);
 
-        private static string response = String.Empty;
+        private static Dictionary<string, string> responseNameChecksum = new Dictionary<string, string>();
 
         public void StartClient()
         {
@@ -68,15 +70,24 @@ namespace HAL.Client
                     sendDone.WaitOne();
 
                     // Receive
-                    int bytesRec = client.Receive(bytes);
                     Receive(client);
-                    if (receiveDone.WaitOne())
-                    {
-                        var checksum = FileParser.FileParser.ParseAReceiveData(response, out string pathFileName);
-                    }
+                    receiveDone.WaitOne();
 
                     // TODO: Compare the Equality of the Checksum (receive one and send one)
-
+                    if (responseNameChecksum.Count > 0)
+                    {
+                        foreach (var content in responseNameChecksum)
+                        {
+                            if (CheckSumGenerator.HashOf(content.Key).Equals(content.Value))
+                            {
+                                Log.Instance?.Info($"{content.Key} have the same checksum that the receive one.");
+                            }
+                            else
+                            {
+                                Log.Instance?.Info($"{content.Key} have NOT the same checksum that the receive one.");
+                            }
+                        }
+                    }
 
                     // Release the socket.    
                     client.Shutdown(SocketShutdown.Both);
@@ -84,14 +95,14 @@ namespace HAL.Client
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Log.Instance?.Error($"Client error: {e.Message}\n{e.StackTrace}");
                 }
 
 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Instance?.Error($"Client error: {e.Message}\n{e.StackTrace}");
             }
 
         }
@@ -102,14 +113,13 @@ namespace HAL.Client
             {
                 var client = (Socket)asyncResult.AsyncState;
                 client.EndConnect(asyncResult);
-                Console.WriteLine("Socket connected to {0}",
-                    client.RemoteEndPoint.ToString());
+                Log.Instance?.Info($"Socket connected to {client.RemoteEndPoint.ToString()}");
 
                 // Signal that connection has been done
                 connectDone.Set();
             } catch (Exception e)
             {
-                // Socket error...
+                Log.Instance?.Error($"Client ConnectCallBack error: {e.Message}\n{e.StackTrace}");
             }
         }
 
@@ -122,25 +132,31 @@ namespace HAL.Client
 
                 int bytesRead = client.EndReceive(asyncResult);
 
-                if(bytesRead <= 0)
+                var content = Encoding.UTF8.GetString(stateObject.buffer, 0, bytesRead);
+                Log.Instance?.Debug($"Bytes Read: {bytesRead}");
+
+                if (content.IndexOf("<EOF>") > -1)
                 {
-                    stateObject.sb.Append(Encoding.UTF8.GetString(stateObject.buffer, 0, bytesRead));
+                    var checksum = FileParser.FileParser.ParseAReceiveData(content, out string pathFileName);
+                    responseNameChecksum.Add(pathFileName, checksum);
+                }
+
+                if(bytesRead > 0)
+                {
+                    stateObject.sb.Append(content);
 
                     client.BeginReceive(stateObject.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReceiveCallBack), stateObject);
                 } else
                 {
                     // All data has arrived
-                    if (stateObject.sb.Length >= 1)
-                    {
-                        response = stateObject.sb.ToString();
-                    }
+                    Log.Instance?.Debug("All data has arrived");
                     //Signal that all data have been receive
                     receiveDone.Set();
                 }
 
             } catch(Exception e)
             {
-                // Socket error...
+                Log.Instance?.Error($"Client ReceiveCallback error: {e.Message}\n{e.StackTrace}");
             }
         }
 
@@ -151,13 +167,13 @@ namespace HAL.Client
                 var client = (Socket)asyncResult.AsyncState;
                 int byteSend = client.EndReceive(asyncResult);
 
-                Console.WriteLine("Sent {0} bytes to server.", byteSend);
+                Log.Instance?.Info($"Sent {byteSend} bytes to server.");
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
-            } catch
+            } catch (Exception e)
             {
-                //Socket error...
+                Log.Instance?.Error($"Client SendCallback error: {e.Message}\n{e.StackTrace}");
             }
         }
 

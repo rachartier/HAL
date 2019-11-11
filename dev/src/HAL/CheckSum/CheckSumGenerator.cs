@@ -36,7 +36,7 @@ namespace HAL.CheckSum
         public static string HashOf(string path)
         {
             StringBuilder sb = new StringBuilder();
-	    var lines = File.ReadAllLines(path);
+	        var lines = File.ReadAllLines(path);
             foreach (var line in lines)
             {
                 sb.Append(line);
