@@ -10,8 +10,8 @@ namespace HAL.FileParser
         /// Parse a receive data which fit with the template of data send from server to client
         /// <FILE>{fileName}</FILE><PATH>{Path of the file in the client side}</PATH>{fileData}
         /// ...
-        /// <CHECKSUM>{Checksum of the send file (to check)}</CHECKSUM><EOT>
-        /// <EOT> is the End Of Transmission mark
+        /// <CHECKSUM>{Checksum of the send file (to check)}</CHECKSUM><EOF>
+        /// <EOF> is the End Of File mark
         /// </summary>
         /// <param name="data">The data to parse</param>
         /// <returns>The checksum of the receive file</returns>
@@ -48,6 +48,13 @@ namespace HAL.FileParser
             return checksum;
         }
 
+        /// <summary>
+        /// Match the data using regexFind and then, if not null, delete the matching result of regexDel in data
+        /// </summary>
+        /// <param name="regexFind">The regex for catching element</param>
+        /// <param name="regexDel">The regex to catching the element you want to delete</param>
+        /// <param name="data">The data you want to treat</param>
+        /// <returns>The element catching by the RegexFind OR null if nothing matching</returns>
         private static string MatchingRegex(Regex regexFind, Regex regexDel, ref string data)
         {
             var match = regexFind.Match(data);
@@ -65,6 +72,12 @@ namespace HAL.FileParser
             }
         }
 
+        /// <summary>
+        /// Remove string chunk into data matching with the regex element
+        /// </summary>
+        /// <param name="regex">The regex for finding the element you want to delete</param>
+        /// <param name="data">The data in wich you want to remove the matching element</param>
+        /// <returns>The data passed in params</returns>
         private static string DeleteStringFromRegex(Regex regex, string data)
         {
             var matchDel = regex.Match(data);

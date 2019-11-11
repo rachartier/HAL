@@ -19,23 +19,27 @@ namespace CheckSumTest
         [TestMethod]
         public void CheckSum_StringHashReturnIsNotNull()
         {
-            using var fs = new FileStream("test/script.pl", FileMode.Open);
-
-            var hash = CheckSumGenerator.HashOf(fs);
-            Assert.IsNotNull(hash, "Hash is not supposed to be null");
+            using (var fs = new FileStream("test/script.pl", FileMode.Open))
+            {
+                var hash = CheckSumGenerator.HashOf(fs);
+                Assert.IsNotNull(hash, "Hash is not supposed to be null");
+            }
         }
 
         [TestMethod]
         public void CheckSum_HashIsEqual()
         {
-            using var fs1 = new FileStream("test/script.pl", FileMode.Open);
-            using var fs2 = new FileStream("test2/script.pl", FileMode.Open);
+            using (var fs1 = new FileStream("test/script.pl", FileMode.Open))
+            {
+                using (var fs2 = new FileStream("test2/script.pl", FileMode.Open))
+                {
+                    var hashFs1 = CheckSumGenerator.HashOf(fs1);
+                    var hashFs2 = CheckSumGenerator.HashOf(fs2);
 
-            var hashFs1 = CheckSumGenerator.HashOf(fs1);
-            var hashFs2 = CheckSumGenerator.HashOf(fs2);
-
-            var equals = hashFs1.Equals(hashFs2);
-            Assert.IsTrue(equals, "Hashes are supposed to be equals");
+                    var equals = hashFs1.Equals(hashFs2);
+                    Assert.IsTrue(equals, "Hashes are supposed to be equals");
+                }
+            }
         }
 
         [TestMethod]

@@ -16,7 +16,7 @@ namespace FileParserTest
             var pluginSocketInfo = new PluginSocketInfo("plugins/date.pl", CheckSumGenerator.HashOf("plugins/date.pl"));
 
             var preBuffer = string.Format("<FILE>{0}</FILE><PATH>{1}</PATH>", pluginSocketInfo.FileName, "test/");
-            var postBuffer = string.Format("<CHECKSUM>{0}</CHECKSUM><EOT>", pluginSocketInfo.CheckSum);
+            var postBuffer = string.Format("<CHECKSUM>{0}</CHECKSUM>", pluginSocketInfo.CheckSum);
 
             var sb = new StringBuilder();
 
