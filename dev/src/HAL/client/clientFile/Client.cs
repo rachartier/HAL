@@ -89,6 +89,8 @@ namespace HAL.Client
                         }
                     }
 
+                    RaiseOnReceiveDone();
+
                     // Release the socket.
                     client.Shutdown(SocketShutdown.Both);
                 }
@@ -150,8 +152,6 @@ namespace HAL.Client
                     Log.Instance?.Debug("All data has arrived");
                     //Signal that all data have been receive
                     receiveDone.Set();
-
-                    RaiseOnReceiveDone();
                 }
             }
             catch (Exception e)
