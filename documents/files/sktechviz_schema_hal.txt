@@ -1,0 +1,45 @@
+# https://sketchviz.com/new
+
+digraph G {
+  graph [fontname = "Handlee"];
+  node [fontname = "Handlee"];
+  edge [fontname = "Handlee"];
+
+  bgcolor=transparent;
+
+  subgraph cluster_0 {
+    node [style=filled];
+    "Initialisation Config Client" -> Connection -> Récupération -> "Initialisation Plugins" -> "Mise à jour périodique des plugins"
+    label = "*Client*";
+    fontsize = 20;
+    color=darkgreen
+  }
+
+  subgraph cluster_1 {
+    node [style=filled];
+    "Initilialisation Config Serv" -> "Récupération Plugins & config" -> Attente -> "Vérif des données" -> Envoi
+    label = "*Serveur*";
+    fontsize = 20;
+    color=blue
+  }
+  
+  subgraph cluster_2 {
+    node [style=filled];
+    Initialisation -> Stockage
+    label = "*Stockage*";
+    fontsize = 20;
+    color=pink
+  }
+  début -> "Initialisation Config Client";
+  début -> "Initilialisation Config Serv";
+  Connection -> Attente;
+  "Envoi" -> Récupération
+  Récupération -> Envoi
+  Envoi -> Attente
+  "Mise à jour périodique des plugins" -> Stockage -> "Mise à jour périodique des plugins"
+  
+
+  Stockage -> Stockage
+  
+  début [shape=Mdiamond];
+}
