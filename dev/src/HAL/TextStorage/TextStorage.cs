@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace HAL.Storage
 {
-    public class TextStorage : IStoragePlugin
+    public class StorageText : IStoragePlugin
     {
         public void Init(string connectionString)
         {

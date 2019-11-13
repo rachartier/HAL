@@ -69,34 +69,38 @@ namespace HAL
             configFile.SetScriptExtensionsConfiguration(pluginMaster);
             configFile.SetInterpreterNameConfiguration(pluginMaster);
 
-            /*
-             * All the plugins in the directory "plugins" will be loaded and added to the plugin master
-             */
-            foreach (var file in Directory.GetFiles("plugins"))
+            // We only want to configure all the plugins when the client has received all the informations and plugins
+            client.OnReceiveDone += (o, e) =>
             {
-                pluginMaster.AddPlugin(file);
-            }
-
-            /*
-             * Then the configuration of all of the plugins is set.
-             */
-            configFile.SetPluginsConfiguration(pluginMaster.Plugins);
-
-            /*
-             * An event is added when the plugin's execution is finished to save it where the user specified above.
-             */
-            foreach (var plugin in pluginMaster.Plugins)
-            {
-                plugin.OnExecutionFinished += new System.EventHandler<APlugin.PluginResultArgs>((o, e) =>
+                /*
+                * All the plugins in the directory "plugins" will be loaded and added to the plugin master
+                */
+                foreach (var file in Directory.GetFiles("plugins"))
                 {
-                    storage.Save(e.Plugin, e.Result);
-                });
-            }
+                    pluginMaster.AddPlugin(file);
+                }
 
-            /*
-             * All the plugins are then schelduled to be launched when needed.
-             */
-            pluginManager.SchedulePlugins(pluginMaster.Plugins);
+                /*
+                 * Then the configuration of all of the plugins is set.
+                 */
+                configFile.SetPluginsConfiguration(pluginMaster.Plugins);
+
+                /*
+                 * An event is added when the plugin's execution is finished to save it where the user specified above.
+                 */
+                foreach (var plugin in pluginMaster.Plugins)
+                {
+                    plugin.OnExecutionFinished += new System.EventHandler<APlugin.PluginResultArgs>((o, e) =>
+                    {
+                        storage.Save(e.Plugin, e.Result);
+                    });
+                }
+
+                /*
+                 * All the plugins are then schelduled to be launched when needed.
+                 */
+                pluginManager.SchedulePlugins(pluginMaster.Plugins);
+            };
 
             client.StartClient();
 

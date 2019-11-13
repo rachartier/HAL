@@ -35,5 +35,10 @@ namespace HAL.Plugin
         /// </summary>
         /// <param name="path">path of the plugin</param>
         public abstract void AddPlugin(string path);
+
+        public void RemoveAllPlugins()
+        {
+            plugins.Clear();
+        }
     }
 }

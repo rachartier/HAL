@@ -54,7 +54,7 @@ namespace HAL.Configuration
                 }
                 catch (Exception e)
                 {
-                    Log.Instance?.Error($"{e.Message} Plugin ignored.");
+                    Log.Instance?.Error($"{e.Message} Plugin {plugin.Infos.FileName} ignored.");
                 }
             }
         }

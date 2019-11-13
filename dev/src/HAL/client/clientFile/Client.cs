@@ -26,11 +26,13 @@ namespace HAL.Client
     {
         private const int Port = 11000;
 
-        private static ManualResetEvent connectDone = new ManualResetEvent(false);
-        private static ManualResetEvent sendDone = new ManualResetEvent(false);
-        private static ManualResetEvent receiveDone = new ManualResetEvent(false);
+        private ManualResetEvent connectDone = new ManualResetEvent(false);
+        private ManualResetEvent sendDone = new ManualResetEvent(false);
+        private ManualResetEvent receiveDone = new ManualResetEvent(false);
 
-        private static Dictionary<string, string> responseNameChecksum = new Dictionary<string, string>();
+        private Dictionary<string, string> responseNameChecksum = new Dictionary<string, string>();
+
+        public event EventHandler<EventArgs> OnReceiveDone;
 
         public void StartClient()
         {
@@ -42,7 +44,7 @@ namespace HAL.Client
                 IPAddress ipAddr = ipHost.AddressList[0];
                 IPEndPoint ipEndPoint = new IPEndPoint(ipAddr, Port);
 
-                Socket client = new Socket(ipAddr.AddressFamily,
+                using var client = new Socket(ipAddr.AddressFamily,
                                            SocketType.Stream,
                                            ProtocolType.Tcp);
 
@@ -78,18 +80,17 @@ namespace HAL.Client
                         {
                             if (CheckSumGenerator.HashOf(content.Key).Equals(content.Value))
                             {
-                                Log.Instance?.Info($"{content.Key} have the same checksum that the receive one.");
+                                Log.Instance?.Info($"{content.Key} have the same checksum that the received one.");
                             }
                             else
                             {
-                                Log.Instance?.Info($"{content.Key} have NOT the same checksum that the receive one.");
+                                Log.Instance?.Info($"{content.Key} have not the same checksum that the received one.");
                             }
                         }
                     }
 
                     // Release the socket.
                     client.Shutdown(SocketShutdown.Both);
-                    client.Close();
                 }
                 catch (Exception e)
                 {
@@ -102,7 +103,7 @@ namespace HAL.Client
             }
         }
 
-        private static void ConnectCallBack(IAsyncResult asyncResult)
+        private void ConnectCallBack(IAsyncResult asyncResult)
         {
             try
             {
@@ -119,7 +120,7 @@ namespace HAL.Client
             }
         }
 
-        private static void ReceiveCallBack(IAsyncResult asyncResult)
+        private void ReceiveCallBack(IAsyncResult asyncResult)
         {
             try
             {
@@ -149,6 +150,8 @@ namespace HAL.Client
                     Log.Instance?.Debug("All data has arrived");
                     //Signal that all data have been receive
                     receiveDone.Set();
+
+                    RaiseOnReceiveDone();
                 }
             }
             catch (Exception e)
@@ -157,7 +160,7 @@ namespace HAL.Client
             }
         }
 
-        private static void SendCallBack(IAsyncResult asyncResult)
+        private void SendCallBack(IAsyncResult asyncResult)
         {
             try
             {
@@ -175,7 +178,7 @@ namespace HAL.Client
             }
         }
 
-        private static void Receive(Socket client)
+        private void Receive(Socket client)
         {
             var stateObject = new StateObject();
             stateObject.client = client;
@@ -183,16 +186,21 @@ namespace HAL.Client
             client.BeginReceive(stateObject.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReceiveCallBack), stateObject);
         }
 
-        private static void Send(Socket client, string data)
+        private void Send(Socket client, string data)
         {
             var byteData = Encoding.UTF8.GetBytes(data);
 
             client.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallBack), client);
         }
 
-        private static void Send(Socket client, byte[] data)
+        private void Send(Socket client, byte[] data)
         {
             client.BeginSend(data, 0, data.Length, 0, new AsyncCallback(SendCallBack), client);
+        }
+
+        private void RaiseOnReceiveDone()
+        {
+            OnReceiveDone?.Invoke(this, new EventArgs());
         }
     }
 }

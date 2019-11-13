@@ -49,19 +49,17 @@ namespace HAL.Configuration
 
             JObject pluginConfig = Root[MagicStringEnumerator.JSONPlugins].Value<JObject>(plugin.Infos.FileName);
 
-            void _SetAttribute<T>(out T attr, string name, T fallback) where T : struct
+            T _SetAttribute<T>(string name, T fallback) where T : struct
             {
                 T? val = pluginConfig[name]?.Value<T?>();
 
                 if (val == null)
                 {
                     Log.Instance?.Error($"{plugin.Infos.FileName} has not \"{name}\" set. Default value used \"{fallback}\".");
-                    attr = fallback;
+                    return fallback;
                 }
-                else
-                {
-                    attr = val.Value;
-                }
+
+                return val.Value;
             }
 
             // plugin needs to have a specific configuration, otherwise it can't be run
@@ -70,18 +68,14 @@ namespace HAL.Configuration
                 throw new NullReferenceException($"Plugin {plugin.Infos.FileName} does not have any configuration.");
             }
 
-            _SetAttribute(out double heartbeat, MagicStringEnumerator.JSONHeartbeat, 1);
-            _SetAttribute(out bool activated, MagicStringEnumerator.JSONActivated, false);
-
-            plugin.Heartbeat = heartbeat;
-            plugin.Activated = activated;
+            plugin.Heartbeat = _SetAttribute(MagicStringEnumerator.JSONHeartbeat, 1.0f);
+            plugin.Activated = _SetAttribute(MagicStringEnumerator.JSONActivated, false);
 
             if (OSAttribute.IsLinux)
             {
-                bool? needAdministratorRights = pluginConfig[MagicStringEnumerator.JSONAdminRights]?.Value<bool>();
-                plugin.AdministratorRights = needAdministratorRights.GetValueOrDefault();
+                bool needAdministratorRights = _SetAttribute(MagicStringEnumerator.JSONAdminRights, false);
 
-                if (needAdministratorRights == true)
+                if (needAdministratorRights)
                 {
                     string administratorUsername = pluginConfig[MagicStringEnumerator.JSONAdminUsername]?.Value<string>();
 
