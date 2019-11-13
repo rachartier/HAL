@@ -429,3 +429,6 @@ Ensuite, il faut modifier le fichier: client/factory/StorageFactory.cs pour y ra
 
 ### Schema récapitulatif du projet
 ![](documents/schemas/Schema_recap_fleche_png.png)
+
+### Schema général de hal
+![](documents/schema_hal.png)
