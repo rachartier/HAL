@@ -1,45 +1,58 @@
 # https://sketchviz.com/new
 
 digraph G {
-  graph [fontname = "Handlee"];
-  node [fontname = "Handlee"];
-  edge [fontname = "Handlee"];
+	graph [fontname = "Handlee"];
+	node [fontname = "Handlee"];
+	edge [fontname = "Handlee"];
 
-  bgcolor=transparent;
+	compound=true;
+		bgcolor=transparent;
 
-  subgraph cluster_0 {
-    node [style=filled];
-    "Initialisation Config Client" -> Connection -> Récupération -> "Initialisation Plugins" -> "Mise à jour périodique des plugins"
-    label = "*Client*";
-    fontsize = 20;
-    color=darkgreen
-  }
+	subgraph cluster_0 {
+		node [style=filled];
+		"Initialisation Config Client" -> Connection ->  "Envoi Informations" -> Récupération -> "Initialisation Plugins" -> "Mise à jour périodique des plugins";
+			label = "*Client*";
+		fontsize = 20;
+		color=darkgreen
+	}
 
-  subgraph cluster_1 {
-    node [style=filled];
-    "Initilialisation Config Serv" -> "Récupération Plugins & config" -> Attente -> "Vérif des données" -> Envoi
-    label = "*Serveur*";
-    fontsize = 20;
-    color=blue
-  }
-  
-  subgraph cluster_2 {
-    node [style=filled];
-    Initialisation -> Stockage
-    label = "*Stockage*";
-    fontsize = 20;
-    color=pink
-  }
-  début -> "Initialisation Config Client";
-  début -> "Initilialisation Config Serv";
-  Connection -> Attente;
-  "Envoi" -> Récupération
-  Récupération -> Envoi
-  Envoi -> Attente
-  "Mise à jour périodique des plugins" -> Stockage -> "Mise à jour périodique des plugins"
-  
+	subgraph cluster_1 {
+		node [style=filled];
+		"Initilialisation Config Serv" -> "Récupération Plugins & config" -> Attente -> "Récupération Info Client" -> "Vérif des données" -> Envoi;
+			label = "*Serveur*";
+		fontsize = 20;
+		color=blue
+	}
 
-  Stockage -> Stockage
-  
-  début [shape=Mdiamond];
+
+	subgraph cluster_interface_stockage {
+		node [style=filled];
+		Initialisation;
+		Stockage;
+		label = "*Interface Stockage*";
+		fontsize = 20;
+		color=pink
+
+
+	}
+
+	début -> "Initialisation Config Client";
+	début -> "Initilialisation Config Serv";
+	début -> Initialisation;
+	Connection -> Attente;
+	"Envoi" -> Récupération;
+	"Récupération Info Client" -> "Envoi Informations";
+	Récupération -> Envoi;
+	Envoi -> Attente;
+	"Mise à jour périodique des plugins" -> Stockage;
+
+	Initialisation -> "Stockage Text" [lhead=cluster_stockage_text];
+	Initialisation -> "Stockage DB" [lhead=cluster_stockage_db];
+	Initialisation -> "Stockage Local" [lhead=cluster_stockage_local];
+
+	Stockage -> "Stockage Text";
+	Stockage -> "Stockage DB";
+	Stockage -> "Stockage Local";
+	début [shape=Mdiamond];
 }
+
