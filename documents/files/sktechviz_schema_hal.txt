@@ -38,13 +38,14 @@ digraph G {
 
 	début -> "Initialisation Config Client";
 	début -> "Initilialisation Config Serv";
-	début -> Initialisation;
+	"Initialisation Config Client" -> Initialisation;
+	
 	Connection -> Attente;
 	"Envoi" -> Récupération;
-	"Récupération Info Client" -> "Envoi Informations";
+	"Envoi Informations" -> "Récupération Info Client";
 	Récupération -> Envoi;
 	Envoi -> Attente;
-	"Mise à jour périodique des plugins" -> Stockage;
+	"Mise à jour périodique des plugins"  -> "Mise à jour périodique des plugins" -> Stockage;
 
 	Initialisation -> "Stockage Text" [lhead=cluster_stockage_text];
 	Initialisation -> "Stockage DB" [lhead=cluster_stockage_db];
