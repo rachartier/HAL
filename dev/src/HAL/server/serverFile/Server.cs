@@ -50,7 +50,7 @@ namespace Server
             try
             {
                 // Create a TCP Socket
-                Socket listener = new Socket(ipAddr.AddressFamily,
+                using var listener = new Socket(ipAddr.AddressFamily,
                                              SocketType.Stream,
                                              ProtocolType.Tcp);
 
@@ -68,7 +68,7 @@ namespace Server
 
                     if (allDone.WaitOne())
                     {
-                        Log.Instance?.Info($"Connexion set with a remote client !");
+                        Log.Instance?.Info($"Connexion set with a remote client.");
                     }
                 }
             }

@@ -41,5 +41,9 @@ namespace HAL.Plugin.Mananger
         public virtual void SchedulePlugins(IEnumerable<APlugin> plugins)
         {
         }
+
+        public virtual void UnscheduleAllPlugins(IEnumerable<APlugin> plugins)
+        {
+        }
     }
 }

@@ -11,5 +11,7 @@ namespace HAL.Plugin
         void AddScriptExtension(string extension, string name);
 
         void AddPlugin(string path);
+
+        void RemoveAllPlugins();
     }
 }

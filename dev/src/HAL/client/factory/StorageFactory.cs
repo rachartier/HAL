@@ -5,12 +5,8 @@ using System.Collections.Generic;
 
 namespace HAL.Factory
 {
-    public class StorageFactory
+    public static class StorageFactory
     {
-        private StorageFactory()
-        {
-        }
-
         /*
          * If you want to add a custom storage, you first need to add an attribute wich will defined your custom storage
          * Example:
@@ -32,7 +28,7 @@ namespace HAL.Factory
             switch (sanitizedStorageName)
             {
                 case Text:
-                    return new TextStorage();
+                    return new StorageText();
 
                 case Local:
                     return new StorageLocalFile();
@@ -52,7 +48,7 @@ namespace HAL.Factory
              *
              * you may want to change this.
              */
-            return new TextStorage();
+            return new StorageText();
         }
     }
 }

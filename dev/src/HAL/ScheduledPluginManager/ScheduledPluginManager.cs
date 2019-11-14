@@ -28,7 +28,7 @@ namespace HAL.Plugin.Mananger
             try
             {
                 // the scheduler is called to run the plugin each heartbeat
-                SchedulerService.Instance.ScheduleTask($"task_{plugin.Infos.FileName}_{Guid.NewGuid()}", plugin.Heartbeat, () =>
+                SchedulerService.Instance.ScheduleTask($"task_{plugin.Infos.FileName}", plugin.Heartbeat, () =>
                 {
                     try
                     {
@@ -56,6 +56,14 @@ namespace HAL.Plugin.Mananger
             foreach (var plugin in plugins)
             {
                 SchedulePlugin(plugin);
+            }
+        }
+
+        public override void UnscheduleAllPlugins(IEnumerable<APlugin> plugins)
+        {
+            foreach (var plugin in plugins)
+            {
+                SchedulerService.Instance.UnscheduleTask($"task_{plugin.Infos.FileName}");
             }
         }
     }
