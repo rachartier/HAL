@@ -1,6 +1,8 @@
 ﻿using HAL.CheckSum;
+using HAL.Configuration;
 using HAL.Loggin;
 using HAL.Plugin;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,20 +28,44 @@ namespace Server
 
     public class ServerFile
     {
-        private const int Port = 11000;
-        private const int nbMaxClient = 100;
+        /// <summary>
+        /// The connection port, retrieve from config file
+        /// </summary>
+        private readonly int Port;
 
-        private static int counterFile;
-        private static int dataSize;
+        /// <summary>
+        /// The max client allow to connect to the same server, retrieve from config file
+        /// </summary>
+        private readonly int nbMaxClient;
 
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
-        public static ManualResetEvent sendDone = new ManualResetEvent(false);
+        /// <summary>
+        /// The path where to save the sent plugin on the client, retrieve from config file
+        /// </summary>
+        private readonly string pathToSave;
+
+        /// <summary>
+        /// The directory name of where the plugins are store in the server, retrieve from config file
+        /// </summary>
+        private readonly string dirName;
+
+        private int counterFile;
+        private int dataSize;
+
+        public ManualResetEvent allDone = new ManualResetEvent(false);
+        public ManualResetEvent sendDone = new ManualResetEvent(false);
 
         public ServerFile()
         {
+            IConfigFileServer<JObject, JToken> configFile = new JSONConfigFileServer();
+            configFile.Load("config/config.json");
+
+            Port = configFile.GetPort();
+            nbMaxClient = configFile.GetMaxConnection();
+            pathToSave = configFile.GetPath();
+            dirName = configFile.GetPluginDirectory();
         }
 
-        public static void StartServer()
+        public void StartServer()
         {
             var pluginsFound = new List<PluginFileInfos>();
 
@@ -84,7 +110,7 @@ namespace Server
         /// The Callback that allow the server to receive, it's the acknowledgement of a connection. Allow to begin a reception from the remote connection
         /// </summary>
         /// <param name="asyncResult">The asynchronous result where the states object is store</param>
-        public static void AcceptCalback(IAsyncResult asyncResult)
+        public void AcceptCalback(IAsyncResult asyncResult)
         {
             var listener = (Socket)asyncResult.AsyncState;
             var handler = listener.EndAccept(asyncResult);
@@ -102,7 +128,7 @@ namespace Server
         /// This method read the receives data, format them and then send it to parsing for using it as HAL.Plugin.PluginFileInfos
         /// </summary>
         /// <param name="asyncResult">The asynchronous result where the states object is store</param>
-        public static void ReadCallback(IAsyncResult asyncResult)
+        public void ReadCallback(IAsyncResult asyncResult)
         {
             var content = string.Empty;
             var pluginsFound = new List<PluginFileInfos>();
@@ -162,7 +188,7 @@ namespace Server
         /// </summary>
         /// <param name="handler">The handler where to send file</param>
         /// <param name="data">A list of HAL.Plugin.PluginFileInfos to send to the handler</param>
-        private static void SendFileAsync(Socket handler, List<PluginFileInfos> data)
+        private void SendFileAsync(Socket handler, List<PluginFileInfos> data)
         {
             dataSize = data.Count;
 
@@ -170,7 +196,7 @@ namespace Server
             {
                 // The preBuffer which is send, matching with the name of the plugins
                 // TODO: Generify the path were to save plugin
-                var preBuffer = String.Format("<{1}><FILE>{0}</FILE><PATH>plugins/</PATH>", data[counterFile - 1].FileName, counterFile);
+                var preBuffer = String.Format("<{1}><FILE>{0}</FILE><PATH>{2}</PATH>", data[counterFile - 1].FileName, counterFile, pathToSave);
                 // The postBuffer is the path of where to save it on the client machine
                 var postBuffer = String.Format("<CHECKSUM>{0}</CHECKSUM></{1}><EOF>", data[counterFile - 1].CheckSum, counterFile);
 
@@ -178,7 +204,7 @@ namespace Server
             }
         }
 
-        private static void SendData(Socket handler, String data)
+        private void SendData(Socket handler, String data)
         {
             var byteData = Encoding.UTF8.GetBytes(data);
             Log.Instance?.Debug($"SendData data string: {data}");
@@ -194,7 +220,7 @@ namespace Server
         /// <param name="preBuffer">the prebuffer of the send</param>
         /// <param name="postBuffer">the postbuffer of the send</param>
         /// <param name="dataSize">the full size of the data to find, usefull for sync the close connection</param>
-        private static void SendDataFile(Socket handler, string pathName, string preBuffer, string postBuffer, int dataSize)
+        private void SendDataFile(Socket handler, string pathName, string preBuffer, string postBuffer, int dataSize)
         {
             var preBuffBytes = Encoding.UTF8.GetBytes(preBuffer);
             var postBufferBytes = Encoding.UTF8.GetBytes(postBuffer);
@@ -214,7 +240,7 @@ namespace Server
         /// The Callback for the end of sending files. When all the files have been sent, close the remote connection.
         /// </summary>
         /// <param name="asyncResult">The asynchronous result where the states object is store</param>
-        private static void SendFileCallback(IAsyncResult asyncResult)
+        private void SendFileCallback(IAsyncResult asyncResult)
         {
             try
             {
@@ -242,7 +268,7 @@ namespace Server
         /// The Callback for the end of sending data. When done, close the remote connection.
         /// </summary>
         /// <param name="asyncResult">The asynchronous result where the states object is store</param>
-        private static void SendCallback(IAsyncResult asyncResult)
+        private void SendCallback(IAsyncResult asyncResult)
         {
             try
             {
@@ -266,7 +292,7 @@ namespace Server
         /// <param name="serverPlugins">The dictionary that contain all the plugins of the server-side plugins</param>
         /// <param name="clientPlugins">The List that contain all the plugins of the client-side plugins</param>
         /// <returns> A list of the path that need to be updating OR null if none</returns>
-        private static List<PluginFileInfos> CheckAllPlugins(List<PluginFileInfos> serverPlugins, List<PluginFileInfos> clientPlugins)
+        private List<PluginFileInfos> CheckAllPlugins(List<PluginFileInfos> serverPlugins, List<PluginFileInfos> clientPlugins)
         {
             var pluginToUpdate = new List<PluginFileInfos>();
 
@@ -295,11 +321,11 @@ namespace Server
         /// Get all the plugin available on the server-side
         /// </summary>
         /// <returns>A List of PluginFileInfos</returns>
-        private static List<PluginFileInfos> PluginsOnServer()
+        private List<PluginFileInfos> PluginsOnServer()
         {
             var pluginsInfo = new List<PluginFileInfos>();
 
-            foreach (var file in Directory.GetFiles("plugins"))
+            foreach (var file in Directory.GetFiles(dirName))
             {
                 pluginsInfo.Add(new PluginSocketInfo(file, CheckSumGenerator.HashOf(file as string)));
             }

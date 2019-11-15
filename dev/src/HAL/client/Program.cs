@@ -25,7 +25,7 @@ namespace HAL
              * Here we instanciate the configuration file
              * Its a JSON format file.
              *
-             * All HAL's configration is here.
+             * All HAL's client configuration is here.
              */
             IConfigFileClient<JObject, JToken> configFile = new JSONConfigFileClient();
             configFile.Load("config/config.json");
