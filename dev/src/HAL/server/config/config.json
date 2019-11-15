@@ -1,0 +1,7 @@
+{
+	"port" : "11000",
+	"nb_max_client" : "100",
+	"retry_max" : "3",
+	"path_to_save" : "plugins/",
+	"directory_plugins" : "plugins"
+}
