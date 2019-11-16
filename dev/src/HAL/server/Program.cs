@@ -6,7 +6,9 @@ namespace server
     {
         private static void Main(string[] args)
         {
-            ServerFile.StartServer();
+            ServerFile server = new ServerFile();
+
+            server.StartServer();
         }
     }
 }
