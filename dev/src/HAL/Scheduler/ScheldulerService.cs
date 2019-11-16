@@ -7,7 +7,7 @@ namespace HAL.Scheduler
 {
     public class SchedulerService
     {
-        public static uint NB_MILLIS_IN_HOURS = 3_600_000U;
+        public static uint NB_MILLIS_IN_MINUTE = 60_000;
 
         public static SchedulerService Instance => instance ??= new SchedulerService();
 
@@ -23,21 +23,21 @@ namespace HAL.Scheduler
         /// schedule a task, it will be repeated each interval
         /// </summary>
         /// <param name="taskName">task's name to be identified</param>
-        /// <param name="intervalHours">interval hours, meaning the task will be repeated at an interval</param>
+        /// <param name="interval">interval of the task to be repeated</param>
         /// <param name="task">the specific task</param>
-        public void ScheduleTask(string taskName, double intervalHours, Action task)
+        public void ScheduleTask(string taskName, double interval, Action task)
         {
             var timer = new Timer(t =>
             {
                 task.Invoke();
-            }, null, 0, (uint)(intervalHours * NB_MILLIS_IN_HOURS));
+            }, null, 0, (uint)(interval * NB_MILLIS_IN_MINUTE));
 
             if (timers.TryAdd(taskName, timer) == false)
             {
                 throw new ArgumentException("Task name already in use.");
             }
 
-            Log.Instance?.Info($"{taskName} scheduled each {intervalHours} heartbeats.");
+            Log.Instance?.Info($"{taskName} scheduled each {interval} heartbeats.");
         }
 
         /// <summary>
