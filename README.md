@@ -110,7 +110,7 @@ Par la suite, il faut ajouter la configuration du plugin portant le nom et exten
 
 * activated (booléen): permet de savoir si le plugin est actif ou non, par conséquent si il doit être executé
 * heartbeat (double): 1 execution par heartbeat. Correspond à l'execution périodique d'un plugin où le hearthbeat défini la période.
-    * plus le heartbeat est petit, plus nombreux seront les executions par heure, et donc par conséquent une plus grande charge système.
+    * plus le heartbeat est petit, plus nombreux seront les executions par minute, et donc par conséquent une plus grande charge système.
 * os (array de string): 
     * optionnel, permet de lancer le plugin uniquement sur un ou plusieurs famille de système d'exploitation
     * si rien n'est spécifié, le plugin sera disponible sur toutes les familles
@@ -141,7 +141,7 @@ Exemple de configuration:
 }
 ```
 
-Ce dernier sera alors activé, aura une execution toutes les demie-heure et sera lancé uniquement sur les plateformes windows et linux.
+Ce dernier sera alors activé, aura une execution toutes les demie-minutes et sera lancé uniquement sur les plateformes windows et linux.
 
 ##### Ajout du mode administrateur
 
