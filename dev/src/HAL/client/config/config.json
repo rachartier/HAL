@@ -1,5 +1,10 @@
 {
   "plugins": {
+      "test.go": {
+           
+      "activated": "true",
+      "heartbeat": "1"
+      },
     "upgrades_available.sh": {
       "activated": "true",
       "heartbeat": "1",
