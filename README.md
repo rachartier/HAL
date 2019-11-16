@@ -15,7 +15,8 @@ Intro
 
 HAL est un projet de supervision destiné à récupérer différents donnés d'un parc informatique et à les envoyer sur un serveur, dans le but d'agréger les données en vue des traitres.
 Il utilise un système de plugins, qui sont chargés automatiquement au démarrage du client. Plusieurs langages pour écrire les plugins sont supportés:
-* C/C++/Go/C# (.dll / .so)
+* C/C++/C# (.dll / .so)
+* Go (.go)
 * Python (.py)
 * Ruby (.rb)
 * Shell (.sh)
@@ -33,8 +34,9 @@ Installation
 Pour le bon fonctionnement de HAL, il faut impérativement avoir 
 
 *  dotnet core 3.x,
-*  python3.x
-*  ruby
+*  python3.x (si vous souhaitez utiliser des plugins en python)
+*  ruby (si vous souhaitez utiliser des plugins en ruby)
+*  golang (si vous souhaitez utiliser des plugins en go)
 
 Ou des erreurs peuvent subvenirs pendant l'éxecution des plugins.
 
