@@ -70,6 +70,7 @@ namespace HAL
             configFile.SetInterpreterNameConfiguration(pluginMaster);
 
             // We only want to configure all the plugins when the client has received all the informations and plugins
+            client.OnReceiveDone += (o, e) =>
             {
                 /*
                 * All the plugins in the directory "plugins" will be loaded and added to the plugin master
@@ -94,15 +95,16 @@ namespace HAL
                         storage.Save(e.Plugin, e.Result);
                     });
                 }
-            }
+
                 /*
                  * All the plugins are then schelduled to be launched when needed.
                  */
                 pluginManager.SchedulePlugins(pluginMaster.Plugins);
+            };
 
-                client.StartClient();
+            client.StartClient();
 
-                while (true) { }
-            }
+            while (true) { }
         }
     }
+}
