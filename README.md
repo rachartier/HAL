@@ -33,10 +33,10 @@ Installation
 
 Pour le bon fonctionnement de HAL, il faut impérativement avoir 
 
-*  dotnet core 3.x,
-*  python3.x (si vous souhaitez utiliser des plugins en python)
-*  ruby (si vous souhaitez utiliser des plugins en ruby)
-*  golang (si vous souhaitez utiliser des plugins en go)
+*  dotnet core 3.x, (serv/client)
+*  python3.x (client, si vous souhaitez utiliser des plugins en python)
+*  ruby (client, si vous souhaitez utiliser des plugins en ruby)
+*  golang (client, si vous souhaitez utiliser des plugins en go)
 
 Ou des erreurs peuvent subvenirs pendant l'éxecution des plugins.
 
@@ -303,6 +303,27 @@ func main() {
 }
 
 ```
+
+Il est aussi possible de faire du Go compilé (sous forme de DLL). L'avantage étant que le client n'est pas obligé de posseder golang. 
+
+``` go
+package main
+
+import "C"
+
+func main() {
+}
+
+//export run
+func run() *C.char {
+	return C.CString("{\"test\": \"reussi\"}")
+}
+```
+
+Il est imépratif d'avoir le commentaire "export run" pour que cela fonctionne. De plus, il faut aussi obligatoirement mettre *C.char comme type de retour.
+
+Compilation: `go build -o testplugin.dll -buildmode=c-shared`
+
 
 ### Vérifier que les plugins ont une sortie JSON correcte
 
