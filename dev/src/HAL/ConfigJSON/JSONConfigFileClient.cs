@@ -55,7 +55,7 @@ namespace HAL.Configuration
 
                 if (val == null)
                 {
-                    Log.Instance?.Error($"{plugin.Infos.FileName} has not \"{name}\" set. Default value used \"{fallback}\".");
+                    Log.Instance?.Warn($"{plugin.Infos.FileName} has not \"{name}\" set. Default value used \"{fallback}\".");
                     return fallback;
                 }
 
