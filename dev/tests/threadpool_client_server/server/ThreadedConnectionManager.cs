@@ -1,3 +1,4 @@
+using System.Net.Http;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -7,17 +8,21 @@ using System.Threading.Tasks;
 
 namespace server
 {
-    public abstract class TcpClientOpenedStream : IDisposable
+    public abstract class TcpClientSavedState : IDisposable
     {
         public StreamWriter StreamWriter { get; }
         public StreamReader StreamReader { get; }
 
         public bool IsDisconnected { get; set; } = false;
 
-        public TcpClientOpenedStream(TcpClient client)
+        private TcpClient reference;
+
+        public TcpClientSavedState(TcpClient client)
         {
             StreamWriter = new StreamWriter(client.GetStream());
             StreamReader = new StreamReader(client.GetStream());
+
+            reference = client;
         }
 
         public abstract void Update();
@@ -26,41 +31,40 @@ namespace server
         {
             StreamWriter.Dispose();
             StreamReader.Dispose();
+
+            reference.Dispose();
         }
     }
 
-    internal class ThreadWitchClients
+    internal class ThreadWithClients
     {
         public Thread Thread { get; set; }
-        public List<TcpClientOpenedStream> Clients { get; } = new List<TcpClientOpenedStream>();
-        public object key = new object();
+        public List<TcpClientSavedState> Clients { get; } = new List<TcpClientSavedState>();
     }
 
     public class ThreadedConnectionManager
     {
-        private ThreadWitchClients[] threadsPool;
-
-        private int threadIndex = 0;
+        private ThreadWithClients[] threadsPool;
         private int threadCount;
 
-        public ThreadedConnectionManager(int threadCount)
+        public ThreadedConnectionManager(int threadCount, int updateTimeMs)
         {
             this.threadCount = threadCount;
 
-            threadsPool = new ThreadWitchClients[threadCount];
+            threadsPool = new ThreadWithClients[threadCount];
 
             for (int i = 0; i < threadCount; ++i)
             {
-                threadsPool[i] = new ThreadWitchClients();
-                var threadOpenedStream = threadsPool[i];
+                threadsPool[i] = new ThreadWithClients();
+                var threadWitchClients = threadsPool[i];
 
-                threadOpenedStream.Thread = new Thread(() =>
+                threadWitchClients.Thread = new Thread(() =>
                 {
                     while (true)
                     {
-                        Parallel.For(0, threadOpenedStream.Clients.Count, (index, _) =>
+                        Parallel.For(0, threadWitchClients.Clients.Count, (index, _) =>
                         {
-                            var client = threadOpenedStream.Clients[index];
+                            var client = threadWitchClients.Clients[index];
 
                             try
                             {
@@ -73,27 +77,54 @@ namespace server
                             }
                         });
 
+                        threadWitchClients.Clients.RemoveAll((c => c.IsDisconnected));
 
-                        threadOpenedStream.Clients.RemoveAll((c => c.IsDisconnected));
-
-                        Thread.Sleep(100);
+                        Thread.Sleep(updateTimeMs);
                     }
                 });
 
-                threadOpenedStream.Thread.Start();
+                threadWitchClients.Thread.Start();
             }
         }
 
-        public void AddTcpClient(TcpClientOpenedStream client)
+        public void KillAllConnections()
         {
-            var threadPool = threadsPool[threadIndex];
-
-            lock (threadPool.key)
+            for (int i = 0; i < threadCount; ++i)
             {
-                threadPool.Clients.Add(client);
+                var threadWitchClients = threadsPool[i];
+                foreach (var client in threadWitchClients.Clients)
+                {
+                    client.Dispose();
+                }
+
+                threadWitchClients.Thread.Interrupt();
+            }
+        }
+
+        public void AddTcpClient(TcpClientSavedState client)
+        {
+            var threadPool = threadsPool[GetMinimumWorkingThread()];
+
+            threadPool.Clients.Add(client);
+        }
+
+        private int GetMinimumWorkingThread()
+        {
+            int threadIndex = 0;
+            int minClientsInThread = threadsPool[0].Clients.Count;
+
+            for (int i = 1; i < threadCount; ++i)
+            {
+                var count = threadsPool[i].Clients.Count;
+
+                if (count < minClientsInThread)
+                {
+                    threadIndex = i;
+                    minClientsInThread = count;
+                }
             }
 
-            threadIndex = ((threadIndex + 1) % threadCount);
+            return threadIndex;
         }
 
         public void _Info()

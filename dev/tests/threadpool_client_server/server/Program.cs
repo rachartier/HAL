@@ -6,14 +6,14 @@ using System.IO;
 
 namespace server
 {
-    class SimpleTcpClientOpenedStream : TcpClientOpenedStream
+    class SimpleTcpClientSavedState : TcpClientSavedState
     {
         private Random random = new Random();
         private int id;
 
         private string dataToSend = "coucou";
 
-        public SimpleTcpClientOpenedStream(TcpClient client)
+        public SimpleTcpClientSavedState(TcpClient client)
             : base(client)
         {
             id = int.Parse(StreamReader.ReadLine());
@@ -33,27 +33,25 @@ namespace server
     class Server
     {
         private TcpListener server;
-        private bool isRunning;
-        private object key = new object();
+        private bool isRunning = true;
 
         public Server(string ip, int port)
         {
-            var connectionManager = new ThreadedConnectionManager(8);
+            var connectionManager = new ThreadedConnectionManager(8, 100);
 
             server = new TcpListener(System.Net.IPAddress.Parse(ip), port);
             server.Start();
 
             Console.WriteLine("Server is running. Waiting for clients...");
 
-            isRunning = true;
-
-
             new Thread(() =>
             {
                 while (true)
                 {
                     connectionManager._Info();
-                    Thread.Sleep(1000);
+                    Console.WriteLine("\nPress any key to kill all connections...");
+
+                    Thread.Sleep(100);
                 }
             }).Start();
 
@@ -63,13 +61,17 @@ namespace server
                 while (isRunning)
                 {
                     var client = await server.AcceptTcpClientAsync();
-                    var tcpOpenedStream = new SimpleTcpClientOpenedStream(client);
+                    var tcpOpenedStream = new SimpleTcpClientSavedState(client);
 
                     connectionManager.AddTcpClient(tcpOpenedStream);
                 }
             });
 
             mainThread.Start();
+
+            Console.ReadKey();
+            connectionManager.KillAllConnections();
+
             mainThread.Join();
         }
 

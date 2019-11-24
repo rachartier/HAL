@@ -23,7 +23,7 @@ namespace client
             };
 
             client.Connect(ip, port);
-            Console.WriteLine($"Hello World ({id})");
+            //Console.WriteLine($"Hello World ({id})");
 
             Updated[id] = false;
 
@@ -59,6 +59,7 @@ namespace client
                 }
             }
 
+            client.Dispose();
             Console.WriteLine($"Goodbye World ({id})...");
         }
     }
@@ -87,9 +88,7 @@ namespace client
                     for (int i = 0; i < Client.NumberClients; ++i)
                     {
                         if (!Client.Updated[i])
-                        {
                             good = false;
-                        }
                         else
                             updated++;
                     }
@@ -100,16 +99,17 @@ namespace client
                     }
                     else
                     {
-                        Console.WriteLine($"NOT GOOD ({updated} update)");
+                        Console.WriteLine($"NOT GOOD ({updated} updated)");
                     }
 
                     Thread.Sleep(1000);
                 }
             }).Start();
 
+            Console.WriteLine("Press any key to kill all clients...");
             Console.ReadKey();
-            Client.Kill = true;
 
+            Client.Kill = true;
         }
     }
 }
