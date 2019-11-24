@@ -1,26 +1,46 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Net;
+﻿using System.Threading.Tasks;
 using System;
 using System.Net.Sockets;
 using System.Threading;
 using System.IO;
-using System.Text;
 
 namespace server
 {
+    class SimpleTcpClientOpenedStream : TcpClientOpenedStream
+    {
+        private Random random = new Random();
+        private int id;
+
+        private string dataToSend = "coucou";
+
+        public SimpleTcpClientOpenedStream(TcpClient client)
+            : base(client)
+        {
+            id = int.Parse(StreamReader.ReadLine());
+
+            //Console.WriteLine($"New client: #{id}");
+        }
+
+        public override void Update()
+        {
+            StreamWriter.WriteLine(dataToSend);
+            StreamWriter.Flush();
+
+            Thread.Sleep((1 + random.Next(5)) * 1000);
+        }
+    }
+
     class Server
     {
         private TcpListener server;
         private bool isRunning;
         private object key = new object();
-        public Dictionary<int, int> ClientStat = new Dictionary<int, int>();
 
         public Server(string ip, int port)
         {
+            var connectionManager = new ThreadedConnectionManager(8);
 
             server = new TcpListener(System.Net.IPAddress.Parse(ip), port);
-
             server.Start();
 
             Console.WriteLine("Server is running. Waiting for clients...");
@@ -32,32 +52,20 @@ namespace server
             {
                 while (true)
                 {
-                    Console.Clear();
-
-                    lock (key)
-                    {
-                        foreach (var stat in ClientStat)
-                        {
-                            Console.WriteLine($"#{stat.Key}: {stat.Value}");
-                        }
-
-                        Console.WriteLine($"Total: {ClientStat.Keys.Count}");
-                    }
-
-                    Thread.Sleep(2 * 1000);
+                    connectionManager._Info();
+                    Thread.Sleep(1000);
                 }
             }).Start();
+
 
             var mainThread = new Thread(async () =>
             {
                 while (isRunning)
                 {
                     var client = await server.AcceptTcpClientAsync();
+                    var tcpOpenedStream = new SimpleTcpClientOpenedStream(client);
 
-                    ThreadPool.QueueUserWorkItem(async (_) =>
-                    {
-                        await HandleClient(client);
-                    });
+                    connectionManager.AddTcpClient(tcpOpenedStream);
                 }
             });
 
@@ -65,49 +73,6 @@ namespace server
             mainThread.Join();
         }
 
-        private async Task HandleClient(TcpClient client)
-        {
-            var random = new Random();
-
-            using var streamWriter = new StreamWriter(client.GetStream());
-            using var streamReader = new StreamReader(client.GetStream());
-
-            bool isClientConnected = true;
-            string dataToSend = "volvic is the best water";
-            int id = 0;
-
-            id = int.Parse(streamReader.ReadLine());
-            //Console.WriteLine($"Client #{id} has logged in...");
-
-            while (isClientConnected)
-            {
-                //Console.WriteLine($"Sending: \"{dataToSend}\" to client #{id}");
-
-                try
-                {
-                    await streamWriter.WriteLineAsync(dataToSend);
-                    await streamWriter.FlushAsync();
-
-                    lock (key)
-                    {
-                        if (!ClientStat.ContainsKey(id))
-                        {
-                            ClientStat.Add(id, 0);
-                        }
-
-                        ClientStat[id] += 1;
-                    }
-                }
-                catch
-                {
-                    isClientConnected = false;
-                }
-
-                Thread.Sleep((1 + random.Next(5)) * 1000);
-            }
-
-            //Console.WriteLine($"Client #{id} disconnected.");
-        }
     }
     class Program
     {
