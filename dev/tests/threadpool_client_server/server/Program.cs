@@ -6,17 +6,16 @@ using System.IO;
 
 namespace server
 {
-    class SimpleTcpClientSavedState : TcpClientSavedState
+    class DemoTcpClientSavedState : TcpClientSavedState
     {
         private Random random = new Random();
         private int id;
 
         private string dataToSend = "coucou";
 
-        public SimpleTcpClientSavedState(TcpClient client)
+        public DemoTcpClientSavedState(TcpClient client)
             : base(client)
         {
-            id = int.Parse(StreamReader.ReadLine());
 
             //Console.WriteLine($"New client: #{id}");
         }
@@ -61,7 +60,7 @@ namespace server
                 while (isRunning)
                 {
                     var client = await server.AcceptTcpClientAsync();
-                    var tcpOpenedStream = new SimpleTcpClientSavedState(client);
+                    var tcpOpenedStream = new DemoTcpClientSavedState(client);
 
                     connectionManager.AddTcpClient(tcpOpenedStream);
                 }
