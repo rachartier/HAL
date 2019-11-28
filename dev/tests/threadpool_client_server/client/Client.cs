@@ -32,7 +32,7 @@ namespace client
         public readonly StreamWriter StreamWriter;
         public readonly StreamReader StreamReader;
 
-        public bool IsConnected {get;set;}
+        public bool IsConnected { get; set; }
 
         private TcpClient client;
 
@@ -42,11 +42,10 @@ namespace client
         {
             client = new TcpClient()
             {
-                NoDelay = true,
+            NoDelay = true,
             };
 
             this.updateIntervalInMs = updateIntervalInMs;
-
 
             client.Connect(ip, port);
 
@@ -59,8 +58,7 @@ namespace client
             StreamReader = new StreamReader(client.GetStream());
         }
 
-
-        public void Start() 
+        public void Start()
         {
             HandleCommunication();
 

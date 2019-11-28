@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +9,7 @@ namespace client
 {
     class Program
     {
-        static int numberClients = 100;
+        static int numberClients = 50;
 
         static Dictionary<int, bool> stats = new Dictionary<int, bool>();
 

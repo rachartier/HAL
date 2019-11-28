@@ -4,17 +4,17 @@ namespace client
 {
     public class DemoClient : Client
     {
-        public int Id {get;set;}
+        public int Id { get; set; }
 
         public DemoClient(int id, string ip, int port) : base(ip, port)
         {
             Id = id;
 
-            OnConnected += (o,e) => {
+            OnConnected += (o, e) =>
+            {
                 StreamWriter.WriteLine(id);
             };
-         }
-
+        }
 
         public override void Update()
         {

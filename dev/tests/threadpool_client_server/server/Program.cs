@@ -36,7 +36,7 @@ namespace server
 
         public Server(string ip, int port)
         {
-            var connectionManager = new ThreadedConnectionManager(8, 100);
+            var connectionManager = new ThreadedConnectionManager(8, 1000);
 
             server = new TcpListener(System.Net.IPAddress.Parse(ip), port);
             server.Start();
