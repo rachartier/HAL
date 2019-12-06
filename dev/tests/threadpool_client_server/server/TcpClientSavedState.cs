@@ -6,8 +6,8 @@ namespace server
 {
     public abstract class TcpClientSavedState : IDisposable
     {
-        public StreamWriter StreamWriter { get; }
-        public StreamReader StreamReader { get; }
+        public readonly StreamWriter StreamWriter; 
+        public readonly StreamReader StreamReader;
 
         public bool IsConnected { get; set; }
 

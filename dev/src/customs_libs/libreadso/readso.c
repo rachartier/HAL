@@ -3,6 +3,9 @@
 #include <string.h>
 #include <assert.h>
 
+#include "../headers/error.h"
+#include "../headers/debug.h"
+
 #if __linux__
 # include <dlfcn.h>
 # define EXPORT
@@ -27,14 +30,6 @@
    if no memory is allocated, then marshal will get the adress of the first result, then add the size of the second data, the size of the third data and so on.
 
 */
-
-#ifdef DEBUG
-# define DPRINT(msg, ...) printf("line %d: " msg "\n", __LINE__, __VA_ARGS__ )
-#else 
-# define DPRINT(msg, ...) 
-#endif
-
-#define FATAL_ERROR(...) fprintf(stderr, "[ERROR] libreadso: " __VA_ARGS__)
 
 #define NUMBER_ENTRYPOINT_FUNC_NAME 2
 
@@ -112,7 +107,7 @@ extern "C" {
         void* lib = _load_lib(input_file);
 
         if(!lib) {
-            FATAL_ERROR("Can't load %s file. NULL returned", input_file);
+            _ERROR("libreadso, can't load %s file. NULL returned", input_file);
             return NULL;
         }
 
@@ -137,7 +132,7 @@ extern "C" {
 #endif
         }
         else {
-            FATAL_ERROR("No entry point found. NULL returned.");
+            _ERROR("libreadso, no entry point found. NULL returned.");
 
 #if __linux__
             dlclose(lib);

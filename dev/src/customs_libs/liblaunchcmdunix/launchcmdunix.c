@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../headers/error.h"
+#include "../headers/debug.h"
+
 #ifdef __linux__
 # define EXPORT 
 #else
@@ -10,8 +13,9 @@
 
 #define BLOCK_SIZE 1024
 
-#define FATAL_ERROR(...) fprintf(stderr, "[ERROR] liblaunchcmdunix: " __VA_ARGS__)
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 char* EXPORT launch_command(const char *command) {
 	if(!command) return NULL;
 
@@ -19,7 +23,7 @@ char* EXPORT launch_command(const char *command) {
 	fp = popen(command, "r");
 
 	if(!fp) {
-        FATAL_ERROR("popen() can't create a processus. NULL returned");
+        _ERROR("liblaunchcmdunix, popen() can't create a processus. NULL returned");
         return NULL;
 	}
 
@@ -29,7 +33,7 @@ char* EXPORT launch_command(const char *command) {
 	char*	data_result = malloc((BLOCK_SIZE + 1) * sizeof(*data_result));
 
 	if(!data_result) {
-        FATAL_ERROR("memory allocation error. NULL returned.");
+        _ERROR("memory allocation error. NULL returned.");
         pclose(fp);
         return NULL;
     }
@@ -46,7 +50,7 @@ char* EXPORT launch_command(const char *command) {
 			char* resized_data = realloc(data_result, ((block_read + 1) * BLOCK_SIZE) * sizeof(*data_result));
 
 			if(!resized_data) {
-                FATAL_ERROR("memory reallocation error. NULL returned.");
+                _ERROR("liblaunchcmdunix, memory reallocation error. NULL returned.");
 	            pclose(fp);
 
 				free(data_result);
@@ -63,4 +67,6 @@ char* EXPORT launch_command(const char *command) {
 
 	return data_result;
 }
-
+#ifdef __cplusplus
+}
+#endif
