@@ -11,7 +11,7 @@
 # define EXPORT __depdecl(dllexport)
 #endif
 
-#define BLOCK_SIZE 1024
+#define BLOCK_SIZE 512
 
 #ifdef __cplusplus
 extern "C" {
