@@ -39,23 +39,23 @@ namespace server
                 {
                     while (true)
                     {
-                            Parallel.For(0, threadWitchClients.Clients.Count, (index, _) =>
+                        Parallel.For(0, threadWitchClients.Clients.Count, (index, _) =>
+                        {
+                            var client = threadWitchClients.Clients[index];
+
+                            try
                             {
-                                var client = threadWitchClients.Clients[index];
+                                client.Update();
+                            }
+                            catch
+                            {
+                                client.Dispose();
+                                client.IsConnected = false;
+                                OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
+                            }
+                        });
 
-                                try
-                                {
-                                    client.Update();
-                                }
-                                catch
-                                {
-                                    client.Dispose();
-                                    client.IsConnected = false;
-                                    OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
-                                }
-                            });
-
-                            threadWitchClients.Clients.RemoveAll((c => !c.IsConnected));
+                        threadWitchClients.Clients.RemoveAll((c => !c.IsConnected));
 
                         Thread.Sleep(updateTimeMs);
                     }
@@ -86,8 +86,9 @@ namespace server
             lock(keyAccessPool)
             {
                 threadSlot.Clients.Add(client);
-                OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));
             }
+
+            OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));
         }
 
         private int GetMinimumWorkingThread()

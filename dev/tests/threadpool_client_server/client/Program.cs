@@ -9,7 +9,7 @@ namespace client
 {
     class Program
     {
-        static int numberClients = 50;
+        static int numberClients = 20;
 
         static Dictionary<int, bool> stats = new Dictionary<int, bool>();
 
@@ -33,6 +33,8 @@ namespace client
                                     stats.Add(client.Id, true);
                                 }
                             }
+
+                            client.Disconnect();
                         }
                     };
 
@@ -44,20 +46,15 @@ namespace client
             {
                 int clientsUpdated = 0;
 
-                Console.Clear();
                 Console.Write("Checking if all clients are udpated... ");
 
-                lock(key) 
-                {
                     foreach (var s in stats)
                     {
                         if (s.Value)
                             clientsUpdated++;
                     }
-                }
 
                 Console.WriteLine($"{clientsUpdated}/{numberClients}");
-                Thread.Sleep(1);
             }
         }
     }

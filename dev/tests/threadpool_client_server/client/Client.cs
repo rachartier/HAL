@@ -32,7 +32,7 @@ namespace client
         public readonly StreamWriter StreamWriter;
         public readonly StreamReader StreamReader;
 
-        public bool IsConnected {get;set;}
+        public bool IsConnected {get; protected set;}
 
         private TcpClient client;
 
@@ -76,6 +76,11 @@ namespace client
                 OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Updated));
                 Thread.Sleep(updateIntervalInMs);
             }
+        }
+
+        public void Disconnect()
+        {
+            IsConnected = false;
         }
 
         public abstract void Update();

@@ -16,7 +16,7 @@ namespace server
         public DemoTcpClientSavedState(TcpClient client)
             : base(client)
         {
-
+            //int id = int.Parse(StreamReader.ReadLine());
             //Console.WriteLine($"New client: #{id}");
         }
 
