@@ -15,24 +15,24 @@ namespace client
             Closed,
         }
 
-        public class ConnectionUpdatedEventArgs
+        public class ConnectionStateChangedEventArgs
         {
             public readonly ConnectionState State;
 
-            public ConnectionUpdatedEventArgs(ConnectionState state)
+            public ConnectionStateChangedEventArgs(ConnectionState state)
             {
                 State = state;
             }
         }
 
-        public event EventHandler<ConnectionUpdatedEventArgs> OnConnectionUpdated;
+        public event EventHandler<ConnectionStateChangedEventArgs> OnConnectionStateChanged;
         public event EventHandler OnConnected;
         public event EventHandler OnClosed;
 
         public readonly StreamWriter StreamWriter;
         public readonly StreamReader StreamReader;
 
-        public bool IsConnected { get; set; }
+        public bool IsConnected {get;set;}
 
         private TcpClient client;
 
@@ -42,14 +42,14 @@ namespace client
         {
             client = new TcpClient()
             {
-            NoDelay = true,
+                NoDelay = true,
             };
 
             this.updateIntervalInMs = updateIntervalInMs;
 
             client.Connect(ip, port);
 
-            OnConnectionUpdated?.Invoke(this, new ConnectionUpdatedEventArgs(ConnectionState.Connected));
+            OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Connected));
             OnConnected?.Invoke(this, null);
 
             IsConnected = true;
@@ -58,11 +58,12 @@ namespace client
             StreamReader = new StreamReader(client.GetStream());
         }
 
-        public void Start()
+
+        public void Start() 
         {
             HandleCommunication();
 
-            OnConnectionUpdated?.Invoke(this, new ConnectionUpdatedEventArgs(ConnectionState.Closed));
+            OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Closed));
             OnClosed?.Invoke(this, null);
         }
 
@@ -72,7 +73,7 @@ namespace client
             {
                 Update();
 
-                OnConnectionUpdated?.Invoke(this, new ConnectionUpdatedEventArgs(ConnectionState.Closed));
+                OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Updated));
                 Thread.Sleep(updateIntervalInMs);
             }
         }

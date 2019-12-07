@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
 using System.IO;
@@ -15,24 +15,23 @@ namespace client
 
         static object key = new object();
 
-        static int clientId = 0;
-
         static void Main(string[] args)
         {
-
             for (int i = 0; i < numberClients; ++i)
             {
-                new Thread(() =>
-                {
+                new Thread(() => {
                     using var client = new DemoClient(i, "127.0.0.1", 1664);
 
-                    client.OnConnectionUpdated += (o, e) =>
+                    client.OnConnectionStateChanged += (o, e) =>
                     {
-                        lock(key)
+                        if(e.State == Client.ConnectionState.Updated) 
                         {
-                            if (!stats.ContainsKey(client.Id))
+                            lock(key)
                             {
-                                stats.Add(client.Id, true);
+                                if (!stats.ContainsKey(client.Id))
+                                {
+                                    stats.Add(client.Id, true);
+                                }
                             }
                         }
                     };
@@ -41,29 +40,25 @@ namespace client
                 }).Start();
             }
 
-            new Thread(() =>
+            while (true)
             {
-                while (true)
+                int clientsUpdated = 0;
+
+                Console.Clear();
+                Console.Write("Checking if all clients are udpated... ");
+
+                lock(key) 
                 {
-                    int clientsUpdated = 0;
-
-                    Console.Clear();
-                    Console.Write("Checking if all clients are udpated... ");
-
                     foreach (var s in stats)
                     {
                         if (s.Value)
                             clientsUpdated++;
                     }
-
-                    Console.WriteLine($"{clientsUpdated}/{numberClients}");
-
-                    Thread.Sleep(1000);
                 }
-            }).Start();
 
-            Console.WriteLine("Press any key to kill all clients...");
-            Console.ReadKey();
+                Console.WriteLine($"{clientsUpdated}/{numberClients}");
+                Thread.Sleep(1);
+            }
         }
     }
 }

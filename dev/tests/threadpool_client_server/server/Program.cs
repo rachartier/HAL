@@ -29,57 +29,28 @@ namespace server
         }
     }
 
-    class Server
-    {
-        private TcpListener server;
-        private bool isRunning = true;
-
-        public Server(string ip, int port)
-        {
-            var connectionManager = new ThreadedConnectionManager(8, 1000);
-
-            server = new TcpListener(System.Net.IPAddress.Parse(ip), port);
-            server.Start();
-
-            Console.WriteLine("Server is running. Waiting for clients...");
-
-            new Thread(() =>
-            {
-                while (true)
-                {
-                    connectionManager._Info();
-                    Console.WriteLine("\nPress any key to kill all connections...");
-
-                    Thread.Sleep(100);
-                }
-            }).Start();
-
-
-            var mainThread = new Thread(async () =>
-            {
-                while (isRunning)
-                {
-                    var client = await server.AcceptTcpClientAsync();
-                    var tcpOpenedStream = new DemoTcpClientSavedState(client);
-
-                    connectionManager.AddTcpClient(tcpOpenedStream);
-                }
-            });
-
-            mainThread.Start();
-
-            Console.ReadKey();
-            connectionManager.KillAllConnections();
-
-            mainThread.Join();
-        }
-
-    }
     class Program
     {
         static void Main(string[] args)
         {
-            var server = new Server("127.0.0.1", 1664);
+            var server = new Server("127.0.0.1", 1664, Environment.ProcessorCount);
+            int connectedClients = 0;
+
+            server.OnServerStarted += (o,e) => {
+                Console.WriteLine("Server starded, waiting for clients...");
+            };
+
+            server.OnClientConnected += (o, e) => {
+                connectedClients++;
+                Console.WriteLine($"Clients: {connectedClients}");
+            };
+
+            server.OnClientDisconnected += (o, e) => {
+                connectedClients--;
+                Console.WriteLine($"Clients: {connectedClients}");
+            };
+
+            server.StartUniqueClientType<DemoTcpClientSavedState>();
         }
     }
 }

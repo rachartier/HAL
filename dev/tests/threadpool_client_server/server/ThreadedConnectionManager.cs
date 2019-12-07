@@ -20,6 +20,10 @@ namespace server
         private int threadCount;
         private object keyAccessPool = new object();
 
+        public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
+        public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
+
+
         public ThreadedConnectionManager(int threadCount, int updateTimeMs = 1000)
         {
             this.threadCount = threadCount;
@@ -38,6 +42,7 @@ namespace server
                             Parallel.For(0, threadWitchClients.Clients.Count, (index, _) =>
                             {
                                 var client = threadWitchClients.Clients[index];
+
                                 try
                                 {
                                     client.Update();
@@ -46,8 +51,8 @@ namespace server
                                 {
                                     client.Dispose();
                                     client.IsConnected = false;
+                                    OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
                                 }
-
                             });
 
                             threadWitchClients.Clients.RemoveAll((c => !c.IsConnected));
@@ -76,11 +81,12 @@ namespace server
 
         public void AddTcpClient(TcpClientSavedState client)
         {
-            var threadPool = this.threadPool[GetMinimumWorkingThread()];
+            var threadSlot = threadPool[GetMinimumWorkingThread()];
 
             lock(keyAccessPool)
             {
-                threadPool.Clients.Add(client);
+                threadSlot.Clients.Add(client);
+                OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));
             }
         }
 
@@ -101,23 +107,6 @@ namespace server
             }
 
             return threadIndex;
-        }
-
-        public void _Info()
-        {
-            int totalClients = 0;
-
-            Console.Clear();
-
-            for (int i = 0; i < threadCount; ++i)
-            {
-                var thread = threadPool[i];
-
-                Console.WriteLine($"Thread #{i}: {thread.Clients.Count} active clients");
-                totalClients += thread.Clients.Count;
-            }
-
-            Console.WriteLine($"Total active clients: {totalClients}");
         }
     }
 }
