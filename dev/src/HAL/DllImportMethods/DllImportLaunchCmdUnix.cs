@@ -6,7 +6,9 @@ namespace HAL.DllImportMethods
     public class DllImportLaunchCmdUnix : BaseDLLImport
     {
         [DllImport("./lib/liblaunchcmdunix")]
+#pragma warning disable IDE1006
         private static extern IntPtr launch_command(IntPtr command);
+#pragma warning restore IDE1006
 
         /// <summary>
         /// launch a command from the shell (unix)

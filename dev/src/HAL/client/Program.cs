@@ -1,8 +1,6 @@
 ﻿using HAL.Client;
 using HAL.Configuration;
 
-using HAL.Configuration;
-
 using HAL.Factory;
 using HAL.Loggin;
 using HAL.Plugin;

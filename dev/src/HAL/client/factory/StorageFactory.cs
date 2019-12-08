@@ -25,30 +25,19 @@ namespace HAL.Factory
             /*
              * You also need to add a case here
              */
-            switch (sanitizedStorageName)
+            return sanitizedStorageName switch
             {
-                case Text:
-                    return new StorageText();
+                Text => new StorageText(),
+                Local => new StorageLocalFile(),
+                MangoDB => new StorageMongoDB(),
 
-                case Local:
-                    return new StorageLocalFile();
-
-                case MangoDB:
-                    return new StorageMongoDB();
-
-                    /*
-                     * Example:
-                     * case MyCustomOracle:
-                     *  return new MyCustomOracleDB();
-                     */
-            }
-
-            /*
-             * Fallback if no storage is found
-             *
-             * you may want to change this.
-             */
-            return new StorageText();
+                /*
+                * Fallback if no storage is found
+                *
+                * you may want to change this.
+                */
+                _ => new StorageText(),
+            };
         }
     }
 }
