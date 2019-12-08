@@ -15,8 +15,8 @@ namespace server
         public DelegateClientConnected OnClientConnected;
         public DelegateClientConnected OnClientDisconnected;
 
-        private ThreadedConnectionManager connectionManager;
-        private TcpListener server;
+        private readonly ThreadedConnectionManager connectionManager;
+        private readonly TcpListener server;
         private bool isRunning = true;
 
         public Server(string ip, int port, int allocatedThreads)
@@ -31,6 +31,11 @@ namespace server
             connectionManager.OnClientDisconnected += (o,e) => {
                 OnClientDisconnected (o, e);
             };
+        }
+
+        public void Stop() 
+        {
+            isRunning = false;
         }
 
         public async void StartUniqueClientType<TClient>() 

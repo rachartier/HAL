@@ -1,6 +1,8 @@
+using System.Threading;
 using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace server
 {
@@ -10,6 +12,7 @@ namespace server
         public readonly StreamReader StreamReader;
 
         public bool IsConnected { get; set; }
+        public bool IsFirstUpdate { get; set; } = true;
 
         private TcpClient reference;
 
@@ -22,7 +25,11 @@ namespace server
             IsConnected = true;
         }
 
-        public abstract void Update();
+        public virtual async Task FirstUpdateAsync() 
+        { 
+            await Task.Run(() => {});
+        }
+        public abstract Task UpdateAsync();
 
         public void Dispose()
         {

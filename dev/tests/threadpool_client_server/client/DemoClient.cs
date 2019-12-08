@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace client
 {
@@ -10,19 +11,21 @@ namespace client
         {
             Id = id;
 
-            OnConnected += (o, e) =>
+            OnConnected += async (o, e) =>
             {
-                StreamWriter.WriteLine(id);
+                await StreamWriter.WriteLineAsync($"{id}");
+                await StreamWriter.FlushAsync();
             };
         }
 
-        public override void Update()
+        public override async Task UpdateAsync()
         {
             try
             {
-                string dataReceived = StreamReader.ReadLine();
+                string result = StreamReader.ReadLine();
+                Console.WriteLine(result);
 
-                if (string.IsNullOrEmpty(dataReceived))
+                if (string.IsNullOrEmpty(result))
                 {
                     IsConnected = false;
                 }

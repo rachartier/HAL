@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace client
 {
@@ -49,29 +50,29 @@ namespace client
 
             client.Connect(ip, port);
 
-            OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Connected));
-            OnConnected?.Invoke(this, null);
-
             IsConnected = true;
 
             StreamWriter = new StreamWriter(client.GetStream());
             StreamReader = new StreamReader(client.GetStream());
+        
+            OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Connected));
+            OnConnected?.Invoke(this, null);
         }
 
 
-        public void Start() 
+        public async Task StartAsync() 
         {
-            HandleCommunication();
+            await HandleCommunicationAsync();
 
             OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Closed));
             OnClosed?.Invoke(this, null);
         }
 
-        public void HandleCommunication()
+        public async Task HandleCommunicationAsync()
         {
             while (IsConnected)
             {
-                Update();
+                await UpdateAsync();
 
                 OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Updated));
                 Thread.Sleep(updateIntervalInMs);
@@ -83,7 +84,7 @@ namespace client
             IsConnected = false;
         }
 
-        public abstract void Update();
+        public abstract Task UpdateAsync();
 
         public void Dispose()
         {

@@ -16,14 +16,19 @@ namespace server
         public DemoTcpClientSavedState(TcpClient client)
             : base(client)
         {
-            //int id = int.Parse(StreamReader.ReadLine());
-            //Console.WriteLine($"New client: #{id}");
+
         }
 
-        public override void Update()
+        public override async Task FirstUpdateAsync() 
         {
-            StreamWriter.WriteLine(dataToSend);
-            StreamWriter.Flush();
+            int id = int.Parse(await StreamReader.ReadLineAsync());
+            Console.WriteLine($"New client: #{id}");
+        }
+
+        public override async Task UpdateAsync()
+        {
+            await StreamWriter.WriteLineAsync(dataToSend);
+            await StreamWriter.FlushAsync();
 
             Thread.Sleep((1 + random.Next(5)) * 1000);
         }

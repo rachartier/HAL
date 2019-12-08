@@ -9,53 +9,32 @@ namespace client
 {
     class Program
     {
-        static int numberClients = 20;
-
-        static Dictionary<int, bool> stats = new Dictionary<int, bool>();
-
-        static object key = new object();
+        static readonly int numberClients = 10;
 
         static void Main(string[] args)
         {
+            List<Thread> children = new List<Thread>();
+
             for (int i = 0; i < numberClients; ++i)
             {
-                new Thread(() => {
-                    using var client = new DemoClient(i, "127.0.0.1", 1664);
+                var thread = new Thread(async () => {
+                    int concI = i;
 
-                    client.OnConnectionStateChanged += (o, e) =>
-                    {
-                        if(e.State == Client.ConnectionState.Updated) 
-                        {
-                            lock(key)
-                            {
-                                if (!stats.ContainsKey(client.Id))
-                                {
-                                    stats.Add(client.Id, true);
-                                }
-                            }
+                    using var client = new DemoClient(concI, "127.0.0.1", 1664);
 
-                            client.Disconnect();
-                        }
-                    };
+                    await client.StartAsync();
+                });
 
-                    client.Start();
-                }).Start();
+                thread.Start();
+                children.Add(thread);
             }
 
-            while (true)
+            foreach(var thread in children) 
             {
-                int clientsUpdated = 0;
-
-                Console.Write("Checking if all clients are udpated... ");
-
-                    foreach (var s in stats)
-                    {
-                        if (s.Value)
-                            clientsUpdated++;
-                    }
-
-                Console.WriteLine($"{clientsUpdated}/{numberClients}");
+                thread.Join();
             }
+
+            Console.WriteLine("All clients are disconnected.");
         }
     }
 }

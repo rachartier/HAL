@@ -16,8 +16,8 @@ namespace server
 
     public class ThreadedConnectionManager
     {
-        private ThreadWithClients[] threadPool;
-        private int threadCount;
+        private readonly ThreadWithClients[] threadPool;
+        private readonly int threadCount;
         private object keyAccessPool = new object();
 
         public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
@@ -39,13 +39,23 @@ namespace server
                 {
                     while (true)
                     {
-                        Parallel.For(0, threadWitchClients.Clients.Count, (index, _) =>
+                        Parallel.For(0, threadWitchClients.Clients.Count, async (index, _) =>
                         {
                             var client = threadWitchClients.Clients[index];
 
                             try
                             {
-                                client.Update();
+                                if(client.IsFirstUpdate) 
+                                {
+                                    OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));
+                                    client.IsFirstUpdate = false;
+                                    
+                                    await client.FirstUpdateAsync();
+                                }
+                                else 
+                                {
+                                   await client.UpdateAsync();
+                                }
                             }
                             catch
                             {
@@ -87,8 +97,6 @@ namespace server
             {
                 threadSlot.Clients.Add(client);
             }
-
-            OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));
         }
 
         private int GetMinimumWorkingThread()
