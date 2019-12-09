@@ -38,123 +38,123 @@
 extern "C" {
 #endif
 
-// a pointer to function to call the dll entry point
-typedef char* (*dll_function)(void);
+    // a pointer to function to call the dll entry point
+    typedef char* (*dll_function)(void);
 
-static const char* g_entrypoint_name[NUMBER_ENTRYPOINT_FUNC_NAME] = {
-    "run",
-    "Run"
-};
+    static const char* g_entrypoint_name[NUMBER_ENTRYPOINT_FUNC_NAME] = {
+        "run",
+        "Run"
+    };
 
-// copy a string into a marshal one
-static char* _cpy_mem_string(char* data, size_t len) {
-    char* string = NULL;
+    // copy a string into a marshal one
+    static char* _cpy_mem_string(char* data, size_t len) {
+        char* string = NULL;
 
-    if (data != NULL) {
-        size_t data_size = (len * sizeof(*string));
+        if (data != NULL) {
+            size_t data_size = (len * sizeof(*string));
 
-        string = malloc(data_size + 1);
+            string = malloc(data_size + 1);
 
-        if (string != NULL) {
-            memcpy(string, data, data_size);
-            string[data_size + 1] = '\0';
+            if (string != NULL) {
+                memcpy(string, data, data_size);
+                string[data_size + 1] = '\0';
 
-            return string;
+                return string;
+            }
         }
+
+        return NULL;
     }
 
-    return NULL;
-}
+    static dll_function _get_entrypoint(void *lib) {
+        dll_function entrypoint = NULL;
 
-static dll_function _get_entrypoint(void *lib) {
-    dll_function entrypoint = NULL;
-
-    for(int i = 0; i < NUMBER_ENTRYPOINT_FUNC_NAME; ++i) {
+        for(int i = 0; i < NUMBER_ENTRYPOINT_FUNC_NAME; ++i) {
 #if __linux__
-        entrypoint = dlsym(lib, g_entrypoint_name[i]);
+            entrypoint = dlsym(lib, g_entrypoint_name[i]);
 #elif defined _WIN32 || defined _WIN64
-        entrypoint = (dll_function)GetProcAddress(lib, g_entrypoint_name[i]);
+            entrypoint = (dll_function)GetProcAddress(lib, g_entrypoint_name[i]);
 #endif
 
-        if(entrypoint != NULL) {
-            DPRINT("entrypoint found: %s", g_entrypoint_name[i]);
-            return entrypoint;
+            if(entrypoint != NULL) {
+                DPRINT("entrypoint found: %s", g_entrypoint_name[i]);
+                return entrypoint;
+            }
         }
+
+        return NULL;
     }
 
-    return NULL;
-}
-
-static inline void* _load_lib(char *file) {
-    void* lib = NULL;
+    static inline void* _load_lib(char *file) {
+        void* lib = NULL;
 
 #if __linux__
-    lib = dlopen(file, RTLD_LAZY);
+        lib = dlopen(file, RTLD_LAZY);
 #else 
-    lib = LoadLibrary(file);
+        lib = LoadLibrary(file);
 #endif
 
-    return lib;
-}
+        return lib;
+    }
 
-static inline void _fatal_error_extrun(void *lib) {
-    _ERROR("libreadso, no entry point found. NULL returned.");
-
-    _close_lib(lib);
-}
-
-static inline char* _convert_dllresult_for_marshal(char *dll_result) {
+    static inline void _close_lib(void *lib) {
 #if __linux__
-    char* result = _cpy_mem_string(dll_result, strlen(dll_result) + 1);
+        dlclose(lib);
+#elif defined _WIN32 || defined _WIN64
+        FreeLibrary(lib);
+#endif
+    }
 
-    return result;
+    static inline void _fatal_error_extrun(void *lib) {
+        _ERROR("libreadso, no entry point found. NULL returned.");
+
+        _close_lib(lib);
+    }
+
+    static inline char* _convert_dllresult_for_marshal(char *dll_result) {
+#if __linux__
+        char* result = _cpy_mem_string(dll_result, strlen(dll_result) + 1);
+
+        return result;
 
 #elif defined _WIN32 || defined _WIN64
-    FreeLibrary(lib);
+        FreeLibrary(lib);
 
-    return  _cpy_mem_string(dll_result, strlen(dll_result) + 1);;
+        return  _cpy_mem_string(dll_result, strlen(dll_result) + 1);;
 #endif
-}
-
-static inline void _close_lib(void *lib) {
-#if __linux__
-    dlclose(lib);
-#elif defined _WIN32 || defined _WIN64
-    FreeLibrary(lib);
-#endif
-}
-
-// the entrypoint wich will be called when needed by the client
-char* EXPORT run_entrypoint_sharedobject(char* input_file) {
-    if (input_file == NULL) {
-        return NULL;
     }
 
-    // open the dll/so
-    void* lib = _load_lib(input_file);
+    // the entrypoint wich will be called when needed by the client
+    char* EXPORT run_entrypoint_sharedobject(char* input_file) {
+        if (input_file == NULL) {
+            return NULL;
+        }
 
-    if(!lib) {
-        _ERROR("libreadso, can't load %s file. NULL returned", input_file);
-        return NULL;
+        // open the dll/so
+        void* lib = _load_lib(input_file);
+
+        if(!lib) {
+            _ERROR("libreadso, can't load %s file. NULL returned", input_file);
+            return NULL;
+        }
+
+        dll_function extrun = NULL;
+        char* dll_result = NULL;
+
+        extrun = _get_entrypoint(lib);
+        dll_result = extrun();
+
+        if(!extrun) {
+            _fatal_error_extrun(lib);
+            return NULL;
+        }
+
+        char *converted_result = _convert_dllresult_for_marshal(dll_result);
+
+        _close_lib(lib);
+
+        return converted_result;
     }
-
-    dll_function extrun = NULL;
-    char* dll_result = NULL;
-
-    extrun = _get_entrypoint(lib);
-    dll_result = extrun();
-    
-    if(!extrun) {
-        _fatal_error_extrun(lib);
-        return NULL;
-    }
-    
-    char *converted_result = _convert_dllresult_for_marshal(dll_result);
-
-    _close_lib(lib);
-
-    return converted_result;
-}
 
 #ifdef __cplusplus
 }
