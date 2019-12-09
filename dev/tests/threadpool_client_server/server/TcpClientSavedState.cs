@@ -27,7 +27,7 @@ namespace server
 
         public virtual async Task FirstUpdateAsync() 
         { 
-            await Task.Run(() => {});
+            await Task.Run(null);
         }
         public abstract Task UpdateAsync();
 
