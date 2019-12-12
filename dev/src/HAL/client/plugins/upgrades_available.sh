@@ -4,3 +4,4 @@ needUpgrade="true"
 [[ -z "$listUpgrades" ]] && needUpgrade="false"
 
 echo -n "{\"need_upgrades\": \"$needUpgrade\"}"
+

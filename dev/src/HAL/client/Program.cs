@@ -1,4 +1,7 @@
-﻿using HAL.Client;
+﻿using System.Collections.Generic;
+using System.Text;
+using System.Threading;
+using HAL.Client;
 using HAL.Configuration;
 
 using HAL.Factory;
@@ -8,17 +11,75 @@ using HAL.Plugin.Mananger;
 using HAL.Storage;
 using Newtonsoft.Json.Linq;
 using Plugin.Manager;
-using System;
 using System.IO;
+using System.Threading.Tasks;
+using System;
+using HAL.CheckSum;
 
 namespace HAL
 {
+    class HalClient : BaseClient
+    {        
+        public HalClient(string ip, int port, int updateIntervalInMs = 100) : base(ip, port, updateIntervalInMs)
+        {
+            OnConnected += async (o, e) =>
+            {
+                    var files = Directory.EnumerateFiles("plugins/");
+
+                    foreach(var file in files) 
+                    {
+                        var checksum = CheckSumGenerator.HashOf(file);
+
+                        await StreamWriter.WriteLineAsync($"{file};{checksum}");
+                        await StreamWriter.FlushAsync();
+                    }
+
+                    await StreamWriter.WriteLineAsync($"END");
+                    await StreamWriter.FlushAsync();
+            };
+        }
+
+        public override async Task UpdateAsync()
+        {
+            string command = " ";
+
+            command = StreamReader.ReadLine();
+
+            if(command?.Equals("ADD") == true) {
+                string path = StreamReader.ReadLine();
+                StringBuilder sb = new StringBuilder();
+                string line;
+
+                while(true)
+                {
+                    line = StreamReader.ReadLine();
+                 
+                    if(line.Equals("END"))
+                        break;
+                 
+                    sb.Append($"{line}\n");
+                }
+
+                await File.WriteAllTextAsync(path, sb.ToString());
+            }
+            else if(command?.Equals("DEL") == true) {
+                string path = StreamReader.ReadLine();
+
+                File.Delete(path);
+            }
+        }
+    }
+
     public class Program
     {
         private static void Main(string[] args)
         {
-            ClientFile client = new ClientFile();
+            using HalClient client = new HalClient("127.0.0.1", 1664);
+            
 
+            new Thread(async () => {
+                await client.StartAsync();
+            }).Start();
             /*
              * Here we instanciate the configuration file
              * Its a JSON format file.
@@ -68,41 +129,43 @@ namespace HAL
             configFile.SetInterpreterNameConfiguration(pluginMaster);
 
             // We only want to configure all the plugins when the client has received all the informations and plugins
-            client.OnReceiveDone += (o, e) =>
-            {
-                /*
-                * All the plugins in the directory "plugins" will be loaded and added to the plugin master
-                */
-                foreach (var file in Directory.GetFiles("plugins"))
-                {
-                    pluginMaster.AddPlugin(file);
-                }
+            // client.OnReceiveDone += (o, e) =>
+            // {
+            //     /*
+            //     * All the plugins in the directory "plugins" will be loaded and added to the plugin master
+            //     */
+            //     foreach (var file in Directory.GetFiles("plugins"))
+            //     {
+            //         pluginMaster.AddPlugin(file);
+            //     }
 
-                /*
-                 * Then the configuration of all of the plugins is set.
-                 */
-                configFile.SetPluginsConfiguration(pluginMaster.Plugins);
+            //     /*
+            //      * Then the configuration of all of the plugins is set.
+            //      */
+            //     configFile.SetPluginsConfiguration(pluginMaster.Plugins);
 
-                /*
-                 * An event is added when the plugin's execution is finished to save it where the user specified above.
-                 */
-                foreach (var plugin in pluginMaster.Plugins)
-                {
-                    plugin.OnExecutionFinished += new System.EventHandler<APlugin.PluginResultArgs>((o, e) =>
-                    {
-                        storage.Save(e.Plugin, e.Result);
-                    });
-                }
+            //     /*
+            //      * An event is added when the plugin's execution is finished to save it where the user specified above.
+            //      */
+            //     foreach (var plugin in pluginMaster.Plugins)
+            //     {
+            //         plugin.OnExecutionFinished += new System.EventHandler<APlugin.PluginResultArgs>((o, e) =>
+            //         {
+            //             storage.Save(e.Plugin, e.Result);
+            //         });
+            //     }
 
-                /*
-                 * All the plugins are then schelduled to be launched when needed.
-                 */
-                pluginManager.SchedulePlugins(pluginMaster.Plugins);
-            };
+            //     /*
+            //      * All the plugins are then schelduled to be launched when needed.
+            //      */
+            //     pluginManager.SchedulePlugins(pluginMaster.Plugins);
+            // };
+            var t = new Thread(() => {
+                while (true) { Thread.Sleep(100); }
+            });
 
-            client.StartClient();
-
-            while (true) { }
+            t.Start();
+            t.Join();
         }
     }
 }

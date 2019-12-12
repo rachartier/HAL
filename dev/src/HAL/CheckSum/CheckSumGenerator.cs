@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HAL.CheckSum
 {
-    public class CheckSumGenerator
+    public static class CheckSumGenerator
     {
         /// <summary>
         /// Create a checksum in sha256 from a FileStream
