@@ -67,12 +67,12 @@ namespace HAL.Server
                 {
                     if(file.Equals("plugins/config.json"))
                     {
-                        await StreamWriter.WriteLineAsync($"ADD\nconfig/config.json\n{code}\nEND");
+                        await StreamWriter.WriteLineAsync($"ADD\n{code.Length}\nconfig/config.json\n{code}\n");
                         await StreamWriter.FlushAsync();
                     }
                     else 
                     {
-                        await StreamWriter.WriteLineAsync($"ADD\n{file}\n{code}\nEND");
+                        await StreamWriter.WriteLineAsync($"ADD\n{code.Length}\n{file}\n{code}\n");
                         await StreamWriter.FlushAsync();
                     }
 
@@ -86,7 +86,7 @@ namespace HAL.Server
             {
                 if(!pluginFile[key].Marked) 
                 {
-                    await StreamWriter.WriteLineAsync($"DEL\n{key}\nEND");
+                    await StreamWriter.WriteLineAsync($"DEL\n{key}");
                     await StreamWriter.FlushAsync();
 
                     pluginFile.Remove(key);
