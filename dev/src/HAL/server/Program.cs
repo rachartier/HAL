@@ -5,6 +5,8 @@ using System.Threading;
 using System.IO;
 using System.Collections.Generic;
 using HAL.CheckSum;
+using HAL.Configuration;
+using HAL.Loggin;
 
 namespace HAL.Server
 {
@@ -66,8 +68,11 @@ namespace HAL.Server
                 {
                     if(file.Equals("plugins/config.json"))
                     {
-                        await StreamWriter.WriteLineAsync($"ADD\n{code.Length}\nconfig/config.json\n{code}\n");
-                        await StreamWriter.FlushAsync();
+                        if(pluginFile["config/config.json"]?.Checksum.Equals(checksum) == false) 
+                        {
+                            await StreamWriter.WriteLineAsync($"ADD\n{code.Length}\nconfig/config.json\n{code}\n");
+                            await StreamWriter.FlushAsync();
+                        }
                     }
                     else 
                     {
@@ -99,21 +104,40 @@ namespace HAL.Server
     {
         static void Main(string[] args)
         {
-            var server = new BaseServer("127.0.0.1", 1664, Environment.ProcessorCount);
+            var configFile = new JSONConfigFileServer();
+            configFile.Load("config/config.json");
+
+            string ip = configFile.GetAddress();
+            int port = configFile.GetPort();
+            int maxThreads = configFile.GetMaxThreads();
+            int updateTimeMs = configFile.GetUpdateRate();
+
+            if(string.IsNullOrEmpty(ip))
+            {
+                Log.Instance?.Error("You must provide 'ip' in the configuration file.");
+                return;
+            }
+
+            Log.Instance?.Info($"Server ip: {ip}");
+            Log.Instance?.Info($"Server port: {port}");
+            Log.Instance?.Info($"Server update time in ms: {updateTimeMs}");
+            Log.Instance?.Info($"Server threads count: {maxThreads}");
+
+            var server = new BaseServer(ip, port, maxThreads, updateTimeMs);
             int connectedClients = 0;
 
             server.OnServerStarted += (o,e) => {
-                Console.WriteLine("Server starded, waiting for clients...");
+                Log.Instance?.Info("Server starded, waiting for clients...");
             };
 
             server.OnClientConnected += (o, e) => {
                 connectedClients++;
-                Console.WriteLine($"Clients: {connectedClients}");
+                Log.Instance?.Info($"New client connected... (actual clients: {connectedClients})");
             };
 
             server.OnClientDisconnected += (o, e) => {
                 connectedClients--;
-                Console.WriteLine($"Clients: {connectedClients}");
+                Log.Instance?.Info($"A client has been disconnected: (actual clients: {connectedClients})");
             };
 
             server.StartUniqueClientType<HalTcpClientSavedState>();

@@ -17,8 +17,17 @@ namespace HAL
     {
         private static void Main(string[] args)
         {
-            using HalClient client = new HalClient("127.0.0.1", 1664);
+            IConfigFileClient<JObject, JToken> configFileLocal = new JSONConfigFileClient();
+            configFileLocal.Load("config/config_local.json");
+
+            string ip = configFileLocal.GetAddress();
+            int port = configFileLocal.GetPort();
             
+            Log.Instance?.Info($"Server ip: {ip}");
+            Log.Instance?.Info($"Server port: {port}");
+
+            using HalClient client = new HalClient(ip, port);
+
             AppDomain.CurrentDomain.ProcessExit += (o,e) => {
                 client.Disconnect();
                 client.Dispose();
@@ -29,20 +38,7 @@ namespace HAL
                 await client.StartAsync();
             }).Start();
 
-            bool hasLocalConfigFile = false;
-            
-            IConfigFileClient<JObject, JToken> configFileLocal = new JSONConfigFileClient();
-            
-            try 
-            {
-                configFileLocal.Load("config/config_local.json");
-                hasLocalConfigFile = true;
-            }
-            catch
-            {
-                Log.Instance?.Warn("Local config file not found. Ignored.");
-                hasLocalConfigFile = false;
-            }
+
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
             /*
@@ -110,9 +106,7 @@ namespace HAL
                  * Then the configuration of all of the plugins is set.
                  */
                 configFile.SetPluginsConfiguration(pluginMaster.Plugins);
-
-                if(hasLocalConfigFile) 
-                    configFileLocal.SetPluginsConfiguration(pluginMaster.Plugins);
+                configFileLocal.SetPluginsConfiguration(pluginMaster.Plugins);
 
                 /*
                  * An event is added when the plugin's execution is finished to save it where the user specified above.

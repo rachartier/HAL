@@ -22,6 +22,9 @@ namespace HAL.Connection.Client
             {
                 var files = Directory.EnumerateFiles("plugins/");
 
+                await StreamWriter.WriteLineAsync($"config/config.json;{CheckSumGenerator.HashOf("config/config.json")}");
+                await StreamWriter.FlushAsync();
+
                 foreach (var file in files)
                 {
                     var checksum = CheckSumGenerator.HashOf(file);

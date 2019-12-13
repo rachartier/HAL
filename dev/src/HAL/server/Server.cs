@@ -19,9 +19,9 @@ namespace HAL.Server
         private readonly TcpListener server;
         private bool isRunning = true;
 
-        public BaseServer(string ip, int port, int allocatedThreads)
+        public BaseServer(string ip, int port, int allocatedThreads, int updateTimeMs)
         {
-            connectionManager = new ThreadedConnectionManager(allocatedThreads);
+            connectionManager = new ThreadedConnectionManager(allocatedThreads, updateTimeMs);
             server = new TcpListener(System.Net.IPAddress.Parse(ip), port);
 
             connectionManager.OnClientConnected += (o,e) => {

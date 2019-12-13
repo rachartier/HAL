@@ -1,4 +1,8 @@
 {
+  "server": {
+    "ip": "127.0.0.1",
+    "port": 11000
+  },
   "plugins": {
     "disk_usage.py": {
       "activated": "true",

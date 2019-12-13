@@ -39,6 +39,17 @@ namespace HAL.Configuration
         /// </summary>
         /// <returns>return storage name or null otherwise</returns>
         public abstract string GetStorageName();
+ 
+        /// <summary>
+        /// Get the port of the socket server
+        /// </summary>
+        /// <returns>The port int if it exist, 11000 otherwise</returns>
+        public abstract int GetPort();
+
+        /// <summary>
+        /// Get the address wich will be running the server
+        /// </summary>
+        public abstract string GetAddress();
 
         /// <summary>
         /// set a list of plugins configuration

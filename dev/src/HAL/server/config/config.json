@@ -1,7 +1,6 @@
 {
-	"port" : "11000",
-	"nb_max_client" : "100",
-	"retry_max" : "3",
-	"path_to_save" : "plugins/",
-	"directory_plugins" : "plugins"
+	"ip": "127.0.0.1",
+	"port": 11000,
+	"max_threads": 8,
+	"update_rate": 1000
 }

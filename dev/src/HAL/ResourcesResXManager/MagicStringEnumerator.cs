@@ -13,12 +13,12 @@
         public static readonly string JSONDatabase = "database";
         public static readonly string JSONConnectionString = "connectionString";
         public static readonly string JSONStorageName = "storage";
+        public static readonly string JSONServer = "server";
 
         /** Server **/
         public static readonly string JSONPort = "port";
-        public static readonly string JSONMaxConnection = "nb_max_client";
-        public static readonly string JSONRetryMax = "retry_max";
-        public static readonly string JSONPath = "path_to_save";
-        public static readonly string JSONPluginDirectory = "directory_plugins";
+        public static readonly string JSONMaxThreads = "max_threads";
+        public static readonly string JSONAddress = "ip";
+        public static readonly string JSONUpdateRate = "update_rate";
     }
 }
