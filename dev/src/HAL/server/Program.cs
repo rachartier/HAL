@@ -60,7 +60,6 @@ namespace HAL.Server
                 if(!pluginFile.ContainsKey(file))
                 {
                     pluginFile.Add(file, new MarkedChecksum("0"));
-
                 }
 
                 if(pluginFile[file]?.Checksum.Equals(checksum) == false) 
@@ -81,7 +80,7 @@ namespace HAL.Server
 
                 pluginFile[file].Marked = true;
             }
-
+/*
             foreach(var key in pluginFile.Keys) 
             {
                 if(!pluginFile[key].Marked) 
@@ -92,6 +91,7 @@ namespace HAL.Server
                     pluginFile.Remove(key);
                 }
             }
+*/
         }
     }
 

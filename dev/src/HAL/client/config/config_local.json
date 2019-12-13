@@ -1,0 +1,8 @@
+{
+  "plugins": {
+    "disk_usage.py": {
+      "activated": "true",
+      "heartbeat": 0.1
+    }
+  }
+}

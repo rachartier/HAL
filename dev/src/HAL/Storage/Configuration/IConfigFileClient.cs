@@ -51,10 +51,12 @@ namespace HAL.Configuration
                 try
                 {
                     SetPluginConfiguration(plugin);
+                    plugin.AlreadyConfigured = true;
                 }
                 catch (Exception e)
                 {
-                    Log.Instance?.Error($"{e.Message} Plugin {plugin.Infos.FileName} ignored.");
+                    if(!plugin.AlreadyConfigured)
+                        Log.Instance?.Error($"{e.Message} Plugin {plugin.Infos.FileName} ignored.");
                 }
             }
         }

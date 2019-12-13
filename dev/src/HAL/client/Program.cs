@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using HAL.Configuration;
 using HAL.Connection.Client;
@@ -18,11 +19,30 @@ namespace HAL
         {
             using HalClient client = new HalClient("127.0.0.1", 1664);
             
+            AppDomain.CurrentDomain.ProcessExit += (o,e) => {
+                client.Disconnect();
+                client.Dispose();
+                Log.Instance?.Error("Unexecpted program exit.");
+            };
 
             new Thread(async () => {
                 await client.StartAsync();
             }).Start();
 
+            bool hasLocalConfigFile = false;
+            
+            IConfigFileClient<JObject, JToken> configFileLocal = new JSONConfigFileClient();
+            
+            try 
+            {
+                configFileLocal.Load("config/config_local.json");
+                hasLocalConfigFile = true;
+            }
+            catch
+            {
+                Log.Instance?.Warn("Local config file not found. Ignored.");
+                hasLocalConfigFile = false;
+            }
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
             /*
@@ -91,6 +111,9 @@ namespace HAL
                  */
                 configFile.SetPluginsConfiguration(pluginMaster.Plugins);
 
+                if(hasLocalConfigFile) 
+                    configFileLocal.SetPluginsConfiguration(pluginMaster.Plugins);
+
                 /*
                  * An event is added when the plugin's execution is finished to save it where the user specified above.
                  */
@@ -109,8 +132,12 @@ namespace HAL
 
                 Log.Instance?.Info("Configuration reloaded.");
             };
-            
-            while (true) { Thread.Sleep(100); }
+            var loopThread = new Thread(() => {
+                while (true) { Thread.Sleep(100); }
+            });
+
+            loopThread.Start();
+            loopThread.Join();
         }
     }
 }
