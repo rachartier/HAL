@@ -74,7 +74,9 @@ namespace HAL.Server
                     {
                         await StreamWriter.WriteLineAsync($"ADD\n{file}\n{code}\nEND");
                         await StreamWriter.FlushAsync();
-                    }                    
+                    }
+
+                    pluginFile[file].Checksum = checksum;                 
                 }
 
                 pluginFile[file].Marked = true;

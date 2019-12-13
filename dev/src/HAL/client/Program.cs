@@ -1,75 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using HAL.Client;
+﻿using System.Threading;
 using HAL.Configuration;
-
+using HAL.Connection.Client;
 using HAL.Factory;
-using HAL.Loggin;
 using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using HAL.Storage;
 using Newtonsoft.Json.Linq;
 using Plugin.Manager;
-using System.IO;
-using System.Threading.Tasks;
-using System;
-using HAL.CheckSum;
 
 namespace HAL
 {
-    class HalClient : BaseClient
-    {        
-        public HalClient(string ip, int port, int updateIntervalInMs = 100) : base(ip, port, updateIntervalInMs)
-        {
-            OnConnected += async (o, e) =>
-            {
-                    var files = Directory.EnumerateFiles("plugins/");
-
-                    foreach(var file in files) 
-                    {
-                        var checksum = CheckSumGenerator.HashOf(file);
-
-                        await StreamWriter.WriteLineAsync($"{file};{checksum}");
-                        await StreamWriter.FlushAsync();
-                    }
-
-                    await StreamWriter.WriteLineAsync($"END");
-                    await StreamWriter.FlushAsync();
-            };
-        }
-
-        public override async Task UpdateAsync()
-        {
-            string command = " ";
-
-            command = StreamReader.ReadLine();
-
-            if(command?.Equals("ADD") == true) {
-                string path = StreamReader.ReadLine();
-                StringBuilder sb = new StringBuilder();
-                string line;
-
-                while(true)
-                {
-                    line = StreamReader.ReadLine();
-                 
-                    if(line.Equals("END"))
-                        break;
-                 
-                    sb.Append($"{line}\n");
-                }
-
-                await File.WriteAllTextAsync(path, sb.ToString());
-            }
-            else if(command?.Equals("DEL") == true) {
-                string path = StreamReader.ReadLine();
-
-                File.Delete(path);
-            }
-        }
-    }
-
     public class Program
     {
         private static void Main(string[] args)
@@ -160,12 +100,8 @@ namespace HAL
             //      */
             //     pluginManager.SchedulePlugins(pluginMaster.Plugins);
             // };
-            var t = new Thread(() => {
-                while (true) { Thread.Sleep(100); }
-            });
-
-            t.Start();
-            t.Join();
+            
+            while (true) { Thread.Sleep(100); }
         }
     }
 }

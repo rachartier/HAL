@@ -5,7 +5,7 @@
       "activated": "true",
       "heartbeat": "1"
       },
-    "upgradazaeaes_available.sh": {
+    "upgrades_available.sh": {
       "activated": "true",
       "os": [
         "linux"
