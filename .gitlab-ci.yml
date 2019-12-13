@@ -5,16 +5,22 @@ before_script:
  
 build:
     stage: build
+    tags:
+    - docker
     script:
         - dotnet build -c Release 
    
 test:
     stage: test
+    tags:
+    - docker
     script:
         - dotnet test --no-restore
 
 deploy:
-    stage: deploy        
+    stage: deploy
+    tags:
+    - docker
     script:
         - dotnet publish -c Release -o $CI_PROJECT_DIR/build/release
     artifacts:
