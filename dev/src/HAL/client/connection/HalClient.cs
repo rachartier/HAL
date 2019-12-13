@@ -9,6 +9,8 @@ namespace HAL.Connection.Client
 {
     class HalClient : BaseClient
     {
+        public event EventHandler<EventArgs> OnReceiveDone;
+
         private readonly FuncManager funcManager = new FuncManager();
 
         public HalClient(string ip, int port, int updateIntervalInMs = 100) : base(ip, port, updateIntervalInMs)
@@ -30,14 +32,14 @@ namespace HAL.Connection.Client
 
                 await StreamWriter.WriteLineAsync($"END");
                 await StreamWriter.FlushAsync();
+
+                OnReceiveDone?.Invoke(this, new EventArgs());
             };
         }
 
         public override async Task UpdateAsync()
         {
-            string command = " ";
-
-            command = StreamReader.ReadLine();
+            string command = StreamReader.ReadLine();
 
             if(!string.IsNullOrEmpty(command))
             {
@@ -60,7 +62,6 @@ namespace HAL.Connection.Client
             {
                 string line = StreamReader.ReadLine();
                 bytesToRead -= line.Length + 1;
-                Console.WriteLine(bytesToRead);
 
                 sb.Append($"{line}\n");
             }
@@ -68,6 +69,7 @@ namespace HAL.Connection.Client
             await File.WriteAllTextAsync(path, sb.ToString());
 
             Log.Instance?.Info($"File received from server: {path}");
+            OnReceiveDone?.Invoke(this, new EventArgs());
         }
 
         private async Task FuncDel()
@@ -75,7 +77,9 @@ namespace HAL.Connection.Client
             string path = StreamReader.ReadLine();
 
             File.Delete(path);
+
             Log.Instance?.Info($"File deleted by server: {path}");
+            OnReceiveDone?.Invoke(this, new EventArgs());
         }
     }
 }

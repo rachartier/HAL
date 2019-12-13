@@ -1,21 +1,19 @@
 {
   "plugins": {
-      "test.go": {
-           
-      "activated": "true",
-      "heartbeat": "1"
-      },
     "upgrades_available.sh": {
       "activated": "true",
       "os": [
         "linux"
-      ]
+      ],
+      "heartbeat": 0.1
     },
     "kernel_version.py": {
       "activated": "true",
+      "heartbeat": 0.1
     },
     "connected_user.py": {
       "activated": "true",
+      "heartbeat": 0.1
     }
   }
 }
