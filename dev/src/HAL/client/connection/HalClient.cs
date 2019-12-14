@@ -24,13 +24,13 @@ namespace HAL.Connection.Client
             {
                 var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
 
-                await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.DefaultConfigPath};{CheckSumGenerator.HashOf(MagicStringEnumerator.DefaultConfigPath)}");
+                await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.DefaultConfigPath};{await CheckSumGenerator.HashOf(MagicStringEnumerator.DefaultConfigPath)}");
                 await StreamWriter.FlushAsync();
 
                 foreach (var file in files)
                 {
-                    var checksum = CheckSumGenerator.HashOf(file);
-
+                    var checksum = await CheckSumGenerator.HashOf(file);
+                    
                     await StreamWriter.WriteLineAsync($"{file};{checksum}");
                     await StreamWriter.FlushAsync();
                 }

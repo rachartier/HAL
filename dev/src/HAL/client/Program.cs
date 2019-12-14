@@ -72,6 +72,11 @@ namespace HAL
                 */
                 IStoragePlugin storage = StorageFactory.CreateStorage(configFile.GetStorageName());
 
+                if(storage is StorageServerFile)
+                {
+                    (storage as StorageServerFile).StreamWriter = client.StreamWriter;
+                }
+
                 pluginManager.UnscheduleAllPlugins(pluginMaster.Plugins);
                 pluginMaster.RemoveAllPlugins();
                 

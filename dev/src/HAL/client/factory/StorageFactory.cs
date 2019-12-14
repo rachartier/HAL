@@ -14,9 +14,10 @@ namespace HAL.Factory
          *
          *  then you'll be able to specified "oracle" in config.json
          */
-        private const String Text = "text";
-        private const String Local = "local";
-        private const String MangoDB = "mangodb";
+        private const string Text = "text";
+        private const string Local = "local";
+        private const string MangoDB = "mangodb";
+        private const string Server = "server";
 
         public static IStoragePlugin CreateStorage(string storageName)
         {
@@ -30,6 +31,7 @@ namespace HAL.Factory
                 Text => new StorageText(),
                 Local => new StorageLocalFile(),
                 MangoDB => new StorageMongoDB(),
+                Server => new StorageServerFile(),
 
                 /*
                 * Fallback if no storage is found

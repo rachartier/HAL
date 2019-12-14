@@ -6,6 +6,7 @@
         public static readonly string CMDUpd = "UPD";
         public static readonly string CMDDel = "DEL";
         public static readonly string CMDEnd = "END";
+        public static readonly string CMDSve = "SVE";
 
         public static readonly string DefaultPluginPath = "plugins";
         public static readonly string DefaultConfigPath = "config/config.json";
@@ -30,5 +31,7 @@
         public static readonly string JSONMaxThreads = "max_threads";
         public static readonly string JSONAddress = "ip";
         public static readonly string JSONUpdateRate = "update_rate";
+
+        public static readonly string RootSaveResults = "results";
     }
 }

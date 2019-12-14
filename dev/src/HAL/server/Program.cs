@@ -25,27 +25,41 @@ namespace HAL.Server
             }
         }
         private IDictionary<string, MarkedChecksum> pluginFile = new Dictionary<string, MarkedChecksum>();
-
         public HalTcpClientSavedState(TcpClient client)
             : base(client)
         {
 
         }
+        public override async Task SaveAsync()
+        {
+            string path = await StreamReader.ReadLineAsync();
+            string filename = await StreamReader.ReadLineAsync();
+            string content = await StreamReader.ReadLineAsync();
+            
+            if(string.IsNullOrEmpty(filename) || string.IsNullOrEmpty(content))
+                return;
+
+            Directory.CreateDirectory($"{MagicStringEnumerator.RootSaveResults}/{path}/");
+
+            using var fw = File.CreateText($"{MagicStringEnumerator.RootSaveResults}/{path}/{filename}");
+            await fw.WriteAsync(content);
+        } 
 
         public override async Task FirstUpdateAsync() 
         {
-            string[] fileArgs = null;
-
             while(true)
             {
-                fileArgs = StreamReader.ReadLine().Split(';');
-                
-                if(fileArgs[0].Equals(MagicStringEnumerator.CMDEnd))
-                    break;
+                var textArgs = await StreamReader.ReadLineAsync();
+                var args = textArgs.Split(';');
 
-                pluginFile.Add(fileArgs[0], new MarkedChecksum(fileArgs[1]));
+                if(args[0].Equals(MagicStringEnumerator.CMDEnd))
+                    break;
+                
+                if(!pluginFile.ContainsKey(args[0]))
+                    pluginFile.Add(args[0], new MarkedChecksum(args[1]));
             }
         }
+
         public override async Task UpdateAsync()
         {
             bool filesUpdated = false;
@@ -96,6 +110,7 @@ namespace HAL.Server
                 await StreamWriter.WriteLineAsync(MagicStringEnumerator.CMDUpd);
                 await StreamWriter.FlushAsync();
             }
+
 /*
             foreach(var key in pluginFile.Keys) 
             {

@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace HAL.Server
 {
@@ -9,6 +11,8 @@ namespace HAL.Server
     {
         public readonly StreamWriter StreamWriter; 
         public readonly StreamReader StreamReader;
+
+        public readonly Stopwatch Stopwatch;
 
         public bool IsConnected { get; set; }
         public bool IsFirstUpdate { get; set; } = true;
@@ -20,6 +24,9 @@ namespace HAL.Server
             StreamWriter = new StreamWriter(client.GetStream());
             StreamReader = new StreamReader(client.GetStream());
 
+            Stopwatch = new Stopwatch();
+            Stopwatch.Start();
+
             reference = client;
             IsConnected = true;
         }
@@ -29,6 +36,7 @@ namespace HAL.Server
             await Task.Run(() => {});
         }
         public abstract Task UpdateAsync();
+        public abstract Task SaveAsync();
         public void Dispose()
         {
             StreamWriter.Dispose();

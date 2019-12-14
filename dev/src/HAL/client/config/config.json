@@ -1,4 +1,6 @@
 {
+  "storage": "server",
+
   "plugins": {
     "upgrades_available.sh": {
       "activated": "true",

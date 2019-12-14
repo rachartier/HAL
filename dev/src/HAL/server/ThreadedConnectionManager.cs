@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using HAL.Loggin;
 
 namespace HAL.Server
 {
@@ -36,35 +38,51 @@ namespace HAL.Server
                 {
                     while (true)
                     {
-                        Parallel.For(0, threadWitchClients.Clients.Count, async (index, _) =>
+                        Parallel.ForEach(threadWitchClients.Clients, async (client) =>
                         {
-                            var client = threadWitchClients.Clients[index];
+                            if(client.Stopwatch.ElapsedMilliseconds > updateTimeMs || client.IsFirstUpdate)
+                            {
+                                try
+                                {
+                                    if(client.IsFirstUpdate) 
+                                    {
+                                        OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));                                        
+                                        await client.FirstUpdateAsync();
 
-                            try
-                            {
-                                if(client.IsFirstUpdate) 
-                                {
-                                    OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));
-                                    client.IsFirstUpdate = false;
-                                    
-                                    await client.FirstUpdateAsync();
+                                        client.IsFirstUpdate = false;
+                                    }
+                                    else 
+                                    {
+                                        await client.UpdateAsync();
+                                    }
                                 }
-                                else 
-                                {
-                                   await client.UpdateAsync();
+                                catch(Exception e)
+                                {  
+                                    Log.Instance?.Error($"ThreadedConnectionManager: {e.Message}");
+
+                                    client.Dispose();
+                                    client.IsConnected = false;
+                                    OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
                                 }
+
+                                client.Stopwatch.Restart();
                             }
-                            catch
+                            else 
                             {
-                                client.Dispose();
-                                client.IsConnected = false;
-                                OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
+                                try 
+                                {
+                                    await client.SaveAsync();
+                                }
+                                catch
+                                {
+                                    // Not very beautiful, but we don't really care if the streams are already occupied.
+                                    // If one fail, then, wait the next turn...
+                                }
                             }
                         });
 
                         threadWitchClients.Clients.RemoveAll((c => !c.IsConnected));
-
-                        Thread.Sleep(updateTimeMs);
+                        Thread.Sleep(100);
                     }
                 });
 
