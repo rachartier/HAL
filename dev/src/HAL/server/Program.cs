@@ -47,6 +47,8 @@ namespace HAL.Server
         }
         public override async Task UpdateAsync()
         {
+            bool filesUpdated = false;
+
             var files = Directory.EnumerateFiles("plugins/");
 
             foreach(var entry in pluginFile.Values) 
@@ -66,6 +68,8 @@ namespace HAL.Server
 
                 if(pluginFile[file]?.Checksum.Equals(checksum) == false) 
                 {
+                    filesUpdated = true;
+
                     if(file.Equals("plugins/config.json"))
                     {
                         if(pluginFile["config/config.json"]?.Checksum.Equals(checksum) == false) 
@@ -84,6 +88,12 @@ namespace HAL.Server
                 }
 
                 pluginFile[file].Marked = true;
+            }
+
+            if(filesUpdated)
+            {
+                await StreamWriter.WriteLineAsync($"UPD");
+                await StreamWriter.FlushAsync();
             }
 /*
             foreach(var key in pluginFile.Keys) 

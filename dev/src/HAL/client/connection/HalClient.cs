@@ -17,7 +17,8 @@ namespace HAL.Connection.Client
         {
             funcManager.AddFunc("ADD", FuncAdd);
             funcManager.AddFunc("DEL", FuncDel);
-        
+            funcManager.AddFunc("UPD", FuncUpd);
+
             OnConnected += async(o, e) =>
             {
                 var files = Directory.EnumerateFiles("plugins/");
@@ -35,8 +36,6 @@ namespace HAL.Connection.Client
 
                 await StreamWriter.WriteLineAsync($"END");
                 await StreamWriter.FlushAsync();
-
-                OnReceiveDone?.Invoke(this, new EventArgs());
             };
         }
 
@@ -56,14 +55,14 @@ namespace HAL.Connection.Client
         private async Task FuncAdd()
         {
             StringBuilder sb = new StringBuilder();
-            string textBytesToRead = StreamReader.ReadLine();
-            string path = StreamReader.ReadLine();
+            string textBytesToRead = await StreamReader.ReadLineAsync();
+            string path = await StreamReader.ReadLineAsync();
 
             int bytesToRead = int.Parse(textBytesToRead);
 
             while (bytesToRead > 0)
             {
-                string line = StreamReader.ReadLine();
+                string line = await StreamReader.ReadLineAsync();
                 bytesToRead -= line.Length + 1;
 
                 sb.Append($"{line}\n");
@@ -72,7 +71,6 @@ namespace HAL.Connection.Client
             await File.WriteAllTextAsync(path, sb.ToString());
 
             Log.Instance?.Info($"File received from server: {path}");
-            OnReceiveDone?.Invoke(this, new EventArgs());
         }
 
         private async Task FuncDel()
@@ -82,6 +80,10 @@ namespace HAL.Connection.Client
             File.Delete(path);
 
             Log.Instance?.Info($"File deleted by server: {path}");
+        }
+
+        private async Task FuncUpd()
+        {
             OnReceiveDone?.Invoke(this, new EventArgs());
         }
     }
