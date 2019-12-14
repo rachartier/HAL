@@ -2,6 +2,16 @@
 {
     public static class MagicStringEnumerator
     {
+        public static readonly string CMDAdd = "ADD";
+        public static readonly string CMDUpd = "UPD";
+        public static readonly string CMDDel = "DEL";
+        public static readonly string CMDEnd = "END";
+
+        public static readonly string DefaultPluginPath = "plugins";
+        public static readonly string DefaultConfigPath = "config/config.json";
+        public static readonly string DefaultLocalConfigPath = "config/config_local.json";
+        public static readonly string DefaultConfigPathServerToClient = "plugins/config.json";
+
         public static readonly string JSONPlugins = "plugins";
         public static readonly string JSONHeartbeat = "heartbeat";
         public static readonly string JSONIntepreter = "interpreter";

@@ -29,7 +29,6 @@ namespace HAL.Server
             await Task.Run(() => {});
         }
         public abstract Task UpdateAsync();
-
         public void Dispose()
         {
             StreamWriter.Dispose();

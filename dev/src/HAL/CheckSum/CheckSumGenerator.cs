@@ -1,6 +1,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace HAL.CheckSum
 {
@@ -30,10 +31,10 @@ namespace HAL.CheckSum
         /// </summary>
         /// <param name="path">The path of the file</param>
         /// <returns>A sha256 checksum in string format</returns>
-        public static string HashOf(string path)
+        public static async Task<string> HashOf(string path)
         {
             StringBuilder sb = new StringBuilder();
-            var lines = File.ReadAllLines(path);
+            var lines = await File.ReadAllLinesAsync(path);
             foreach (var line in lines)
             {
                 sb.Append(line);

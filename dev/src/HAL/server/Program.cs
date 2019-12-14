@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using HAL.CheckSum;
 using HAL.Configuration;
 using HAL.Loggin;
+using HAL.MagicString;
 
 namespace HAL.Server
 {
@@ -39,7 +40,7 @@ namespace HAL.Server
             {
                 fileArgs = StreamReader.ReadLine().Split(';');
                 
-                if(fileArgs[0].Equals("END"))
+                if(fileArgs[0].Equals(MagicStringEnumerator.CMDEnd))
                     break;
 
                 pluginFile.Add(fileArgs[0], new MarkedChecksum(fileArgs[1]));
@@ -49,17 +50,17 @@ namespace HAL.Server
         {
             bool filesUpdated = false;
 
-            var files = Directory.EnumerateFiles("plugins/");
+            var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
 
             foreach(var entry in pluginFile.Values) 
             {
                 entry.Marked = false;
             }
 
-            foreach(var file in files) 
+            foreach(var file in files)
             {
-                var checksum = CheckSumGenerator.HashOf(file);
-                var code = File.ReadAllText(file);
+                var checksum = await CheckSumGenerator.HashOf(file);
+                var code = await File.ReadAllTextAsync(file);
 
                 if(!pluginFile.ContainsKey(file))
                 {
@@ -70,18 +71,18 @@ namespace HAL.Server
                 {
                     filesUpdated = true;
 
-                    if(file.Equals("plugins/config.json"))
+                    if(file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
                     {
-                        if(pluginFile["config/config.json"]?.Checksum.Equals(checksum) == false) 
+                        if(pluginFile[MagicStringEnumerator.DefaultConfigPath]?.Checksum.Equals(checksum) == false) 
                         {
-                            await StreamWriter.WriteLineAsync($"ADD\n{code.Length}\nconfig/config.json\n{code}\n");
+                            await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.CMDAdd}\n{code.Length}\n{MagicStringEnumerator.DefaultConfigPath}\n{code}\n");
                             await StreamWriter.FlushAsync();
                         }
                     }
                     else 
                     {
-                        await StreamWriter.WriteLineAsync($"ADD\n{code.Length}\n{file}\n{code}\n");
-                        await StreamWriter.FlushAsync();
+                        await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.CMDAdd}\n{code.Length}\n{file}\n{code}\n");
+                        await StreamWriter.FlushAsync();   
                     }
 
                     pluginFile[file].Checksum = checksum;                 
@@ -92,7 +93,7 @@ namespace HAL.Server
 
             if(filesUpdated)
             {
-                await StreamWriter.WriteLineAsync($"UPD");
+                await StreamWriter.WriteLineAsync(MagicStringEnumerator.CMDUpd);
                 await StreamWriter.FlushAsync();
             }
 /*
@@ -115,7 +116,7 @@ namespace HAL.Server
         static void Main(string[] args)
         {
             var configFile = new JSONConfigFileServer();
-            configFile.Load("config/config.json");
+            configFile.Load(MagicStringEnumerator.DefaultConfigPath);
 
             string ip = configFile.GetAddress();
             int port = configFile.GetPort();

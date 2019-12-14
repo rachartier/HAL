@@ -5,6 +5,7 @@ using HAL.Configuration;
 using HAL.Connection.Client;
 using HAL.Factory;
 using HAL.Loggin;
+using HAL.MagicString;
 using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using HAL.Storage;
@@ -18,7 +19,7 @@ namespace HAL
         private static void Main(string[] args)
         {
             IConfigFileClient<JObject, JToken> configFileLocal = new JSONConfigFileClient();
-            configFileLocal.Load("config/config_local.json");
+            configFileLocal.Load(MagicStringEnumerator.DefaultLocalConfigPath);
 
             string ip = configFileLocal.GetAddress();
             int port = configFileLocal.GetPort();
@@ -59,7 +60,7 @@ namespace HAL
                 * All HAL's client configuration is here.
                 */
                 IConfigFileClient<JObject, JToken> configFile = new JSONConfigFileClient();
-                configFile.Load("config/config.json");
+                configFile.Load(MagicStringEnumerator.DefaultConfigPath);
 
                 /*
                 * A storage is needed to save the output of the plugins
@@ -97,7 +98,7 @@ namespace HAL
                 /*
                 * All the plugins in the directory "plugins" will be loaded and added to the plugin master
                 */
-                foreach (var file in Directory.GetFiles("plugins"))
+                foreach (var file in Directory.GetFiles(MagicStringEnumerator.DefaultPluginPath))
                 {
                     pluginMaster.AddPlugin(file);
                 }
@@ -113,10 +114,10 @@ namespace HAL
                  */
                 foreach (var plugin in pluginMaster.Plugins)
                 {
-                    plugin.OnExecutionFinished += new System.EventHandler<APlugin.PluginResultArgs>((o, e) =>
+                    plugin.OnExecutionFinished += (o, e) =>
                     {
                         storage.Save(e.Plugin, e.Result);
-                    });
+                    };
                 }
 
                 /*
