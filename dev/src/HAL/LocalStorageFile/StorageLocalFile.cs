@@ -20,10 +20,8 @@ namespace HAL.Storage
 
             Directory.CreateDirectory($"{dirName}{strTodayDate}/{plugin.Infos.Name}/");
 
-            using (var fw = File.CreateText($"{dirName}{strTodayDate}/{plugin.Infos.Name}/{completeTodayDate}_{plugin.Infos.Name}.json"))
-            {
-                await fw.WriteAsync(obj.ToString());
-            }
+            using var fw = File.CreateText($"{dirName}{strTodayDate}/{plugin.Infos.Name}/{completeTodayDate}_{plugin.Infos.Name}.json");
+            await fw.WriteAsync(obj.ToString());
 
             return StorageCode.Success;
         }

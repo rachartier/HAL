@@ -20,7 +20,7 @@ namespace HAL.Storage
             string strTodayDate = DateTime.Now.ToString("yyyy-MM-dd");
             string completeTodayDate = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
-            string path = $"{strTodayDate}/{plugin.Infos.Name}";
+            string path = $"{strTodayDate}/{Environment.MachineName}/{plugin.Infos.Name}";
             string fileName = $"{completeTodayDate}_{plugin.Infos.Name}.json";
 
             await StreamWriter.WriteLineAsync($"{path}\n{fileName}\n{obj.ToString()}");

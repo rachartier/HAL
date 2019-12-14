@@ -76,7 +76,7 @@ namespace HAL.Server
                                 catch
                                 {
                                     // Not very beautiful, but we don't really care if the streams are already occupied.
-                                    // If one fail, then, wait the next turn...
+                                    // If one fail, then, wait the next cycle...
                                 }
                             }
                         });

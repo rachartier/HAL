@@ -2,6 +2,7 @@ using HAL.Loggin;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace HAL.Scheduler
 {
@@ -55,6 +56,25 @@ namespace HAL.Scheduler
 
                 return timers.Remove(taskName);
             }
+            return false;
+        }
+
+        /// <summary>
+        /// unschedule a task asynchronously
+        /// </summary>
+        /// <param name="taskName">task's name identifier</param>
+        /// <returns></returns>
+        public async Task<bool> UnscheduleTaskAsync(string taskName)
+        {
+            if (timers.TryGetValue(taskName, out Timer timer))
+            {
+                await timer.DisposeAsync();
+
+                Log.Instance?.Info($"{taskName} unscheduled");
+
+                return timers.Remove(taskName);
+            }
+            
             return false;
         }
     }

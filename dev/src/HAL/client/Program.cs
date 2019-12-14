@@ -51,7 +51,7 @@ namespace HAL
             APluginManager pluginManager = new ScheduledPluginManager(pluginMaster);
 
             // We only want to configure all the plugins when the client has received all the informations and plugins
-            client.OnReceiveDone += (o, e) =>
+            client.OnReceiveDone += async (o, e) =>
             {
                 /*
                 * Here we instanciate the configuration file
@@ -77,7 +77,13 @@ namespace HAL
                     (storage as StorageServerFile).StreamWriter = client.StreamWriter;
                 }
 
-                pluginManager.UnscheduleAllPlugins(pluginMaster.Plugins);
+                // TODO: fix that 
+                // if this method isnt here twice, then its possible to the schelduled plugin not to be deleted
+                // why? I dont know yet
+                // update: if the heartbeat is to low, then it need to be called 3 times or more
+                await pluginManager.UnscheduleAllPluginsAsync(pluginMaster.Plugins);
+                await pluginManager.UnscheduleAllPluginsAsync(pluginMaster.Plugins);
+
                 pluginMaster.RemoveAllPlugins();
                 
                 /*
@@ -132,12 +138,8 @@ namespace HAL
 
                 Log.Instance?.Info("Configuration reloaded.");
             };
-            var loopThread = new Thread(() => {
-                while (true) { Thread.Sleep(100); }
-            });
-
-            loopThread.Start();
-            loopThread.Join();
+           
+            while (true) { Thread.Sleep(100); }
         }
     }
 }
