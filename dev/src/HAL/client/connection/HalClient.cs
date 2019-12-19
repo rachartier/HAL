@@ -24,7 +24,19 @@ namespace HAL.Connection.Client
             {
                 var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
 
-                await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.DefaultConfigPath};{await CheckSumGenerator.HashOf(MagicStringEnumerator.DefaultConfigPath)}");
+                string configFileChecksum;
+
+                try 
+                {
+                    configFileChecksum = await CheckSumGenerator.HashOf(MagicStringEnumerator.DefaultConfigPath);
+                
+                }
+                catch
+                {
+                    configFileChecksum = "0";
+                }
+
+                await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.DefaultConfigPath};{configFileChecksum}");
                 await StreamWriter.FlushAsync();
 
                 foreach (var file in files)
@@ -85,6 +97,7 @@ namespace HAL.Connection.Client
 
         private async Task FuncUpd()
         {
+            Console.WriteLine("upd recu");
             OnReceiveDone?.Invoke(this, new EventArgs());
         }
     }
