@@ -9,7 +9,7 @@ namespace HAL.Server
 {
     internal class ThreadWithClients
     {
-        public Thread Thread { get; set; }
+        public Thread UpdateThread { get; set; }
         public List<TcpClientSavedState> Clients { get; } = new List<TcpClientSavedState>();
     }
 
@@ -34,7 +34,7 @@ namespace HAL.Server
                 threadPool[i] = new ThreadWithClients();
                 var threadWitchClients = threadPool[i];
 
-                threadWitchClients.Thread = new Thread(() =>
+                threadWitchClients.UpdateThread = new Thread(() =>
                 {
                     while (true)
                     {
@@ -66,14 +66,17 @@ namespace HAL.Server
                                 }
                                 client.Stopwatch.Restart();
                             }
-                            try 
+                            else 
                             {
-                                await client.SaveAsync();
-                            }
-                            catch
-                            {
-                                // Not very beautiful, but we don't really care if the streams are already occupied.
-                                // If one fail, then, wait the next cycle...
+                                try 
+                                {   
+                                    await client.SaveAsync();
+                                }
+                                catch
+                                {
+                                    // Not very beautiful, but we don't really care if the streams are already occupied.
+                                    // If one fail, then, wait the next cycle...
+                                }
                             }
                         });
 
@@ -82,7 +85,8 @@ namespace HAL.Server
                     }
                 });
 
-                threadWitchClients.Thread.Start();
+                threadWitchClients.UpdateThread.Start();
+
             }
         }
 
@@ -96,7 +100,7 @@ namespace HAL.Server
                     client.Dispose();
                 }
 
-                threadWitchClients.Thread.Interrupt();
+                threadWitchClients.UpdateThread.Interrupt();
             }
         }
 

@@ -14,7 +14,6 @@ namespace HAL.Storage
         public void Init(string connectionString)
         {
         }
-
         public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
         {
             string strTodayDate = DateTime.Now.ToString("yyyy-MM-dd");
@@ -23,9 +22,10 @@ namespace HAL.Storage
             string path = $"{strTodayDate}/{Environment.MachineName}/{plugin.Infos.Name}";
             string fileName = $"{completeTodayDate}_{plugin.Infos.Name}.json";
 
-            await StreamWriter.WriteLineAsync($"{path}\n{fileName}\n{obj.ToString()}");
+            for(int i = 0; i < 1000; ++i) {
+            await StreamWriter.WriteLineAsync($"{path};{i}{fileName};{obj.ToString()}");
             await StreamWriter.FlushAsync();
-            
+            }
             return StorageCode.Success;
         }
     }

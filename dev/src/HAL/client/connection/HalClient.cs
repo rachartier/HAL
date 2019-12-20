@@ -97,7 +97,6 @@ namespace HAL.Connection.Client
 
         private async Task FuncUpd()
         {
-            Console.WriteLine("upd recu");
             OnReceiveDone?.Invoke(this, new EventArgs());
         }
     }
