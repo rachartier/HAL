@@ -13,6 +13,7 @@ namespace HAL.Configuration
     public class JSONConfigFileClient : IConfigFileClient<JObject, JToken>
     {
         private static int DEFAULT_PORT = 11000;
+
         public JSONConfigFileClient()
         {
         }
@@ -107,6 +108,7 @@ namespace HAL.Configuration
                 }
             }
         }
+
         public override int GetPort()
         {
             if (Root == null)
@@ -116,7 +118,7 @@ namespace HAL.Configuration
 
             int? port = Root[MagicStringEnumerator.JSONServer]?.Value<int?>(MagicStringEnumerator.JSONPort);
 
-            if(port == null)
+            if (port == null)
                 return DEFAULT_PORT;
 
             return port.Value;
@@ -133,6 +135,7 @@ namespace HAL.Configuration
 
             return address;
         }
+
         public override void SetScriptExtensionsConfiguration(IPluginMaster pluginMaster)
         {
             if (Root == null)
@@ -270,7 +273,7 @@ namespace HAL.Configuration
 
             string path = Root.Value<string>(MagicStringEnumerator.JSONSavePath);
 
-            if(string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
             {
                 return "results/";
             }

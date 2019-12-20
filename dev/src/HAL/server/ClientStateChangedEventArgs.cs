@@ -7,6 +7,6 @@ namespace HAL.Server
         public ClientStateChangedEventArgs(TcpClientSavedState client)
         {
             Client = client;
-        } 
+        }
     }
 }

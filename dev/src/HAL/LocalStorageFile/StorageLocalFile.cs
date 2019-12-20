@@ -7,7 +7,8 @@ namespace HAL.Storage
 {
     public class StorageLocalFile : IStoragePlugin
     {
-        public string SavePath {get;set;}
+        public string SavePath { get; set; }
+
         public void Init(string connectionString)
         {
         }

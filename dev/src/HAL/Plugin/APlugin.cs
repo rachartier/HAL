@@ -34,7 +34,7 @@ namespace HAL.Plugin
         public bool AdministratorRights { get; set; } = false;
         public bool Activated { get; set; } = false;
 
-        public bool AlreadyConfigured {get;set;} = false;
+        public bool AlreadyConfigured { get; set; } = false;
 
         public void RaiseOnExecutionFinished(string result)
         {

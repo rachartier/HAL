@@ -1,15 +1,16 @@
 using System;
 using System.Net.Sockets;
 
-
-namespace HAL.Server 
+namespace HAL.Server
 {
-    class BaseServer
+    internal class BaseServer
     {
         public event EventHandler OnServerStarted;
+
         public event EventHandler OnServerClosed;
 
         public delegate void DelegateClientConnected(object o, ClientStateChangedEventArgs tcpClient);
+
         public delegate void DelegateClientDisconnected(object o, ClientStateChangedEventArgs tcpClient);
 
         public DelegateClientConnected OnClientConnected;
@@ -24,21 +25,23 @@ namespace HAL.Server
             connectionManager = new ThreadedConnectionManager(allocatedThreads, updateTimeMs);
             server = new TcpListener(System.Net.IPAddress.Parse(ip), port);
 
-            connectionManager.OnClientConnected += (o,e) => {
-                OnClientConnected (o, e);
+            connectionManager.OnClientConnected += (o, e) =>
+            {
+                OnClientConnected(o, e);
             };
 
-            connectionManager.OnClientDisconnected += (o,e) => {
-                OnClientDisconnected (o, e);
+            connectionManager.OnClientDisconnected += (o, e) =>
+            {
+                OnClientDisconnected(o, e);
             };
         }
 
-        public void Stop() 
+        public void Stop()
         {
             isRunning = false;
         }
 
-        public async void StartUniqueClientType<TClient>(string savePath) 
+        public async void StartUniqueClientType<TClient>(string savePath)
             where TClient : TcpClientSavedState
         {
             server.Start();

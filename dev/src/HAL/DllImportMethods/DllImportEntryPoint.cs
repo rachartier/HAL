@@ -6,10 +6,9 @@ namespace HAL.DllImportMethods
     public class DllImportEntryPoint : BaseDLLImport
     {
         [DllImport("./lib/libreadso")]
-
-
 #pragma warning disable IDE1006
         private static extern IntPtr run_entrypoint_sharedobject(IntPtr input_file);
+
 #pragma warning restore IDE1006
 
         /// <summary>
