@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Xml.Linq;
+using System.Linq;
+using System.Threading.Tasks;
 using System;
 using System.Net.Sockets;
 using System.Threading;
@@ -34,12 +36,18 @@ namespace HAL.Server
         }
         public override async Task SaveAsync()
         {
-            string path = await StreamReader.ReadLineAsync();
-            string filename = await StreamReader.ReadLineAsync();
-            string content = await StreamReader.ReadLineAsync();
-            
-            if(string.IsNullOrEmpty(filename) || string.IsNullOrEmpty(content))
+            string[] data = new string[3];
+
+            string result = await StreamReader.ReadLineAsync();
+
+            if(string.IsNullOrEmpty(result))
                 return;
+
+            var splitedResult = result.Split(';', 3);
+            
+            string path = splitedResult[0];
+            string filename = splitedResult[1];
+            string content = splitedResult[2];
 
             string folder = $"{savePath}/{MagicStringEnumerator.RootSaveResults}/{path}/";
 
@@ -91,8 +99,8 @@ namespace HAL.Server
 
                     if(file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
                     {
-                            await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.CMDAdd}\n{code.Length}\n{MagicStringEnumerator.DefaultConfigPath}\n{code}\n");
-                            await StreamWriter.FlushAsync();
+                        await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.CMDAdd}\n{code.Length}\n{MagicStringEnumerator.DefaultConfigPath}\n{code}\n");
+                        await StreamWriter.FlushAsync();
                     }
                     else 
                     {
