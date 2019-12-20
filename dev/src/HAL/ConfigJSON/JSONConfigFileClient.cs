@@ -260,5 +260,22 @@ namespace HAL.Configuration
 
             return storageName;
         }
+
+        public override string GetSavePath()
+        {
+            if (Root == null)
+            {
+                return null;
+            }
+
+            string path = Root.Value<string>(MagicStringEnumerator.JSONSavePath);
+
+            if(string.IsNullOrEmpty(path))
+            {
+                return "results/";
+            }
+
+            return path;
+        }
     }
 }

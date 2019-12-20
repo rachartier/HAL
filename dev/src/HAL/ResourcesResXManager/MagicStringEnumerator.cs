@@ -33,5 +33,7 @@
         public static readonly string JSONUpdateRate = "update_rate";
 
         public static readonly string RootSaveResults = "results";
+
+        public static readonly string JSONSavePath = "save_path";
     }
 }

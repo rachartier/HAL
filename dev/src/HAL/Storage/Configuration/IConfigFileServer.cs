@@ -25,5 +25,11 @@
         /// </summary>
         /// <returns>The maximum connection int if it exist, max threads count of your processor otherwise</returns>
         public abstract int GetMaxThreads();
+
+        /// <summary>
+        /// Get the path to store the plugin's results
+        /// </summary>
+        /// <returns>the path</returns>
+        public abstract string GetSavePath();
     }
 }

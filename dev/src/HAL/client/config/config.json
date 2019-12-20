@@ -11,7 +11,7 @@
     },
     "kernel_version.py": {
       "activated": "true",
-      "heartbeat": 0.10
+      "heartbeat": 0.1
     },
     "connected_user.py": {
       "activated": "true",

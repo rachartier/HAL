@@ -88,5 +88,22 @@ namespace HAL.Configuration
 
             return maxThreads.Value;
         }
+
+        public override string GetSavePath()
+        {
+            if (Root == null)
+            {
+                return null;
+            }
+
+            string path = Root.Value<string>(MagicStringEnumerator.JSONSavePath);
+
+            if(string.IsNullOrEmpty(path))
+            {
+                return "results/";
+            }
+
+            return path;
+        }
     }
 }

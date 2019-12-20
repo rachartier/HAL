@@ -76,6 +76,10 @@ namespace HAL
                 {
                     (storage as StorageServerFile).StreamWriter = client.StreamWriter;
                 }
+                else if(storage is StorageLocalFile)
+                {
+                    (storage as StorageLocalFile).SavePath = configFile.GetSavePath();
+                }
 
                 // TODO: fix that 
                 // if this method isnt here twice, then its possible to the schelduled plugin not to be deleted
@@ -123,6 +127,7 @@ namespace HAL
                 /*
                  * An event is added when the plugin's execution is finished to save it where the user specified above.
                  */
+                var savePath = configFile.GetSavePath();
                 foreach (var plugin in pluginMaster.Plugins)
                 {
                     plugin.OnExecutionFinished += (o, e) =>

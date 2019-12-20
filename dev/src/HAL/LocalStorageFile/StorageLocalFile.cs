@@ -7,6 +7,7 @@ namespace HAL.Storage
 {
     public class StorageLocalFile : IStoragePlugin
     {
+        public string SavePath {get;set;}
         public void Init(string connectionString)
         {
         }
@@ -18,9 +19,11 @@ namespace HAL.Storage
             string strTodayDate = DateTime.Now.ToString("yyyy-MM-dd");
             string completeTodayDate = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
-            Directory.CreateDirectory($"{dirName}{strTodayDate}/{plugin.Infos.Name}/");
+            string folder = $"{SavePath}/{dirName}{strTodayDate}/{plugin.Infos.Name}/";
 
-            using var fw = File.CreateText($"{dirName}{strTodayDate}/{plugin.Infos.Name}/{completeTodayDate}_{plugin.Infos.Name}.json");
+            Directory.CreateDirectory(folder);
+
+            using var fw = File.CreateText($"{folder}{completeTodayDate}_{plugin.Infos.Name}.json");
             await fw.WriteAsync(obj.ToString());
 
             return StorageCode.Success;

@@ -64,25 +64,21 @@ namespace HAL.Server
                                     client.IsConnected = false;
                                     OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
                                 }
-
                                 client.Stopwatch.Restart();
                             }
-                            else 
+                            try 
                             {
-                                try 
-                                {
-                                    await client.SaveAsync();
-                                }
-                                catch
-                                {
-                                    // Not very beautiful, but we don't really care if the streams are already occupied.
-                                    // If one fail, then, wait the next cycle...
-                                }
+                                await client.SaveAsync();
+                            }
+                            catch
+                            {
+                                // Not very beautiful, but we don't really care if the streams are already occupied.
+                                // If one fail, then, wait the next cycle...
                             }
                         });
 
                         threadWitchClients.Clients.RemoveAll((c => !c.IsConnected));
-                        Thread.Sleep(100);
+                        Thread.Sleep(10);
                     }
                 });
 

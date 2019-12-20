@@ -2,5 +2,6 @@
 	"ip": "127.0.0.1",
 	"port": 11000,
 	"max_threads": 8,
-	"update_rate": 1000
+	"update_rate": 1000,
+	"save_path": "coucou/lol"
 }

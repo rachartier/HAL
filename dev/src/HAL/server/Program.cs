@@ -13,7 +13,7 @@ namespace HAL.Server
 {
     class HalTcpClientSavedState : TcpClientSavedState
     {
-        class MarkedChecksum 
+        internal class MarkedChecksum 
         {
             public string Checksum {get; set;}
             public bool Marked {get; set;}
@@ -24,11 +24,13 @@ namespace HAL.Server
                 Marked = marked;
             }
         }
+        private string savePath;
         private IDictionary<string, MarkedChecksum> pluginFile = new Dictionary<string, MarkedChecksum>();
-        public HalTcpClientSavedState(TcpClient client)
+
+        public HalTcpClientSavedState(TcpClient client, string savePath)
             : base(client)
         {
-
+            this.savePath = savePath;
         }
         public override async Task SaveAsync()
         {
@@ -39,9 +41,11 @@ namespace HAL.Server
             if(string.IsNullOrEmpty(filename) || string.IsNullOrEmpty(content))
                 return;
 
-            Directory.CreateDirectory($"{MagicStringEnumerator.RootSaveResults}/{path}/");
+            string folder = $"{savePath}/{MagicStringEnumerator.RootSaveResults}/{path}/";
 
-            using var fw = File.CreateText($"{MagicStringEnumerator.RootSaveResults}/{path}/{filename}");
+            Directory.CreateDirectory(folder);
+
+            using var fw = File.CreateText($"{folder}{filename}");
             await fw.WriteAsync(content);
         } 
 
@@ -87,11 +91,8 @@ namespace HAL.Server
 
                     if(file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
                     {
-                        if(pluginFile[MagicStringEnumerator.DefaultConfigPath]?.Checksum.Equals(checksum) == false) 
-                        {
                             await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.CMDAdd}\n{code.Length}\n{MagicStringEnumerator.DefaultConfigPath}\n{code}\n");
                             await StreamWriter.FlushAsync();
-                        }
                     }
                     else 
                     {
@@ -134,6 +135,7 @@ namespace HAL.Server
             configFile.Load(MagicStringEnumerator.DefaultConfigPath);
 
             string ip = configFile.GetAddress();
+            string savePath = configFile.GetSavePath(); 
             int port = configFile.GetPort();
             int maxThreads = configFile.GetMaxThreads();
             int updateTimeMs = configFile.GetUpdateRate();
@@ -166,7 +168,7 @@ namespace HAL.Server
                 Log.Instance?.Info($"A client has been disconnected: (actual clients: {connectedClients})");
             };
 
-            server.StartUniqueClientType<HalTcpClientSavedState>();
+            server.StartUniqueClientType<HalTcpClientSavedState>(savePath);
         }
     }
 }

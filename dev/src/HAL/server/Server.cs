@@ -38,7 +38,7 @@ namespace HAL.Server
             isRunning = false;
         }
 
-        public async void StartUniqueClientType<TClient>() 
+        public async void StartUniqueClientType<TClient>(string savePath) 
             where TClient : TcpClientSavedState
         {
             server.Start();
@@ -47,7 +47,7 @@ namespace HAL.Server
             while (isRunning)
             {
                 var client = await server.AcceptTcpClientAsync();
-                var tcpOpenedStream = (TClient)Activator.CreateInstance(typeof(TClient), client);
+                var tcpOpenedStream = (TClient)Activator.CreateInstance(typeof(TClient), client, savePath);
 
                 connectionManager.AddTcpClient(tcpOpenedStream);
             }

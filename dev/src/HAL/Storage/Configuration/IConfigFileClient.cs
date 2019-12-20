@@ -52,6 +52,12 @@ namespace HAL.Configuration
         public abstract string GetAddress();
 
         /// <summary>
+        /// Get the path to store the plugin's results
+        /// </summary>
+        /// <returns>the path</returns>
+        public abstract string GetSavePath();
+        
+        /// <summary>
         /// set a list of plugins configuration
         /// </summary>
         /// <param name="plugins"></param>
