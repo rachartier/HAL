@@ -1,9 +1,8 @@
-using System.Diagnostics;
+using HAL.Loggin;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using HAL.Loggin;
 
 namespace HAL.Server
 {
@@ -20,8 +19,8 @@ namespace HAL.Server
         private object keyAccessPool = new object();
 
         public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
-        public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
 
+        public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
 
         public ThreadedConnectionManager(int threadCount, int updateTimeMs = 1000)
         {
@@ -40,18 +39,18 @@ namespace HAL.Server
                     {
                         Parallel.ForEach(threadWitchClients.Clients, async (client) =>
                         {
-                            if(client.Stopwatch.ElapsedMilliseconds > updateTimeMs || client.IsFirstUpdate)
+                            if (client.Stopwatch.ElapsedMilliseconds > updateTimeMs || client.IsFirstUpdate)
                             {
                                 try
                                 {
-                                    if(client.IsFirstUpdate) 
+                                    if (client.IsFirstUpdate)
                                     {
-                                        OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));                                        
+                                        OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));
                                         await client.FirstUpdateAsync();
 
                                         client.IsFirstUpdate = false;
                                     }
-                                    else 
+                                    else
                                     {
                                         try 
                                         {   
@@ -64,8 +63,8 @@ namespace HAL.Server
                                         }
                                     }
                                 }
-                                catch(Exception e)
-                                {  
+                                catch (Exception e)
+                                {
                                     Log.Instance?.Error($"ThreadedConnectionManager: {e.Message}");
 
                                     client.Dispose();
@@ -74,10 +73,10 @@ namespace HAL.Server
                                 }
                                 client.Stopwatch.Restart();
                             }
-                            else 
+                            else
                             {
-                                try 
-                                {   
+                                try
+                                {
                                     await client.SaveAsync();
                                 }
                                 catch
@@ -94,7 +93,10 @@ namespace HAL.Server
                 });
 
                 threadWitchClients.UpdateThread.Start();
+<<<<<<< HEAD
 
+=======
+>>>>>>> a1ac5e3a2d74c5556408191707a1bcf94b208545
             }
         }
 
@@ -116,7 +118,7 @@ namespace HAL.Server
         {
             var threadSlot = threadPool[GetMinimumWorkingThread()];
 
-            lock(keyAccessPool)
+            lock (keyAccessPool)
             {
                 threadSlot.Clients.Add(client);
             }

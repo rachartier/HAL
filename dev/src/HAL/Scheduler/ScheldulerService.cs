@@ -74,7 +74,7 @@ namespace HAL.Scheduler
 
                 return timers.Remove(taskName);
             }
-            
+
             return false;
         }
     }

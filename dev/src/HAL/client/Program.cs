@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using HAL.Configuration;
+﻿using HAL.Configuration;
 using HAL.Connection.Client;
 using HAL.Factory;
 using HAL.Loggin;
@@ -11,6 +8,9 @@ using HAL.Plugin.Mananger;
 using HAL.Storage;
 using Newtonsoft.Json.Linq;
 using Plugin.Manager;
+using System;
+using System.IO;
+using System.Threading;
 
 namespace HAL
 {
@@ -23,22 +23,23 @@ namespace HAL
 
             string ip = configFileLocal.GetAddress();
             int port = configFileLocal.GetPort();
-            
+
             Log.Instance?.Info($"Server ip: {ip}");
             Log.Instance?.Info($"Server port: {port}");
 
             using HalClient client = new HalClient(ip, port);
 
-            AppDomain.CurrentDomain.ProcessExit += (o,e) => {
+            AppDomain.CurrentDomain.ProcessExit += (o, e) =>
+            {
                 client.Disconnect();
                 client.Dispose();
                 Log.Instance?.Error("Unexecpted program exit.");
             };
 
-            new Thread(async () => {
+            new Thread(async () =>
+            {
                 await client.StartAsync();
             }).Start();
-
 
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
@@ -72,16 +73,16 @@ namespace HAL
                 */
                 IStoragePlugin storage = StorageFactory.CreateStorage(configFile.GetStorageName());
 
-                if(storage is StorageServerFile)
+                if (storage is StorageServerFile)
                 {
                     (storage as StorageServerFile).StreamWriter = client.StreamWriter;
                 }
-                else if(storage is StorageLocalFile)
+                else if (storage is StorageLocalFile)
                 {
                     (storage as StorageLocalFile).SavePath = configFile.GetSavePath();
                 }
 
-                // TODO: fix that 
+                // TODO: fix that
                 // if this method isnt here twice, then its possible to the schelduled plugin not to be deleted
                 // why? I dont know yet
                 // update: if the heartbeat is to low, then it need to be called 3 times or more
@@ -89,7 +90,7 @@ namespace HAL
                 await pluginManager.UnscheduleAllPluginsAsync(pluginMaster.Plugins);
 
                 pluginMaster.RemoveAllPlugins();
-                
+
                 /*
                 * A connection string is needed if you want to access a database
                 *
@@ -143,7 +144,7 @@ namespace HAL
 
                 Log.Instance?.Info("Configuration reloaded.");
             };
-           
+
             while (true) { Thread.Sleep(100); }
         }
     }

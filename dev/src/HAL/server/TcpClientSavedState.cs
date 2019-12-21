@@ -1,15 +1,14 @@
-using System.Diagnostics;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using System.Threading;
 
 namespace HAL.Server
 {
     public abstract class TcpClientSavedState : IDisposable
     {
-        public readonly StreamWriter StreamWriter; 
+        public readonly StreamWriter StreamWriter;
         public readonly StreamReader StreamReader;
 
         public readonly Stopwatch Stopwatch;
@@ -31,12 +30,15 @@ namespace HAL.Server
             IsConnected = true;
         }
 
-        public virtual async Task FirstUpdateAsync() 
-        { 
-            await Task.Run(() => {});
+        public virtual async Task FirstUpdateAsync()
+        {
+            await Task.Run(() => { });
         }
+
         public abstract Task UpdateAsync();
+
         public abstract Task SaveAsync();
+
         public void Dispose()
         {
             StreamWriter.Dispose();

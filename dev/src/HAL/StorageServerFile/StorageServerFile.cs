@@ -1,9 +1,7 @@
-﻿using System.IO;
+﻿using HAL.Plugin;
 using System;
-
-using HAL.MagicString;
+using System.IO;
 using System.Threading.Tasks;
-using HAL.Plugin;
 
 namespace HAL.Storage
 {
@@ -22,10 +20,9 @@ namespace HAL.Storage
             string path = $"{strTodayDate}/{Environment.MachineName}/{plugin.Infos.Name}";
             string fileName = $"{completeTodayDate}_{plugin.Infos.Name}.json";
 
-            for(int i = 0; i < 1000; ++i) {
-            await StreamWriter.WriteLineAsync($"{path};{i}{fileName};{obj.ToString()}");
+            await StreamWriter.WriteLineAsync($"{path};{fileName};{obj.ToString()}");
             await StreamWriter.FlushAsync();
-            }
+
             return StorageCode.Success;
         }
     }

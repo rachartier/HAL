@@ -39,7 +39,7 @@ namespace HAL.Configuration
         /// </summary>
         /// <returns>return storage name or null otherwise</returns>
         public abstract string GetStorageName();
- 
+
         /// <summary>
         /// Get the port of the socket server
         /// </summary>
@@ -56,7 +56,7 @@ namespace HAL.Configuration
         /// </summary>
         /// <returns>the path</returns>
         public abstract string GetSavePath();
-        
+
         /// <summary>
         /// set a list of plugins configuration
         /// </summary>
@@ -72,7 +72,7 @@ namespace HAL.Configuration
                 }
                 catch (Exception e)
                 {
-                    if(!plugin.AlreadyConfigured)
+                    if (!plugin.AlreadyConfigured)
                         Log.Instance?.Error($"{e.Message} Plugin {plugin.Infos.FileName} ignored.");
                 }
             }

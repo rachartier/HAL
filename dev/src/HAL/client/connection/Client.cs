@@ -1,10 +1,9 @@
+using HAL.Loggin;
 using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-
-using HAL.Loggin;
 
 namespace HAL.Connection.Client
 {
@@ -29,13 +28,15 @@ namespace HAL.Connection.Client
         }
 
         public event EventHandler<ConnectionStateChangedEventArgs> OnConnectionStateChanged;
+
         public event EventHandler OnConnected;
+
         public event EventHandler OnClosed;
 
-        public StreamWriter StreamWriter {get; private set;}
-        public StreamReader StreamReader {get; private set;}
+        public StreamWriter StreamWriter { get; private set; }
+        public StreamReader StreamReader { get; private set; }
 
-        public bool IsConnected {get; protected set;}
+        public bool IsConnected { get; protected set; }
 
         private TcpClient client;
 
@@ -54,20 +55,20 @@ namespace HAL.Connection.Client
         }
 
         private void Connect()
-        {   
+        {
             client = new TcpClient()
             {
                 NoDelay = true,
             };
             client.Connect(ip, port);
-            
+
             IsConnected = true;
 
             StreamWriter = new StreamWriter(client.GetStream());
             StreamReader = new StreamReader(client.GetStream());
         }
 
-        public async Task StartAsync() 
+        public async Task StartAsync()
         {
             OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Connected));
             OnConnected?.Invoke(this, new EventArgs());
@@ -82,7 +83,7 @@ namespace HAL.Connection.Client
         {
             while (IsConnected)
             {
-                if(!client.Connected)
+                if (!client.Connected)
                 {
                     Log.Instance?.Info("No information from server... Will try to reconnect.");
                     IsConnected = false;
@@ -100,17 +101,17 @@ namespace HAL.Connection.Client
             await TryReconnect();
         }
 
-        public async Task TryReconnect() 
+        public async Task TryReconnect()
         {
             Log.Instance?.Info("Trying to reconnect...");
-    
-            while(!client.Connected)
+
+            while (!client.Connected)
             {
                 try
                 {
                     Connect();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Log.Instance?.Info($"Trying to reconnect... {e.Message}");
                     Thread.Sleep(1000);

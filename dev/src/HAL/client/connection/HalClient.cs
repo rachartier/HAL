@@ -1,14 +1,14 @@
+using HAL.CheckSum;
+using HAL.Loggin;
+using HAL.MagicString;
 using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using HAL.CheckSum;
-using HAL.Loggin;
-using HAL.MagicString;
 
 namespace HAL.Connection.Client
 {
-    class HalClient : BaseClient
+    internal class HalClient : BaseClient
     {
         public event EventHandler<EventArgs> OnReceiveDone;
 
@@ -20,16 +20,15 @@ namespace HAL.Connection.Client
             funcManager.AddFunc(MagicStringEnumerator.CMDDel, FuncDel);
             funcManager.AddFunc(MagicStringEnumerator.CMDUpd, FuncUpd);
 
-            OnConnected += async(o, e) =>
+            OnConnected += async (o, e) =>
             {
                 var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
 
                 string configFileChecksum;
 
-                try 
+                try
                 {
                     configFileChecksum = await CheckSumGenerator.HashOf(MagicStringEnumerator.DefaultConfigPath);
-                
                 }
                 catch
                 {
@@ -42,7 +41,7 @@ namespace HAL.Connection.Client
                 foreach (var file in files)
                 {
                     var checksum = await CheckSumGenerator.HashOf(file);
-                    
+
                     await StreamWriter.WriteLineAsync($"{file};{checksum}");
                     await StreamWriter.FlushAsync();
                 }
@@ -55,12 +54,12 @@ namespace HAL.Connection.Client
         public override async Task UpdateAsync()
         {
             string command = await StreamReader.ReadLineAsync();
-            
-            if(!string.IsNullOrEmpty(command))
+
+            if (!string.IsNullOrEmpty(command))
             {
                 var function = funcManager.GetFunc(command);
-                
-                if(function != null)
+
+                if (function != null)
                     await function();
             }
         }
@@ -68,7 +67,7 @@ namespace HAL.Connection.Client
         private async Task FuncAdd()
         {
             StringBuilder sb = new StringBuilder();
-            string textBytesToRead = await  StreamReader.ReadLineAsync();
+            string textBytesToRead = await StreamReader.ReadLineAsync();
             string path = await StreamReader.ReadLineAsync();
 
             int bytesToRead = int.Parse(textBytesToRead);

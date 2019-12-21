@@ -1,7 +1,7 @@
-﻿using System;
-using HAL.Loggin;
+﻿using HAL.Loggin;
 using HAL.MagicString;
 using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
 
 namespace HAL.Configuration
@@ -39,7 +39,7 @@ namespace HAL.Configuration
 
             int? port = Root.Value<int?>(MagicStringEnumerator.JSONPort);
 
-            if(port == null)
+            if (port == null)
                 return DEFAULT_PORT;
 
             return port.Value;
@@ -54,7 +54,7 @@ namespace HAL.Configuration
 
             int? updateRate = Root.Value<int?>(MagicStringEnumerator.JSONUpdateRate);
 
-            if(updateRate == null)
+            if (updateRate == null)
                 return DEFAULT_UPDATE_RATE;
 
             return updateRate.Value;
@@ -81,7 +81,7 @@ namespace HAL.Configuration
 
             int? maxThreads = Root.Value<int?>(MagicStringEnumerator.JSONMaxThreads);
 
-            if(maxThreads == null)
+            if (maxThreads == null)
             {
                 return Environment.ProcessorCount;
             }
@@ -98,7 +98,7 @@ namespace HAL.Configuration
 
             string path = Root.Value<string>(MagicStringEnumerator.JSONSavePath);
 
-            if(string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
             {
                 return "results/";
             }
