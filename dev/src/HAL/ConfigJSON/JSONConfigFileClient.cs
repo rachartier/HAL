@@ -12,7 +12,7 @@ namespace HAL.Configuration
 {
     public class JSONConfigFileClient : IConfigFileClient<JObject, JToken>
     {
-        private static int DEFAULT_PORT = 11000;
+        private static readonly int DEFAULT_PORT = 11000;
 
         public JSONConfigFileClient()
         {

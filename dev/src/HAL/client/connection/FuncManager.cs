@@ -6,7 +6,7 @@ namespace HAL.Connection.Client
 {
     public class FuncManager
     {
-        private IDictionary<string, Func<Task>> functions = new Dictionary<string, Func<Task>>();
+        private readonly IDictionary<string, Func<Task>> functions = new Dictionary<string, Func<Task>>();
 
         public bool AddFunc(string name, Func<Task> Func)
         {

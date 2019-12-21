@@ -7,15 +7,15 @@
       "os": [
         "linux"
       ],
-      "heartbeat": 0.10
+      "heartbeat": 0.100
     },
     "kernel_version.py": {
       "activated": "true",
-      "heartbeat": 0.10
+      "heartbeat": 0.100
     },
     "connected_user.py": {
       "activated": "true",
-      "heartbeat": 0.10
+      "heartbeat": 0.100
     }
   }
 }

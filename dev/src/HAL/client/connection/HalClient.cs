@@ -66,28 +66,25 @@ namespace HAL.Connection.Client
 
         private async Task FuncAdd()
         {
-            StringBuilder sb = new StringBuilder();
-            string textBytesToRead = await StreamReader.ReadLineAsync();
-            string path = await StreamReader.ReadLineAsync();
+            string data = await StreamReader.ReadLineAsync();        
+            string[] args = data.Split(';', 2);
+            
+            string textBytesToRead = args[0];
+            string path = args[1];
 
             int bytesToRead = int.Parse(textBytesToRead);
 
-            while (bytesToRead > 0)
-            {
-                string line = await StreamReader.ReadLineAsync();
-                bytesToRead -= line.Length + 1;
+            char[] buffer = new char[bytesToRead];
 
-                sb.Append($"{line}\n");
-            }
-
-            await File.WriteAllTextAsync(path, sb.ToString());
+            await StreamReader.ReadBlockAsync(buffer, 0, bytesToRead);
+            await File.WriteAllTextAsync(path, new string(buffer));
 
             Log.Instance?.Info($"File received from server: {path}");
         }
 
         private async Task FuncDel()
         {
-            string path = StreamReader.ReadLine();
+            string path = await StreamReader.ReadLineAsync();
 
             File.Delete(path);
 

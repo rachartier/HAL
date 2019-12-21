@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-﻿using System.Xml.Linq;
-using System.Linq;
-using System.Threading.Tasks;
-=======
 ﻿using HAL.CheckSum;
 using HAL.Configuration;
->>>>>>> a1ac5e3a2d74c5556408191707a1bcf94b208545
+using HAL.Loggin;
+using HAL.MagicString;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,9 +23,9 @@ namespace HAL.Server
                 Marked = marked;
             }
         }
-
-        private string savePath;
-        private IDictionary<string, MarkedChecksum> pluginFile = new Dictionary<string, MarkedChecksum>();
+        private readonly IDictionary<string, MarkedChecksum> pluginFile = new Dictionary<string, MarkedChecksum>();
+        private readonly string savePath;
+        private bool firstUpdate = true;
 
         public HalTcpClientSavedState(TcpClient client, string savePath)
             : base(client)
@@ -39,23 +35,13 @@ namespace HAL.Server
 
         public override async Task SaveAsync()
         {
-            string[] data = new string[3];
-
             string result = await StreamReader.ReadLineAsync();
 
-<<<<<<< HEAD
-            if(string.IsNullOrEmpty(result))
-                return;
-
-            var splitedResult = result.Split(';', 3);
-            
-=======
             if (string.IsNullOrEmpty(result))
                 return;
 
             var splitedResult = result.Split(';', 3);
 
->>>>>>> a1ac5e3a2d74c5556408191707a1bcf94b208545
             string path = splitedResult[0];
             string filename = splitedResult[1];
             string content = splitedResult[2];
@@ -79,7 +65,16 @@ namespace HAL.Server
                     break;
 
                 if (!pluginFile.ContainsKey(args[0]))
-                    pluginFile.Add(args[0], new MarkedChecksum(args[1]));
+                {
+                    string fileName = args[0];
+
+                    if(args[0] == MagicStringEnumerator.DefaultConfigPath)
+                    {
+                        fileName = MagicStringEnumerator.DefaultConfigPathServerToClient;
+                    }
+
+                    pluginFile.Add(fileName, new MarkedChecksum(args[1]));
+                }
             }
         }
 
@@ -108,27 +103,23 @@ namespace HAL.Server
                 {
                     filesUpdated = true;
 
-                    if (file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
-                    {
-                        await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.CMDAdd}\n{code.Length}\n{MagicStringEnumerator.DefaultConfigPath}\n{code}\n");
-                        await StreamWriter.FlushAsync();
-                    }
-                    else
-                    {
-                        await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.CMDAdd}\n{code.Length}\n{file}\n{code}\n");
-                        await StreamWriter.FlushAsync();
-                    }
+                    string path = file;
 
+                    if (file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
+                        path = MagicStringEnumerator.DefaultConfigPath;
+                    
                     pluginFile[file].Checksum = checksum;
+
+                    await SendAddCommand(code.Length, file, code);
                 }
 
                 pluginFile[file].Marked = true;
             }
 
-            if (filesUpdated)
+            if (filesUpdated || firstUpdate)
             {
-                await StreamWriter.WriteLineAsync(MagicStringEnumerator.CMDUpd);
-                await StreamWriter.FlushAsync();
+                firstUpdate = false;
+                await SendUpdateCommand();
             }
 
             /*
@@ -143,6 +134,17 @@ namespace HAL.Server
                             }
                         }
             */
+        }
+
+        private async Task SendAddCommand(int length, string path, string code)
+        {
+            await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.CMDAdd}\n{length};{path}\n{code}");
+            await StreamWriter.FlushAsync();
+        }
+        private async Task SendUpdateCommand()
+        {
+            await StreamWriter.WriteLineAsync(MagicStringEnumerator.CMDUpd);
+            await StreamWriter.FlushAsync();
         }
     }
 

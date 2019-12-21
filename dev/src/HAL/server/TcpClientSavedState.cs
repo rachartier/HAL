@@ -16,7 +16,7 @@ namespace HAL.Server
         public bool IsConnected { get; set; }
         public bool IsFirstUpdate { get; set; } = true;
 
-        private TcpClient reference;
+        private readonly TcpClient reference;
 
         public TcpClientSavedState(TcpClient client)
         {

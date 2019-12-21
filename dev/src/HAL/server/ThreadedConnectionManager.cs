@@ -16,7 +16,7 @@ namespace HAL.Server
     {
         private readonly ThreadWithClients[] threadPool;
         private readonly int threadCount;
-        private object keyAccessPool = new object();
+        private readonly object keyAccessPool = new object();
 
         public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
 
@@ -81,8 +81,7 @@ namespace HAL.Server
                                 }
                                 catch
                                 {
-                                    // Not very beautiful, but we don't really care if the streams are already occupied.
-                                    // If one fail, then, wait the next cycle...
+                                    // Same
                                 }
                             }
                         });
@@ -93,10 +92,6 @@ namespace HAL.Server
                 });
 
                 threadWitchClients.UpdateThread.Start();
-<<<<<<< HEAD
-
-=======
->>>>>>> a1ac5e3a2d74c5556408191707a1bcf94b208545
             }
         }
 
