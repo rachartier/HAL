@@ -86,8 +86,7 @@ namespace HAL.Connection.Client
                 if (!client.Connected)
                 {
                     Log.Instance?.Info("No information from server... Will try to reconnect.");
-                    IsConnected = false;
-                    client.Close();
+                    Disconnect();
 
                     break;
                 }
@@ -101,7 +100,7 @@ namespace HAL.Connection.Client
             await TryReconnect();
         }
 
-        public async Task TryReconnect()
+        private async Task TryReconnect()
         {
             Log.Instance?.Info("Trying to reconnect...");
 
@@ -125,6 +124,7 @@ namespace HAL.Connection.Client
         public void Disconnect()
         {
             IsConnected = false;
+            client.Close();
         }
 
         public abstract Task UpdateAsync();

@@ -208,11 +208,7 @@ namespace HAL.Configuration
 
                         val = dllimport.UseLaunchCommand($"printenv | grep {extensionName} | cut -d '=' -f 2").Trim();
 
-                        if (string.IsNullOrEmpty(val))
-                        {
-                            Log.Instance?.Info($"Environment variable not found: {extensionName}");
-                        }
-                        else
+                        if (!string.IsNullOrEmpty(val))
                         {
                             Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
                         }

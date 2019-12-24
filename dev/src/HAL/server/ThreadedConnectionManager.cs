@@ -52,8 +52,8 @@ namespace HAL.Server
                                     }
                                     else
                                     {
-                                        try 
-                                        {   
+                                        try
+                                        {
                                             await client.UpdateAsync();
                                         }
                                         catch
@@ -87,7 +87,7 @@ namespace HAL.Server
                         });
 
                         threadWitchClients.Clients.RemoveAll((c => !c.IsConnected));
-                        Thread.Sleep(10);
+                        Thread.Sleep(100);
                     }
                 });
 

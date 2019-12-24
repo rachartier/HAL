@@ -33,13 +33,14 @@ namespace HAL
             {
                 client.Disconnect();
                 client.Dispose();
-                Log.Instance?.Error("Unexecpted program exit.");
+                Log.Instance?.Error("Unexcepted program exit.");
             };
 
             new Thread(async () =>
             {
                 await client.StartAsync();
             }).Start();
+
 
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 

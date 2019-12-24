@@ -23,7 +23,7 @@ namespace HAL.Server
                 Marked = marked;
             }
         }
-        private readonly IDictionary<string, MarkedChecksum> pluginFile = new Dictionary<string, MarkedChecksum>();
+        private readonly IDictionary<string, MarkedChecksum> serverSidedFiles = new Dictionary<string, MarkedChecksum>();
         private readonly string savePath;
         private bool firstUpdate = true;
 
@@ -64,7 +64,7 @@ namespace HAL.Server
                 if (args[0].Equals(MagicStringEnumerator.CMDEnd))
                     break;
 
-                if (!pluginFile.ContainsKey(args[0]))
+                if (!serverSidedFiles.ContainsKey(args[0]))
                 {
                     string fileName = args[0];
 
@@ -73,7 +73,7 @@ namespace HAL.Server
                         fileName = MagicStringEnumerator.DefaultConfigPathServerToClient;
                     }
 
-                    pluginFile.Add(fileName, new MarkedChecksum(args[1]));
+                    serverSidedFiles.Add(fileName, new MarkedChecksum(args[1]));
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace HAL.Server
 
             var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
 
-            foreach (var entry in pluginFile.Values)
+            foreach (var entry in serverSidedFiles.Values)
             {
                 entry.Marked = false;
             }
@@ -94,12 +94,12 @@ namespace HAL.Server
                 var checksum = await CheckSumGenerator.HashOf(file);
                 var code = await File.ReadAllTextAsync(file);
 
-                if (!pluginFile.ContainsKey(file))
+                if (!serverSidedFiles.ContainsKey(file))
                 {
-                    pluginFile.Add(file, new MarkedChecksum("0"));
+                    serverSidedFiles.Add(file, new MarkedChecksum("0"));
                 }
 
-                if (pluginFile[file]?.Checksum.Equals(checksum) == false)
+                if (serverSidedFiles[file]?.Checksum.Equals(checksum) == false)
                 {
                     filesUpdated = true;
 
@@ -108,12 +108,12 @@ namespace HAL.Server
                     if (file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
                         path = MagicStringEnumerator.DefaultConfigPath;
                     
-                    pluginFile[file].Checksum = checksum;
+                    serverSidedFiles[file].Checksum = checksum;
 
                     await SendAddCommand(code.Length, file, code);
                 }
 
-                pluginFile[file].Marked = true;
+                serverSidedFiles[file].Marked = true;
             }
 
             if (filesUpdated || firstUpdate)
