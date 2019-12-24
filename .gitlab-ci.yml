@@ -18,7 +18,7 @@ test:
         - dotnet test --no-restore
 
 deploy:
-    stage: deploy
+    stage: deploy  
     tags:
     - docker
     script:

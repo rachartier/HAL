@@ -1,12 +1,16 @@
 ﻿using HAL.Loggin;
 using HAL.MagicString;
 using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
 
 namespace HAL.Configuration
 {
     public class JSONConfigFileServer : IConfigFileServer<JObject, JToken>
     {
+        public static int DEFAULT_PORT = 11000;
+        public static int DEFAULT_UPDATE_RATE = 10000;
+
         public JSONConfigFileServer()
         {
         }
@@ -26,69 +30,80 @@ namespace HAL.Configuration
             Log.Instance?.Info($"Configuration file {file} loaded");
         }
 
-        public override int GetMaxConnection()
-        {
-            if (Root == null)
-            {
-                return 100;
-            }
-
-            int maxConnection = int.Parse(Root.Value<string>(MagicStringEnumerator.JSONMaxConnection));
-
-            return maxConnection;
-
-        }
-
-        public override string GetPath()
-        {
-            if (Root == null)
-            {
-                return null;
-            }
-
-            string path = Root.Value<string>(MagicStringEnumerator.JSONPath);
-
-            return path;
-        }
-
-        public override string GetPluginDirectory()
-        {
-            if (Root == null)
-            {
-                return null;
-            }
-
-            string dirName = Root.Value<string>(MagicStringEnumerator.JSONPluginDirectory);
-
-            return dirName;
-        }
-
         public override int GetPort()
         {
             if (Root == null)
             {
-                return 11000;
+                return DEFAULT_PORT;
             }
 
-            int port = int.Parse(Root.Value<string>(MagicStringEnumerator.JSONPort));
+            int? port = Root.Value<int?>(MagicStringEnumerator.JSONPort);
 
-            return port;
+            if (port == null)
+                return DEFAULT_PORT;
+
+            return port.Value;
         }
 
-        public override int GetRetryMax()
+        public override int GetUpdateRate()
         {
             if (Root == null)
             {
-                return 3;
+                return DEFAULT_UPDATE_RATE;
             }
 
-            int retry = int.Parse(Root.Value<string>(MagicStringEnumerator.JSONRetryMax));
+            int? updateRate = Root.Value<int?>(MagicStringEnumerator.JSONUpdateRate);
 
-            return retry;
+            if (updateRate == null)
+                return DEFAULT_UPDATE_RATE;
+
+            return updateRate.Value;
         }
 
+        public override string GetAddress()
+        {
+            if (Root == null)
+            {
+                return null;
+            }
 
+            string address = Root.Value<string>(MagicStringEnumerator.JSONAddress);
 
+            return address;
+        }
 
+        public override int GetMaxThreads()
+        {
+            if (Root == null)
+            {
+                return Environment.ProcessorCount;
+            }
+
+            int? maxThreads = Root.Value<int?>(MagicStringEnumerator.JSONMaxThreads);
+
+            if (maxThreads == null)
+            {
+                return Environment.ProcessorCount;
+            }
+
+            return maxThreads.Value;
+        }
+
+        public override string GetSavePath()
+        {
+            if (Root == null)
+            {
+                return null;
+            }
+
+            string path = Root.Value<string>(MagicStringEnumerator.JSONSavePath);
+
+            if (string.IsNullOrEmpty(path))
+            {
+                return "results/";
+            }
+
+            return path;
+        }
     }
 }

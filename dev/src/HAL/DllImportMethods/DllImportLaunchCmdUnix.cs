@@ -8,6 +8,7 @@ namespace HAL.DllImportMethods
         [DllImport("./lib/liblaunchcmdunix")]
 #pragma warning disable IDE1006
         private static extern IntPtr launch_command(IntPtr command);
+
 #pragma warning restore IDE1006
 
         /// <summary>

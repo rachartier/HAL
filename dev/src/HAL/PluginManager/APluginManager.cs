@@ -1,5 +1,6 @@
 ﻿using HAL.Executor;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HAL.Plugin.Mananger
 {
@@ -44,6 +45,11 @@ namespace HAL.Plugin.Mananger
 
         public virtual void UnscheduleAllPlugins(IEnumerable<APlugin> plugins)
         {
+        }
+
+        public virtual Task UnscheduleAllPluginsAsync(IEnumerable<APlugin> plugins)
+        {
+            return null;
         }
     }
 }

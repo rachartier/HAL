@@ -2,6 +2,17 @@
 {
     public static class MagicStringEnumerator
     {
+        public static readonly string CMDAdd = "ADD";
+        public static readonly string CMDUpd = "UPD";
+        public static readonly string CMDDel = "DEL";
+        public static readonly string CMDEnd = "END";
+        public static readonly string CMDSve = "SVE";
+
+        public static readonly string DefaultPluginPath = "plugins";
+        public static readonly string DefaultConfigPath = "config/config.json";
+        public static readonly string DefaultLocalConfigPath = "config/config_local.json";
+        public static readonly string DefaultConfigPathServerToClient = "plugins/config.json";
+
         public static readonly string JSONPlugins = "plugins";
         public static readonly string JSONHeartbeat = "heartbeat";
         public static readonly string JSONIntepreter = "interpreter";
@@ -13,12 +24,16 @@
         public static readonly string JSONDatabase = "database";
         public static readonly string JSONConnectionString = "connectionString";
         public static readonly string JSONStorageName = "storage";
+        public static readonly string JSONServer = "server";
 
         /** Server **/
         public static readonly string JSONPort = "port";
-        public static readonly string JSONMaxConnection = "nb_max_client";
-        public static readonly string JSONRetryMax = "retry_max";
-        public static readonly string JSONPath = "path_to_save";
-        public static readonly string JSONPluginDirectory = "directory_plugins";
+        public static readonly string JSONMaxThreads = "max_threads";
+        public static readonly string JSONAddress = "ip";
+        public static readonly string JSONUpdateRate = "update_rate";
+
+        public static readonly string RootSaveResults = "results";
+
+        public static readonly string JSONSavePath = "save_path";
     }
 }

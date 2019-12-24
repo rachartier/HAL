@@ -4,6 +4,7 @@ using HAL.Scheduler;
 using System;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HAL.Plugin.Mananger
 {
@@ -64,6 +65,14 @@ namespace HAL.Plugin.Mananger
             foreach (var plugin in plugins)
             {
                 SchedulerService.Instance.UnscheduleTask($"task_{plugin.Infos.FileName}");
+            }
+        }
+
+        public async override Task UnscheduleAllPluginsAsync(IEnumerable<APlugin> plugins)
+        {
+            foreach (var plugin in plugins)
+            {
+                await SchedulerService.Instance.UnscheduleTaskAsync($"task_{plugin.Infos.FileName}");
             }
         }
     }

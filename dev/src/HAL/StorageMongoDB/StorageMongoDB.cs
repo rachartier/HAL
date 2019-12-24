@@ -1,8 +1,8 @@
-﻿using HAL.Plugin;
+using System.Threading.Tasks;
+using HAL.Plugin;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
 
 namespace HAL.Storage
 {

@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConfigJSON\ConfigJSON.csproj" />
-    <ProjectReference Include="..\FileParser\FileParser.csproj" />
     <ProjectReference Include="..\LocalStorageFile\StorageLocalFile.csproj" />
     <ProjectReference Include="..\Loggin\Loggin.csproj" />
     <ProjectReference Include="..\PluginManager\PluginManager.csproj" />
@@ -40,6 +39,7 @@
     <ProjectReference Include="..\Scheduler\Scheduler.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
     <ProjectReference Include="..\TextStorage\StorageText.csproj" />
+    <ProjectReference Include="..\StorageServerFile\StorageServerFile.csproj" />
     <ProjectReference Include="..\CheckSum\CheckSum.csproj" />
     <ProjectReference Include="..\StorageMongoDB\StorageMongoDB.csproj" />
   </ItemGroup>

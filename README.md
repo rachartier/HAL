@@ -7,6 +7,7 @@ Contents
 
 - [Intro](#intro)
 - [Installation](#installation)
+- [Server](#server)
 - [Write your own plugin](#write-your-own-plugin)
 - [Stockage](#stockage)
 - [Add another file extension](#add-another-file-extension)
@@ -43,6 +44,39 @@ Ou des erreurs peuvent subvenirs pendant l'éxecution des plugins.
 
 XXXXXXXXXXXXXXXX
 
+Server
+-------
+
+Le serveur permet de distribuer les plugins automatiquement à tous les clients. Si un plugin est ajouté ou modifié, de même pour le fichier de configuration, alors le serveur enverra les modifications aux clients.
+Pour configurer le serveur, il faut modifier le fichier config/config.json:
+
+*  ip (string): l'ip sur laquelle comuniquera le serveur
+*  port (int): le port d'écoute (par défaut le port 11000)
+*  max\_threads (int): optionnel, permet de gérer le nombre de threads utilisés par le serveur, par défault, il en utilise le nombre maximum. A noter qu'en dessous de 2 threads et avec beaucoup de clients (> 500), des lags peuvent apparaitre  
+*  update\_rate (int): la frequence d'actualisation en ms du serveur pour vérifier si des plugins ont éte ajoutés ou modifiés
+* save\_path (string): chemin de sauvegardes des resultats des plugins quand l'option est selectionnée
+
+### Fichier de configuration
+
+2 types de fichiers de configurations sont présents:
+*  config\_local.json
+*  config\_global.json
+
+Le premier, config_local.json, sert uniquement à rajouter des configurations de plugin. Il est déposé en local dans le dossier "config" sur les *clients*, et ne sera en aucun cas supprimé ou modifié par le serveur.
+Le second, quand à lui, sert à modifier tous ce qui est possible dans HAL. Tout est détaillés plus bas dans la documentation. Ce fichier sera distribué à tous les clients.
+
+Il sera impératif de rédiger son propre config\_global.json, et il faudra le placer dans le dossier "plugins" du serveur.
+Pour ajouter un plugin, il suffit uniquement de le deposer dans le dossier "plugins" du serveur. 
+
+Pour régler la connection au serveur d'un client, il faut ajouter dans le fichier de configuration local:
+
+```
+"server": {
+    "ip": "<ip du serveur>",
+    "port": <port du serveur>
+}
+```
+
 Write your own plugin
 ---------------------
 
@@ -74,7 +108,7 @@ osInfo = {
 print(json.dumps(osInfo));
 ```
 
-Le fichier de configuratin peut être modifier pour accepter un intepréteur différent de celui par défaut.
+Le fichier de configuratin (global) peut être modifié pour accepter un intepréteur différent de celui par défaut.
 
 ``` json
 {
@@ -428,6 +462,7 @@ NOM_DU_STOCKAGE peut être:
 * "text" (sauvegarde sur la sortie console)
 * "local" (sauvegarde sur la machine client)
 * "mangodb" (sauvegarde sur une base mongodb)
+* "serveur" (sauvegarde sur le serveur avec des dossiers et fichiers json)
 
 Attention, si vous utilisez "mangodb" ou tout autre base de donnée, il faut alors généralement spécifier une connection string:
 ```json

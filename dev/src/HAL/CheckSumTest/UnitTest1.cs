@@ -29,7 +29,7 @@ namespace CheckSumTest
         {
             using var fs1 = new FileStream("test/script.pl", FileMode.Open);
             using var fs2 = new FileStream("test2/script.pl", FileMode.Open);
-            
+
             var hashFs1 = CheckSumGenerator.HashOf(fs1);
             var hashFs2 = CheckSumGenerator.HashOf(fs2);
 

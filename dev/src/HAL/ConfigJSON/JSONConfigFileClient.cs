@@ -12,6 +12,8 @@ namespace HAL.Configuration
 {
     public class JSONConfigFileClient : IConfigFileClient<JObject, JToken>
     {
+        private static readonly int DEFAULT_PORT = 11000;
+
         public JSONConfigFileClient()
         {
         }
@@ -107,6 +109,33 @@ namespace HAL.Configuration
             }
         }
 
+        public override int GetPort()
+        {
+            if (Root == null)
+            {
+                return DEFAULT_PORT;
+            }
+
+            int? port = Root[MagicStringEnumerator.JSONServer]?.Value<int?>(MagicStringEnumerator.JSONPort);
+
+            if (port == null)
+                return DEFAULT_PORT;
+
+            return port.Value;
+        }
+
+        public override string GetAddress()
+        {
+            if (Root == null)
+            {
+                return null;
+            }
+
+            string address = Root[MagicStringEnumerator.JSONServer]?.Value<string>(MagicStringEnumerator.JSONAddress);
+
+            return address;
+        }
+
         public override void SetScriptExtensionsConfiguration(IPluginMaster pluginMaster)
         {
             if (Root == null)
@@ -179,11 +208,7 @@ namespace HAL.Configuration
 
                         val = dllimport.UseLaunchCommand($"printenv | grep {extensionName} | cut -d '=' -f 2").Trim();
 
-                        if (string.IsNullOrEmpty(val))
-                        {
-                            Log.Instance?.Info($"Environment variable not found: {extensionName}");
-                        }
-                        else
+                        if (!string.IsNullOrEmpty(val))
                         {
                             Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
                         }
@@ -233,6 +258,23 @@ namespace HAL.Configuration
             string storageName = Root.Value<string>(MagicStringEnumerator.JSONStorageName);
 
             return storageName;
+        }
+
+        public override string GetSavePath()
+        {
+            if (Root == null)
+            {
+                return null;
+            }
+
+            string path = Root.Value<string>(MagicStringEnumerator.JSONSavePath);
+
+            if (string.IsNullOrEmpty(path))
+            {
+                return "results/";
+            }
+
+            return path;
         }
     }
 }

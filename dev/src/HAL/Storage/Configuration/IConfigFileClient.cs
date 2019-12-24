@@ -41,6 +41,23 @@ namespace HAL.Configuration
         public abstract string GetStorageName();
 
         /// <summary>
+        /// Get the port of the socket server
+        /// </summary>
+        /// <returns>The port int if it exist, 11000 otherwise</returns>
+        public abstract int GetPort();
+
+        /// <summary>
+        /// Get the address wich will be running the server
+        /// </summary>
+        public abstract string GetAddress();
+
+        /// <summary>
+        /// Get the path to store the plugin's results
+        /// </summary>
+        /// <returns>the path</returns>
+        public abstract string GetSavePath();
+
+        /// <summary>
         /// set a list of plugins configuration
         /// </summary>
         /// <param name="plugins"></param>
@@ -51,10 +68,12 @@ namespace HAL.Configuration
                 try
                 {
                     SetPluginConfiguration(plugin);
+                    plugin.AlreadyConfigured = true;
                 }
                 catch (Exception e)
                 {
-                    Log.Instance?.Error($"{e.Message} Plugin {plugin.Infos.FileName} ignored.");
+                    if (!plugin.AlreadyConfigured)
+                        Log.Instance?.Error($"{e.Message} Plugin {plugin.Infos.FileName} ignored.");
                 }
             }
         }

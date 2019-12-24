@@ -11,27 +11,25 @@
         public abstract int GetPort();
 
         /// <summary>
-        /// Get the maximum authorized connection for the server
+        /// Get the address wich will be running the server
         /// </summary>
-        /// <returns>The maximum connection int if it exist, 100 otherwise</returns>
-        public abstract int GetMaxConnection();
+        public abstract string GetAddress();
 
         /// <summary>
-        /// Get the maximum retry for the retry-policy
+        /// Get the update rate in milliseconds
         /// </summary>
-        /// <returns>The maximum retry int if it exist, 3 otherwise</returns>
-        public abstract int GetRetryMax();
+        public abstract int GetUpdateRate();
 
         /// <summary>
-        /// Get the path where to save the plugins sent to client
+        /// Get the maximum used threads for the server
         /// </summary>
-        /// <returns>The path string if it exist, null otherwise</returns>
-        public abstract string GetPath();
+        /// <returns>The maximum connection int if it exist, max threads count of your processor otherwise</returns>
+        public abstract int GetMaxThreads();
 
         /// <summary>
-        /// Get the name of the directory where the plugins are in the server
+        /// Get the path to store the plugin's results
         /// </summary>
-        /// <returns>The name string if it exist, null otherwise</returns>
-        public abstract string GetPluginDirectory();
+        /// <returns>the path</returns>
+        public abstract string GetSavePath();
     }
 }

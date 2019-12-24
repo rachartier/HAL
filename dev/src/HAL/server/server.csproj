@@ -24,6 +24,7 @@
     <ProjectReference Include="..\CheckSum\CheckSum.csproj" />
     <ProjectReference Include="..\ConfigJSON\ConfigJSON.csproj" />
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
+    <ProjectReference Include="..\StorageServerFile\StorageServerFile.csproj" />
   </ItemGroup>
 
   <ItemGroup>
