@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Reflection;
 using System.Threading.Tasks;
 using HAL.Plugin;
 using MongoDB.Bson.Serialization;
@@ -24,7 +28,14 @@ namespace HAL.Storage
             var collection = defaultDatabase.GetCollection<dynamic>(plugin.Infos.Name);
             //await collection.InsertOneAsync(anonymousObject);
 
-            var document = BsonSerializer.Deserialize<dynamic>(obj.ToString());
+            dynamic document = new ExpandoObject() as IDictionary<string, object>;
+
+            PropertyInfo[] propertyInfos;
+            propertyInfos = typeof(APlugin).GetProperties(BindingFlags.Public |
+                                            BindingFlags.Static);
+
+            document.machine_name = Environment.MachineName;
+            document.result = BsonSerializer.Deserialize<dynamic>(obj.ToString());
 
             await collection.InsertOneAsync(document,
                 new InsertOneOptions

@@ -1,7 +1,5 @@
 ﻿using HAL.Storage;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace HAL.Factory
 {
@@ -16,13 +14,14 @@ namespace HAL.Factory
          */
         private const string Text = "text";
         private const string Local = "local";
-        private const string MangoDB = "mangodb";
+        private const string MongoDB = "mongodb";
         private const string Server = "server";
 
         public static IStoragePlugin CreateStorage(string storageName)
         {
             var sanitizedStorageName = storageName?.Trim().ToLower();
 
+            Console.WriteLine(sanitizedStorageName);
             /*
              * You also need to add a case here
              */
@@ -30,7 +29,7 @@ namespace HAL.Factory
             {
                 Text => new StorageText(),
                 Local => new StorageLocalFile(),
-                MangoDB => new StorageMongoDB(),
+                MongoDB => new StorageMongoDB(),
                 Server => new StorageServerFile(),
 
                 /*

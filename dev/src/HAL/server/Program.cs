@@ -68,7 +68,7 @@ namespace HAL.Server
                 {
                     string fileName = args[0];
 
-                    if(args[0] == MagicStringEnumerator.DefaultConfigPath)
+                    if (args[0] == MagicStringEnumerator.DefaultConfigPath)
                     {
                         fileName = MagicStringEnumerator.DefaultConfigPathServerToClient;
                     }
@@ -107,10 +107,10 @@ namespace HAL.Server
 
                     if (file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
                         path = MagicStringEnumerator.DefaultConfigPath;
-                    
+
                     serverSidedFiles[file].Checksum = checksum;
 
-                    await SendAddCommand(code.Length, file, code);
+                    await SendAddCommand(code.Length, path, code);
                 }
 
                 serverSidedFiles[file].Marked = true;
