@@ -39,6 +39,7 @@ namespace HAL.Server
         public void Stop()
         {
             isRunning = false;
+            connectionManager.KillAllConnections();
         }
 
         public async void StartUniqueClientType<TClient>(string savePath)

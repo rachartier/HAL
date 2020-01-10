@@ -178,6 +178,12 @@ namespace HAL.Server
             server.OnServerStarted += (o, e) =>
             {
                 Log.Instance?.Info("Server starded, waiting for clients...");
+
+                AppDomain.CurrentDomain.ProcessExit += (o, e) =>
+                {
+                    server.Stop();
+                    Log.Instance?.Error("Unexcepted program exit.");
+                };
             };
 
             server.OnClientConnected += (o, e) =>
