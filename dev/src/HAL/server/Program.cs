@@ -52,6 +52,8 @@ namespace HAL.Server
 
             using var fw = File.CreateText($"{folder}{filename}");
             await fw.WriteAsync(content);
+
+            Log.Instance?.Info($"{path} {filename} {content}");
         }
 
         public override async Task FirstUpdateAsync()

@@ -1,0 +1,3 @@
+[submodule "dev/tests/dev/tests/docker-influxdb-grafana"]
+	path = dev/tests/dev/tests/docker-influxdb-grafana
+	url = https://github.com/nicolargo/docker-influxdb-grafana

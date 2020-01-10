@@ -1,9 +1,5 @@
 {
-  "storage": "mongodb",
-
-  "database": {
-    "connectionString": "mongodb://localhost:27017/admin"
-  },
+  "storage": "server",
 
   "plugins": {
     "upgrades_available.sh": {
