@@ -6,15 +6,15 @@ dotnet publish -c Release /p:DefineConstants=PRODUCTION_BUILD /p:PublishSingleFi
 
 if [ ! -d $BUILDPATH/plugins ]; then
     mkdir $BUILDPATH/plugins
-    echo "\033[0;32mplugins copied."
+    echo "\033[0;32mAll plugins copied."
 fi
 
 cp -rf config $BUILDPATH
-echo "\033[0;32mconfig copied."
+echo "\033[0;32mConfiguration copied."
 
 if [ ! -f $BUILDPATH/config/config_local.json ]; then
     echo "{\n}" > $BUILDPATH/config/config_local.json
-    echo "\033[0;32mempty config/config_local.json created. You need to put server configuration inside."
+    echo "\033[0;32mEmpty config/config_local.json created. You need to put server configuration inside."
 fi
 
 cp -rf nlog.config $BUILDPATH
