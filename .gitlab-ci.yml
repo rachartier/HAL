@@ -17,12 +17,3 @@ test:
     script:
         - dotnet test --no-restore
 
-deploy:
-    stage: deploy  
-    tags:
-    - docker
-    script:
-        - dotnet publish -c Release -o $CI_PROJECT_DIR/build/release
-    artifacts:
-        paths:
-            - $CI_PROJECT_DIR/build/release
