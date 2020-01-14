@@ -8,7 +8,7 @@
     <target xsi:type="Console" name="console"
       layout="${longdate} [${level:uppercase=true}] ${message}" />
     <target name="logfile" xsi:type="File"
-        fileName="/var/log/hal/${shortdate}_logfile.txt"
+        fileName="../log/hal/${shortdate}_logfile.txt"
             layout="${longdate} ${level:uppercase=true}] ${message}" />
   </targets>
 

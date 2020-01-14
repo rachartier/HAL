@@ -44,7 +44,7 @@ namespace HAL.Plugin.Mananger
             }
             catch (Exception e)
             {
-                Log.Instance?.Error(e.Message);
+                Log.Instance?.Error($"SchedulePlugin: {e.Message}");
             }
         }
 

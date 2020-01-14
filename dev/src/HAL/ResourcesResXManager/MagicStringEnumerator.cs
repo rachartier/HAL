@@ -8,10 +8,17 @@
         public static readonly string CMDEnd = "END";
         public static readonly string CMDSve = "SVE";
 
+#if PRODUCTION_BUILD
+        public static readonly string DefaultPluginPath = "../plugins";
+        public static readonly string DefaultConfigPath = "../config/config.json";
+        public static readonly string DefaultLocalConfigPath = "../config/config_local.json";
+        public static readonly string DefaultConfigPathServerToClient = "../plugins/config.json";
+#else
         public static readonly string DefaultPluginPath = "plugins";
         public static readonly string DefaultConfigPath = "config/config.json";
         public static readonly string DefaultLocalConfigPath = "config/config_local.json";
         public static readonly string DefaultConfigPathServerToClient = "plugins/config.json";
+#endif
 
         public static readonly string JSONPlugins = "plugins";
         public static readonly string JSONHeartbeat = "heartbeat";

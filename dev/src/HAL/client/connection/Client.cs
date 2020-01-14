@@ -60,9 +60,21 @@ namespace HAL.Connection.Client
             {
                 NoDelay = true,
             };
-            client.Connect(ip, port);
+            while (!IsConnected)
+            {
+                try
+                {
 
-            IsConnected = true;
+                    Log.Instance?.Info($"Connecting to {ip}:{port}...");
+                    client.Connect(ip, port);
+                    IsConnected = true;
+                }
+                catch (Exception)
+                {
+                    Log.Instance?.Error($"Can't connect to {ip}:{port}, retry in 5 seconds...");
+                    Thread.Sleep(5000);
+                }
+            }
 
             StreamWriter = new StreamWriter(client.GetStream());
             StreamReader = new StreamReader(client.GetStream());
