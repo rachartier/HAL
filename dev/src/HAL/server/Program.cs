@@ -35,6 +35,11 @@ namespace HAL.Server
 
         public override async Task SaveAsync()
         {
+            if (reference.Available <= 0)
+            {
+                return;
+            }
+
             string result = await StreamReader.ReadLineAsync();
 
             if (string.IsNullOrEmpty(result))
@@ -53,7 +58,7 @@ namespace HAL.Server
             using var fw = File.CreateText($"{folder}{filename}");
             await fw.WriteAsync(content);
 
-            Log.Instance?.Info($"{path} {filename} {content}");
+           //Log.Instance?.Info($"{path} {filename} {content}");
         }
 
         public override async Task FirstUpdateAsync()

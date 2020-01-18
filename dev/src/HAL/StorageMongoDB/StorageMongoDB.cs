@@ -58,5 +58,9 @@ namespace HAL.Storage
                 return false;
             }
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

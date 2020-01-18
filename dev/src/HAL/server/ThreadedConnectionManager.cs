@@ -71,6 +71,7 @@ namespace HAL.Server
                                     client.IsConnected = false;
                                     OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
                                 }
+
                                 client.Stopwatch.Restart();
                             }
                             else
@@ -87,7 +88,7 @@ namespace HAL.Server
                         });
 
                         threadWitchClients.Clients.RemoveAll((c => !c.IsConnected));
-                        Thread.Sleep(100);
+                        Thread.Sleep(10);
                     }
                 });
 

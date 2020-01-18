@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NLog" Version="4.6.7" />
   </ItemGroup>
 
@@ -41,6 +41,7 @@
     <ProjectReference Include="..\StorageServerFile\StorageServerFile.csproj" />
     <ProjectReference Include="..\CheckSum\CheckSum.csproj" />
     <ProjectReference Include="..\StorageMongoDB\StorageMongoDB.csproj" />
+    <ProjectReference Include="..\StorageInfluxDB\StorageInfluxDB.csproj" />
   </ItemGroup>
 
   <ItemGroup>

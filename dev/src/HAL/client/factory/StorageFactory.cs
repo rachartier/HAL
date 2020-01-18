@@ -16,6 +16,7 @@ namespace HAL.Factory
         private const string Local = "local";
         private const string MongoDB = "mongodb";
         private const string Server = "server";
+        private const string InfluxDB = "influxdb";
 
         public static IStoragePlugin CreateStorage(string storageName)
         {
@@ -31,6 +32,7 @@ namespace HAL.Factory
                 Local => new StorageLocalFile(),
                 MongoDB => new StorageMongoDB(),
                 Server => new StorageServerFile(),
+                InfluxDB => new StorageInfluxDB(),
 
                 /*
                 * Fallback if no storage is found

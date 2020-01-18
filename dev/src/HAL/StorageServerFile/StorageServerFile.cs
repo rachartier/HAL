@@ -25,5 +25,8 @@ namespace HAL.Storage
 
             return StorageCode.Success;
         }
+        public void Dispose()
+        {
+        }
     }
 }

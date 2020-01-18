@@ -1,9 +1,10 @@
 using HAL.Plugin;
+using System;
 using System.Threading.Tasks;
 
 namespace HAL.Storage
 {
-    public interface IStoragePlugin
+    public interface IStoragePlugin : IDisposable
     {
         /// <summary>
         /// Initialize, if needed, the storage

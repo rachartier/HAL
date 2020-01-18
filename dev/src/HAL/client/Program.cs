@@ -21,6 +21,16 @@ namespace HAL
             IConfigFileClient<JObject, JToken> configFileLocal = new JSONConfigFileClient();
             configFileLocal.Load(MagicStringEnumerator.DefaultLocalConfigPath);
 
+            /*
+            * A storage is needed to save the output of the plugins
+            *
+            * the only purpose of text storage is to debug and do a showcase.
+            *
+            * you can switch on local file storage (wich will stock all the outputs on the client side)
+            * or by mongodb stockage.
+            */
+            IStoragePlugin storage = null;
+
             string ip = configFileLocal.GetAddress();
             int port = configFileLocal.GetPort();
 
@@ -31,6 +41,7 @@ namespace HAL
 
             AppDomain.CurrentDomain.ProcessExit += (o, e) =>
             {
+                storage?.Dispose();
                 client.Disconnect();
                 client.Dispose();
                 Log.Instance?.Error("Unexcepted program exit.");
@@ -64,15 +75,7 @@ namespace HAL
                 IConfigFileClient<JObject, JToken> configFile = new JSONConfigFileClient();
                 configFile.Load(MagicStringEnumerator.DefaultConfigPath);
 
-                /*
-                * A storage is needed to save the output of the plugins
-                *
-                * the only purpose of text storage is to debug and do a showcase.
-                *
-                * you can switch on local file storage (wich will stock all the outputs on the client side)
-                * or by mongodb stockage.
-                */
-                IStoragePlugin storage = StorageFactory.CreateStorage(configFile.GetStorageName());
+                storage = StorageFactory.CreateStorage(configFile.GetStorageName());
 
                 if (storage is StorageServerFile)
                 {
@@ -132,9 +135,14 @@ namespace HAL
                 var savePath = configFile.GetSavePath();
                 foreach (var plugin in pluginMaster.Plugins)
                 {
-                    plugin.OnExecutionFinished += (o, e) =>
+                    plugin.OnExecutionFinished += async (o, e) =>
                     {
-                        storage.Save(e.Plugin, e.Result);
+                        var code = await storage.Save(e.Plugin, e.Result);
+
+                        if (code == StorageCode.Failed)
+                        {
+                            Log.Instance?.Error("Storage failed.");
+                        }
                     };
                 }
 
