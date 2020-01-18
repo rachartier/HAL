@@ -4,6 +4,7 @@ namespace HAL.Storage
     {
         Unknown,
         Failed,
-        Success
+        Success,
+        Pass
     }
 }

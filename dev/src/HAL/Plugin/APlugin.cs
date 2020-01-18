@@ -1,5 +1,6 @@
 ﻿using HAL.OSData;
 using System;
+using System.Collections.Generic;
 
 namespace HAL.Plugin
 {
@@ -29,12 +30,15 @@ namespace HAL.Plugin
         public PluginFileInfos.FileType Type { get; protected set; }
         public OSAttribute.TargetFlag OsAuthorized { get; set; } = 0;
 
+        public List<string> AttributesToObserve;
+
         public double Heartbeat { get; set; } = 1;
         public string AdministratorUsername { get; set; }
         public bool AdministratorRights { get; set; } = false;
         public bool Activated { get; set; } = false;
 
         public bool AlreadyConfigured { get; set; } = false;
+        public bool ObserveAllAttributes { get; set; } = false;
 
         public void RaiseOnExecutionFinished(string result)
         {

@@ -15,6 +15,8 @@
         public static readonly string DefaultConfigPathServerToClient = "plugins/config.json";
 
         public static readonly string JSONPlugins = "plugins";
+        public static readonly string JSONDifferencial = "differencial";
+        public static readonly string JSONDifferencialAll = "differencial_all";
         public static readonly string JSONHeartbeat = "heartbeat";
         public static readonly string JSONIntepreter = "interpreter";
         public static readonly string JSONAdminUsername = "admin_username";

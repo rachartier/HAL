@@ -9,11 +9,19 @@ namespace HAL.Storage
     {
         public StreamWriter StreamWriter { get; set; }
 
+        private DifferencialStorage diffStorage = new DifferencialStorage();
+
         public void Init(string connectionString)
         {
         }
+
         public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
         {
+            if (!diffStorage.HasDifference(plugin, obj))
+            {
+                return StorageCode.Pass;
+            }
+
             string strTodayDate = DateTime.Now.ToString("yyyy-MM-dd");
             string completeTodayDate = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 

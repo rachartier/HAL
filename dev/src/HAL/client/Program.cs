@@ -148,7 +148,7 @@ namespace HAL
                         }
                         catch (Exception ex)
                         {
-                            Log.Instance?.Error(ex.Message);
+                            Log.Instance?.Error(ex.StackTrace);
                             Log.Instance?.Error("Storage failed.");
                         }
                     };

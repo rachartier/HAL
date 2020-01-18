@@ -5,6 +5,7 @@ using HAL.OSData;
 using HAL.Plugin;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -105,6 +106,19 @@ namespace HAL.Configuration
                     }
 
                     plugin.OsAuthorized |= OSAttribute.OSNameToTargetFlag[os];
+                }
+            }
+
+            if (pluginConfig[MagicStringEnumerator.JSONDifferencialAll]?.Value<bool>() == true)
+            {
+                plugin.ObserveAllAttributes = true;
+            }
+            else
+            {
+                var attributesToObserve = GetAttributesToObserve(pluginConfig);
+                if (attributesToObserve != null)
+                {
+                    plugin.AttributesToObserve = attributesToObserve;
                 }
             }
         }
@@ -275,6 +289,17 @@ namespace HAL.Configuration
             }
 
             return path;
+        }
+
+
+        private List<string> GetAttributesToObserve(JObject pluginConfig)
+        {
+            var differencial = pluginConfig[MagicStringEnumerator.JSONDifferencial];
+
+            if (differencial == null)
+                return null;
+
+            return differencial.ToObject<List<string>>();
         }
     }
 }
