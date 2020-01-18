@@ -203,6 +203,51 @@ Exemple:
 
 Le plugin sera alors lancé automatiquement avec la commande suivant: `sudo -u user -s <shell specifié dans interpreteur> -c script.sh`
 
+##### Mode "differencial"
+
+L'utilisation du mode "differencial" n'est disponible que quand le stockage est sur le serveur.
+Ce mode sert à qu'un résultat de plugin soit pas à nouveau sauvegardé si sa valeur n'a pas changé depuis la dernière éxecution.
+
+Exemple:
+A la première execution du plugin, le json obtenu est:
+```json
+    {"kernel_version": "debian 4.19"}
+```
+
+Le résultat est alors stocké. Mais si aux résultats suivant le kernel version est toujours "debian 4.19", alors ceux si seront ignorés.
+
+Utilisation:
+
+differencial_all (bool): si à True, alors tous les champs du json seront vérifiés, si un a changé, alors le résultat sera sauvegardé.
+differencial (string array): permet de spécifier les champs à observer.
+
+Exemple:
+```json
+"plugins": {
+	"script.py": {
+		"activated": "true",
+		"heartbeat": "1",
+		"differencial_all": true
+		
+	}
+}
+```
+
+```json
+"plugins": {
+	"script.py": {
+		"activated": "true",
+		"heartbeat": "1",
+		"differencial": [
+		    "champs1",
+		    "champs2"
+		]
+		
+	}
+}
+```
+
+
 #### Rédaction d'un plugin AssemblyDLL, classique DLL, Shared object
 
 ##### Exemple en C/C++ (classique DLL, Shared Object)
