@@ -3,7 +3,6 @@ using HAL.Loggin;
 using HAL.MagicString;
 using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HAL.Connection.Client
@@ -19,6 +18,7 @@ namespace HAL.Connection.Client
             funcManager.AddFunc(MagicStringEnumerator.CMDAdd, FuncAdd);
             funcManager.AddFunc(MagicStringEnumerator.CMDDel, FuncDel);
             funcManager.AddFunc(MagicStringEnumerator.CMDUpd, FuncUpd);
+            funcManager.AddFunc(MagicStringEnumerator.CMDHtb, FuncHtb);
 
             OnConnected += async (o, e) =>
             {
@@ -66,9 +66,9 @@ namespace HAL.Connection.Client
 
         private async Task FuncAdd()
         {
-            string data = await StreamReader.ReadLineAsync();        
+            string data = await StreamReader.ReadLineAsync();
             string[] args = data.Split(';', 2);
-            
+
             string textBytesToRead = args[0];
             string path = args[1];
 
@@ -94,6 +94,10 @@ namespace HAL.Connection.Client
         private async Task FuncUpd()
         {
             OnReceiveDone?.Invoke(this, new EventArgs());
+        }
+
+        private async Task FuncHtb()
+        {
         }
     }
 }

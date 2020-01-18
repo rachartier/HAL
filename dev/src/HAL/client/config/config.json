@@ -1,9 +1,5 @@
 {
-  "storage": "influxdb",
-
-  "database": {
-    "connectionString": "http://localhost:8086/"
-  },
+  "storage": "server",
 
   "plugins": {
     "upgrades_available.sh": {

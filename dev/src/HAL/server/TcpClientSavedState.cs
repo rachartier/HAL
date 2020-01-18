@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using HAL.MagicString;
 
 namespace HAL.Server
 {
@@ -24,6 +25,7 @@ namespace HAL.Server
             StreamReader = new StreamReader(client.GetStream());
 
             Stopwatch = new Stopwatch();
+
             Stopwatch.Start();
 
             reference = client;
@@ -38,6 +40,11 @@ namespace HAL.Server
         public abstract Task UpdateAsync();
 
         public abstract Task SaveAsync();
+
+        public void SendHeartbeat()
+        {
+            StreamWriter.WriteLine(MagicStringEnumerator.CMDHtb);
+        }
 
         public void Dispose()
         {

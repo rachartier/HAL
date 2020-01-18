@@ -3,10 +3,11 @@
     public static class MagicStringEnumerator
     {
         public static readonly string CMDAdd = "ADD";
-        public static readonly string CMDUpd = "UPD";
+        public static readonly string CMDUpd = "UPD"; /* Update */
         public static readonly string CMDDel = "DEL";
         public static readonly string CMDEnd = "END";
-        public static readonly string CMDSve = "SVE";
+        public static readonly string CMDSve = "SVE"; /* Save */
+        public static readonly string CMDHtb = "HTB"; /* Heartbeat */
 
         public static readonly string DefaultPluginPath = "plugins";
         public static readonly string DefaultConfigPath = "config/config.json";

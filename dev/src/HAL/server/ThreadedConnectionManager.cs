@@ -22,7 +22,7 @@ namespace HAL.Server
 
         public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
 
-        public ThreadedConnectionManager(int threadCount, int updateTimeMs = 1000)
+        public ThreadedConnectionManager(int threadCount, int updateTimeMs = 1000, int heartbeatWaitTimeMs = 5_000)
         {
             this.threadCount = threadCount;
 
@@ -39,6 +39,18 @@ namespace HAL.Server
                     {
                         Parallel.ForEach(threadWitchClients.Clients, async (client) =>
                         {
+                            try
+                            {
+                                client.SendHeartbeat();
+                            }
+                            catch
+                            {
+                                client.Dispose();
+                                client.IsConnected = false;
+                                OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
+                                return;
+                            }
+
                             if (client.Stopwatch.ElapsedMilliseconds > updateTimeMs || client.IsFirstUpdate)
                             {
                                 try
@@ -46,7 +58,16 @@ namespace HAL.Server
                                     if (client.IsFirstUpdate)
                                     {
                                         OnClientConnected?.Invoke(this, new ClientStateChangedEventArgs(client));
-                                        await client.FirstUpdateAsync();
+
+                                        try
+                                        {
+                                            await client.FirstUpdateAsync();
+                                        }
+                                        catch
+                                        {
+                                            // Not very beautiful, but we don't really care if the streams are already occupied.
+                                            // If one fail, then, wait the next cycle...
+                                        }
 
                                         client.IsFirstUpdate = false;
                                     }
@@ -58,8 +79,6 @@ namespace HAL.Server
                                         }
                                         catch
                                         {
-                                            // Not very beautiful, but we don't really care if the streams are already occupied.
-                                            // If one fail, then, wait the next cycle...
                                         }
                                     }
                                 }
@@ -70,6 +89,7 @@ namespace HAL.Server
                                     client.Dispose();
                                     client.IsConnected = false;
                                     OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
+
                                 }
 
                                 client.Stopwatch.Restart();
@@ -80,9 +100,9 @@ namespace HAL.Server
                                 {
                                     await client.SaveAsync();
                                 }
-                                catch
+                                catch (Exception e)
                                 {
-                                    // Same
+                                    Log.Instance?.Error($"SaveAsync: {e.Message}");
                                 }
                             }
                         });

@@ -60,6 +60,7 @@ namespace HAL.Connection.Client
             {
                 NoDelay = true,
             };
+
             while (!IsConnected)
             {
                 try

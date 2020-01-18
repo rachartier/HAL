@@ -37,8 +37,8 @@ namespace HAL
             Log.Instance?.Info($"Server ip: {ip}");
             Log.Instance?.Info($"Server port: {port}");
 
-            using HalClient client = new HalClient(ip, port);
 
+            using HalClient client = new HalClient(ip, port);
             AppDomain.CurrentDomain.ProcessExit += (o, e) =>
             {
                 storage?.Dispose();
@@ -51,7 +51,6 @@ namespace HAL
             {
                 await client.StartAsync();
             }).Start();
-
 
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
@@ -137,10 +136,19 @@ namespace HAL
                 {
                     plugin.OnExecutionFinished += async (o, e) =>
                     {
-                        var code = await storage.Save(e.Plugin, e.Result);
-
-                        if (code == StorageCode.Failed)
+                        try
                         {
+                            var code = await storage.Save(e.Plugin, e.Result);
+
+                            if (code == StorageCode.Failed)
+                            {
+                                Log.Instance?.Error("Storage failed.");
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Instance?.Error(ex.Message);
                             Log.Instance?.Error("Storage failed.");
                         }
                     };
