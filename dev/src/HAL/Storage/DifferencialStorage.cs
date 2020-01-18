@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using HAL.Loggin;
 using HAL.Plugin;
 using Newtonsoft.Json.Linq;
 
@@ -41,7 +42,13 @@ public class DifferencialStorage
         {
             var storedAttr = storedObject[attr]?.Value<string>();
 
-            if (!convertedJsonObject[attr].Value<string>().Equals(storedAttr))
+            if (convertedJsonObject[attr] == null)
+            {
+                Log.Instance?.Warn($"Attribute {attr} in differencial mode on plugin '{plugin.Infos.FileName}' is uknown. Difference returned is true.");
+                return true;
+            }
+
+            if (!convertedJsonObject[attr]?.Value<string>().Equals(storedAttr) == true)
             {
                 storedObject = convertedJsonObject;
                 return true;
