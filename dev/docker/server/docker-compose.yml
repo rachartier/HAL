@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  hal:
+    image: dockerhub.iut-clermont.uca.fr:443/hal_hal-server_dotnet3.1:1.0
+    ports:
+      - "11000:11000"
+    restart: unless-stopped
+    volumes:
+          - /data/TMP/hal_saves:/data
+    environment:
+      IP_HAL: "0.0.0.0"
+      PORT_HAL: 11000
+      MAX_THREADS_HAL: 8
+      UPDATE_RATE_HAL: 1000
+      SAVE_PATH_HAL: /data
