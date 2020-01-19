@@ -205,7 +205,6 @@ Le plugin sera alors lancé automatiquement avec la commande suivant: `sudo -u u
 
 ##### Mode "differencial"
 
-L'utilisation du mode "differencial" n'est disponible que quand le stockage est sur le serveur.
 Ce mode sert à qu'un résultat de plugin soit pas à nouveau sauvegardé si sa valeur n'a pas changé depuis la dernière éxecution.
 
 Exemple:
