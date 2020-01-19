@@ -484,11 +484,12 @@ Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini
 Stockage
 --------
 
-A l'heure actuelle, 3 formes de stockage existe:
+A l'heure actuelle, 4 formes de stockage existe:
 * Format texte, sortie sur la console
 * Sauvegarde en locale sur le client
 * Sauvegarde en base de donnée (MangoDB)
-
+* Sauvegarde en base de donnée orientée séries chronologiques (InfluxDB)
+* 
 Le stockage sert a sauvegarder le résultat de chaque plugin pour pouvoir ensuite manipuler ces données.
 
 Pour séléctionner le stockage voulu, il faut créer un attribut dans le fichier "config.json":
@@ -507,6 +508,7 @@ NOM_DU_STOCKAGE peut être:
 * "text" (sauvegarde sur la sortie console)
 * "local" (sauvegarde sur la machine client)
 * "mangodb" (sauvegarde sur une base mongodb)
+* "influxdb" (sauvegarde sur une base influxdb)
 * "serveur" (sauvegarde sur le serveur avec des dossiers et fichiers json)
 
 Attention, si vous utilisez "mangodb" ou tout autre base de donnée, il faut alors généralement spécifier une connection string:
