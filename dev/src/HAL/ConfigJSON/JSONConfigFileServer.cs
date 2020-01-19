@@ -1,5 +1,4 @@
-﻿using HAL.Loggin;
-using HAL.MagicString;
+﻿using HAL.MagicString;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
@@ -26,8 +25,6 @@ namespace HAL.Configuration
 
             // root is composed of all the leaves
             Root = JObject.Parse(jsonData);
-
-            Log.Instance?.Info($"Configuration file {file} loaded");
         }
 
         public override int GetPort()
