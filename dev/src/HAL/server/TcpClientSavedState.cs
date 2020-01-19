@@ -46,6 +46,11 @@ namespace HAL.Server
             StreamWriter.WriteLine(MagicStringEnumerator.CMDHtb);
         }
 
+        public void Disconnect()
+        {
+            reference.Close();
+            IsConnected = false;
+        }
         public void Dispose()
         {
             StreamWriter.Dispose();

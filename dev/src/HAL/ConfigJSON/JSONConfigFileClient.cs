@@ -30,8 +30,6 @@ namespace HAL.Configuration
 
             // root is composed of all the leaves
             Root = JObject.Parse(jsonData);
-
-            Log.Instance?.Info($"Configuration file {file} loaded");
         }
 
         /*

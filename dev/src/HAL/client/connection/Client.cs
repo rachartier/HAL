@@ -36,7 +36,7 @@ namespace HAL.Connection.Client
         public StreamWriter StreamWriter { get; private set; }
         public StreamReader StreamReader { get; private set; }
 
-        public bool IsConnected { get; protected set; }
+        public bool IsConnected { get; protected set; } = false;
 
         private TcpClient client;
 

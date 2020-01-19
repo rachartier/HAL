@@ -58,7 +58,7 @@ namespace HAL.Server
             using var fw = File.CreateText($"{folder}{filename}");
             await fw.WriteAsync(content);
 
-           //Log.Instance?.Info($"{path} {filename} {content}");
+            //Log.Instance?.Info($"{path} {filename} {content}");
         }
 
         public override async Task FirstUpdateAsync()
@@ -160,7 +160,17 @@ namespace HAL.Server
         private static void Main(string[] args)
         {
             var configFile = new JSONConfigFileServer();
-            configFile.Load(MagicStringEnumerator.DefaultConfigPath);
+            try
+            {
+                configFile.Load(MagicStringEnumerator.DefaultConfigPath);
+                Log.Instance?.Info($"Configuration file {MagicStringEnumerator.DefaultConfigPath} loaded");
+            }
+            catch (Exception ex)
+            {
+                Log.Instance?.Error($"{MagicStringEnumerator.DefaultConfigPath}: {ex.Message}");
+                Log.Instance?.Error("Program closed due to errors.");
+                return;
+            }
 
             string ip = configFile.GetAddress();
             string savePath = configFile.GetSavePath();
@@ -193,6 +203,7 @@ namespace HAL.Server
                 };
             };
 
+            object t = new object();
             server.OnClientConnected += (o, e) =>
             {
                 connectedClients++;

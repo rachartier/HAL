@@ -19,7 +19,6 @@ namespace HAL.Server
         private readonly object keyAccessPool = new object();
 
         public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
-
         public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
 
         public ThreadedConnectionManager(int threadCount, int updateTimeMs = 1000, int heartbeatWaitTimeMs = 5_000)
@@ -45,8 +44,8 @@ namespace HAL.Server
                             }
                             catch
                             {
+                                client.Disconnect();
                                 client.Dispose();
-                                client.IsConnected = false;
                                 OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
                                 return;
                             }
@@ -86,10 +85,9 @@ namespace HAL.Server
                                 {
                                     Log.Instance?.Error($"ThreadedConnectionManager: {e.Message}");
 
+                                    client.Disconnect();
                                     client.Dispose();
-                                    client.IsConnected = false;
                                     OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
-
                                 }
 
                                 client.Stopwatch.Restart();
@@ -100,14 +98,15 @@ namespace HAL.Server
                                 {
                                     await client.SaveAsync();
                                 }
-                                catch (Exception e)
+                                catch
                                 {
-                                    Log.Instance?.Error($"SaveAsync: {e.Message}");
                                 }
                             }
                         });
 
-                        threadWitchClients.Clients.RemoveAll((c => !c.IsConnected));
+                        threadWitchClients.Clients.RemoveAll(c => !c.IsConnected);
+                        threadWitchClients.Clients.RemoveAll(c => !c.IsConnected);
+                        threadWitchClients.Clients.RemoveAll(c => !c.IsConnected);
                         Thread.Sleep(10);
                     }
                 });
@@ -132,10 +131,9 @@ namespace HAL.Server
 
         public void AddTcpClient(TcpClientSavedState client)
         {
-            var threadSlot = threadPool[GetMinimumWorkingThread()];
-
             lock (keyAccessPool)
             {
+                var threadSlot = threadPool[GetMinimumWorkingThread()];
                 threadSlot.Clients.Add(client);
             }
         }

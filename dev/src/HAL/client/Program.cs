@@ -16,10 +16,39 @@ namespace HAL
 {
     public class Program
     {
+        private static HalClient client;
+        private static IStoragePlugin storage;
+        private static bool receiveError;
+
+        private static void CleanExit()
+        {
+            storage?.Dispose();
+            client.Disconnect();
+            client.Dispose();
+
+            if (receiveError)
+            {
+                Log.Instance?.Error("Program closed due to errors.");
+                return;
+            }
+            else
+            {
+                Log.Instance?.Error("Unexcepted program exit.");
+            }
+        }
         private static void Main(string[] args)
         {
             IConfigFileClient<JObject, JToken> configFileLocal = new JSONConfigFileClient();
-            configFileLocal.Load(MagicStringEnumerator.DefaultLocalConfigPath);
+            try
+            {
+                configFileLocal.Load(MagicStringEnumerator.DefaultLocalConfigPath);
+                Log.Instance?.Info($"Configuration file {MagicStringEnumerator.DefaultLocalConfigPath} loaded");
+            }
+            catch (Exception ex)
+            {
+                Log.Instance?.Error($"{MagicStringEnumerator.DefaultLocalConfigPath}: {ex.Message}");
+                return;
+            }
 
             /*
             * A storage is needed to save the output of the plugins
@@ -29,7 +58,6 @@ namespace HAL
             * you can switch on local file storage (wich will stock all the outputs on the client side)
             * or by mongodb stockage.
             */
-            IStoragePlugin storage = null;
 
             string ip = configFileLocal.GetAddress();
             int port = configFileLocal.GetPort();
@@ -37,14 +65,10 @@ namespace HAL
             Log.Instance?.Info($"Server ip: {ip}");
             Log.Instance?.Info($"Server port: {port}");
 
-
-            using HalClient client = new HalClient(ip, port);
+            client = new HalClient(ip, port);
             AppDomain.CurrentDomain.ProcessExit += (o, e) =>
             {
-                storage?.Dispose();
-                client.Disconnect();
-                client.Dispose();
-                Log.Instance?.Error("Unexcepted program exit.");
+                CleanExit();
             };
 
             new Thread(async () =>
@@ -62,6 +86,7 @@ namespace HAL
              */
             APluginManager pluginManager = new ScheduledPluginManager(pluginMaster);
 
+
             // We only want to configure all the plugins when the client has received all the informations and plugins
             client.OnReceiveDone += async (o, e) =>
             {
@@ -72,7 +97,18 @@ namespace HAL
                 * All HAL's client configuration is here.
                 */
                 IConfigFileClient<JObject, JToken> configFile = new JSONConfigFileClient();
-                configFile.Load(MagicStringEnumerator.DefaultConfigPath);
+
+                try
+                {
+                    configFile.Load(MagicStringEnumerator.DefaultConfigPath);
+                    Log.Instance?.Info($"Configuration file {MagicStringEnumerator.DefaultConfigPath} loaded");
+                }
+                catch (Exception ex)
+                {
+                    Log.Instance?.Error($"{MagicStringEnumerator.DefaultConfigPath}: {ex.Message}");
+                    receiveError = true;
+                    return;
+                }
 
                 storage = StorageFactory.CreateStorage(configFile.GetStorageName());
 
@@ -148,6 +184,7 @@ namespace HAL
                         }
                         catch (Exception ex)
                         {
+                            Log.Instance?.Error(ex.Message);
                             Log.Instance?.Error(ex.StackTrace);
                             Log.Instance?.Error("Storage failed.");
                         }
@@ -162,7 +199,9 @@ namespace HAL
                 Log.Instance?.Info("Configuration reloaded.");
             };
 
-            while (true) { Thread.Sleep(100); }
+            while (!receiveError) { Thread.Sleep(100); }
+
+            CleanExit();
         }
     }
 }

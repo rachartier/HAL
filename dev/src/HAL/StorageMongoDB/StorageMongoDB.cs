@@ -10,18 +10,18 @@ using Newtonsoft.Json.Linq;
 
 namespace HAL.Storage
 {
-    public class StorageMongoDB : IStoragePlugin
+    public class StorageMongoDB : DifferencialStorage
     {
         private MongoClient client;
         private IMongoDatabase defaultDatabase;
 
-        public void Init(string connectionString)
+        public override void Init(string connectionString)
         {
             client = new MongoClient(connectionString);
             defaultDatabase = client.GetDatabase(MongoUrl.Create(connectionString).DatabaseName);
         }
 
-        public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
+        public override async Task<StorageCode> SaveDifferencial<T>(APlugin plugin, T obj)
         {
             var anonymousObject = JObject.Parse(obj.ToString());
 
@@ -57,10 +57,6 @@ namespace HAL.Storage
             {
                 return false;
             }
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

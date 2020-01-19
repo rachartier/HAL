@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using HAL.Loggin;
 using HAL.Plugin;
+using HAL.Storage;
 using Newtonsoft.Json.Linq;
 
-public class DifferencialStorage
+public abstract class DifferencialStorage : IStoragePlugin
 {
-    private JObject storedObject;
+    private IDictionary<string, JObject> storedObject = new Dictionary<string, JObject>();
 
     public bool HasDifference<T>(APlugin plugin, T obj)
     {
@@ -14,11 +16,13 @@ public class DifferencialStorage
             return true;
         }
 
+        string key = plugin.Infos.Name;
+
         JObject convertedJsonObject = JObject.Parse(obj.ToString());
 
-        if (storedObject == null)
+        if (!storedObject.ContainsKey(plugin.Infos.Name))
         {
-            storedObject = convertedJsonObject;
+            storedObject.Add(key, convertedJsonObject);
             return true;
         }
 
@@ -40,7 +44,7 @@ public class DifferencialStorage
 
         foreach (var attr in attributesToObserve)
         {
-            var storedAttr = storedObject[attr]?.Value<string>();
+            string storedAttr = storedObject[key][attr]?.Value<string>();
 
             if (convertedJsonObject[attr] == null)
             {
@@ -50,11 +54,27 @@ public class DifferencialStorage
 
             if (!convertedJsonObject[attr]?.Value<string>().Equals(storedAttr) == true)
             {
-                storedObject = convertedJsonObject;
+                storedObject[key] = convertedJsonObject;
                 return true;
             }
         }
 
         return false;
     }
+
+
+    public abstract Task<StorageCode> SaveDifferencial<T>(APlugin plugin, T obj);
+    public virtual void Init(string connectionString) { }
+
+    public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
+    {
+        if (!HasDifference(plugin, obj))
+        {
+            return StorageCode.Pass;
+        }
+
+        return await SaveDifferencial(plugin, obj);
+    }
+
+    public virtual void Dispose() { }
 }

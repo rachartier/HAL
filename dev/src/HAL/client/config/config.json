@@ -7,19 +7,19 @@
       "os": [
         "linux"
       ],
-      "heartbeat": 0.010
+      "heartbeat": 0.010,
     },
     "kernel_version.py": {
       "activated": "true",
       "heartbeat": 0.010,
-      "differencial": [
-        "kernel_version"
-      ]
-      
+      "differencial_all": true
     },
     "connected_user.py": {
       "activated": "true",
-      "heartbeat": 0.010
+      "heartbeat": 0.010,
+      "differencial": [
+        "connected_user"
+      ]
     }
   }
 }

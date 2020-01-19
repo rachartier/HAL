@@ -4,13 +4,9 @@ using System.Threading.Tasks;
 
 namespace HAL.Storage
 {
-    public class StorageText : IStoragePlugin
+    public class StorageText : DifferencialStorage
     {
-        public void Init(string connectionString)
-        {
-        }
-
-        public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
+        public override async Task<StorageCode> SaveDifferencial<T>(APlugin plugin, T obj)
         {
             await Task.Run(() =>
             {
@@ -18,9 +14,6 @@ namespace HAL.Storage
             });
 
             return StorageCode.Success;
-        }
-        public void Dispose()
-        {
         }
     }
 }
