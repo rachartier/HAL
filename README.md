@@ -205,7 +205,6 @@ Le plugin sera alors lancé automatiquement avec la commande suivant: `sudo -u u
 
 ##### Mode "differencial"
 
-L'utilisation du mode "differencial" n'est disponible que quand le stockage est sur le serveur.
 Ce mode sert à qu'un résultat de plugin soit pas à nouveau sauvegardé si sa valeur n'a pas changé depuis la dernière éxecution.
 
 Exemple:
@@ -485,11 +484,12 @@ Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini
 Stockage
 --------
 
-A l'heure actuelle, 3 formes de stockage existe:
+A l'heure actuelle, 4 formes de stockage existe:
 * Format texte, sortie sur la console
 * Sauvegarde en locale sur le client
 * Sauvegarde en base de donnée (MangoDB)
-
+* Sauvegarde en base de donnée orientée séries chronologiques (InfluxDB)
+* 
 Le stockage sert a sauvegarder le résultat de chaque plugin pour pouvoir ensuite manipuler ces données.
 
 Pour séléctionner le stockage voulu, il faut créer un attribut dans le fichier "config.json":
@@ -508,6 +508,7 @@ NOM_DU_STOCKAGE peut être:
 * "text" (sauvegarde sur la sortie console)
 * "local" (sauvegarde sur la machine client)
 * "mangodb" (sauvegarde sur une base mongodb)
+* "influxdb" (sauvegarde sur une base influxdb)
 * "serveur" (sauvegarde sur le serveur avec des dossiers et fichiers json)
 
 Attention, si vous utilisez "mangodb" ou tout autre base de donnée, il faut alors généralement spécifier une connection string:
