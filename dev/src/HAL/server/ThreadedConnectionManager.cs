@@ -14,12 +14,25 @@ namespace HAL.Server
 
     public class ThreadedConnectionManager
     {
+        public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
+        public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
+
+        public int ClientsCount
+        {
+            get
+            {
+                int total = 0;
+                foreach (var t in threadPool)
+                {
+                    total += t.Clients.Count;
+                }
+                return total;
+            }
+        }
+
         private readonly ThreadWithClients[] threadPool;
         private readonly int threadCount;
         private readonly object keyAccessPool = new object();
-
-        public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
-        public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
 
         public ThreadedConnectionManager(int threadCount, int updateTimeMs = 1000, int heartbeatWaitTimeMs = 5_000)
         {
@@ -104,8 +117,6 @@ namespace HAL.Server
                             }
                         });
 
-                        threadWitchClients.Clients.RemoveAll(c => !c.IsConnected);
-                        threadWitchClients.Clients.RemoveAll(c => !c.IsConnected);
                         threadWitchClients.Clients.RemoveAll(c => !c.IsConnected);
                         Thread.Sleep(10);
                     }

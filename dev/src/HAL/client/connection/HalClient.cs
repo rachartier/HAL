@@ -66,7 +66,7 @@ namespace HAL.Connection.Client
 
         private async Task FuncAdd()
         {
-            string data = await StreamReader.ReadLineAsync();
+                string data = await StreamReader.ReadLineAsync();
             string[] args = data.Split(';', 2);
 
             string textBytesToRead = args[0];

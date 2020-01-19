@@ -190,7 +190,6 @@ namespace HAL.Server
             Log.Instance?.Info($"Server threads count: {maxThreads}");
 
             var server = new BaseServer(ip, port, maxThreads, updateTimeMs);
-            int connectedClients = 0;
 
             server.OnServerStarted += (o, e) =>
             {
@@ -203,17 +202,14 @@ namespace HAL.Server
                 };
             };
 
-            object t = new object();
             server.OnClientConnected += (o, e) =>
             {
-                connectedClients++;
-                Log.Instance?.Info($"New client connected... (actual clients: {connectedClients})");
+                Log.Instance?.Info($"New client connected... (actual clients: {server.ClientsCount})");
             };
 
             server.OnClientDisconnected += (o, e) =>
             {
-                connectedClients--;
-                Log.Instance?.Info($"A client has been disconnected: (actual clients: {connectedClients})");
+                Log.Instance?.Info($"A client has been disconnected.");
             };
 
             server.StartUniqueClientType<HalTcpClientSavedState>(savePath);

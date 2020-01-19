@@ -6,15 +6,15 @@ namespace HAL.Server
     internal class BaseServer
     {
         public event EventHandler OnServerStarted;
-
         public event EventHandler OnServerClosed;
 
         public delegate void DelegateClientConnected(object o, ClientStateChangedEventArgs tcpClient);
-
         public delegate void DelegateClientDisconnected(object o, ClientStateChangedEventArgs tcpClient);
 
         public DelegateClientConnected OnClientConnected;
         public DelegateClientConnected OnClientDisconnected;
+
+        public int? ClientsCount => connectionManager?.ClientsCount;
 
         private readonly ThreadedConnectionManager connectionManager;
         private readonly TcpListener server;
@@ -42,7 +42,7 @@ namespace HAL.Server
             connectionManager.KillAllConnections();
         }
 
-        public async void StartUniqueClientType<TClient>(string savePath)
+        public void StartUniqueClientType<TClient>(string savePath)
             where TClient : TcpClientSavedState
         {
             server.Start();
@@ -50,7 +50,7 @@ namespace HAL.Server
 
             while (isRunning)
             {
-                var client = await server.AcceptTcpClientAsync();
+                var client = server.AcceptTcpClient();
                 var tcpOpenedStream = (TClient)Activator.CreateInstance(typeof(TClient), client, savePath);
 
                 connectionManager.AddTcpClient(tcpOpenedStream);

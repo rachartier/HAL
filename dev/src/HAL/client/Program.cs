@@ -42,7 +42,7 @@ namespace HAL
             try
             {
                 configFileLocal.Load(MagicStringEnumerator.DefaultLocalConfigPath);
-                Log.Instance?.Info($"Configuration file {MagicStringEnumerator.DefaultLocalConfigPath} loaded");
+                Log.Instance?.Info($"Configuration file {MagicStringEnumerator.DefaultLocalConfigPath} loaded.");
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace HAL
                 try
                 {
                     configFile.Load(MagicStringEnumerator.DefaultConfigPath);
-                    Log.Instance?.Info($"Configuration file {MagicStringEnumerator.DefaultConfigPath} loaded");
+                    Log.Instance?.Info($"Configuration file {MagicStringEnumerator.DefaultConfigPath} loaded.");
                 }
                 catch (Exception ex)
                 {
