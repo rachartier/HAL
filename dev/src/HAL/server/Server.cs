@@ -6,9 +6,11 @@ namespace HAL.Server
     internal class BaseServer
     {
         public event EventHandler OnServerStarted;
+
         public event EventHandler OnServerClosed;
 
         public delegate void DelegateClientConnected(object o, ClientStateChangedEventArgs tcpClient);
+
         public delegate void DelegateClientDisconnected(object o, ClientStateChangedEventArgs tcpClient);
 
         public DelegateClientConnected OnClientConnected;

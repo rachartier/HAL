@@ -15,6 +15,7 @@ namespace HAL.Server
     public class ThreadedConnectionManager
     {
         public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
+
         public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
 
         public int ClientsCount

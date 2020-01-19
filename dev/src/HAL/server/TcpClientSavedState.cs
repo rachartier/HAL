@@ -1,9 +1,9 @@
+using HAL.MagicString;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using HAL.MagicString;
 
 namespace HAL.Server
 {
@@ -51,6 +51,7 @@ namespace HAL.Server
             reference.Close();
             IsConnected = false;
         }
+
         public void Dispose()
         {
             StreamWriter.Dispose();

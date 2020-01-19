@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using HAL.Loggin;
 using HAL.Plugin;
 using HAL.Storage;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public abstract class DifferencialStorage : IStoragePlugin
 {
@@ -62,9 +62,11 @@ public abstract class DifferencialStorage : IStoragePlugin
         return false;
     }
 
-
     public abstract Task<StorageCode> SaveDifferencial<T>(APlugin plugin, T obj);
-    public virtual void Init(string connectionString) { }
+
+    public virtual void Init(string connectionString)
+    {
+    }
 
     public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
     {
@@ -76,5 +78,7 @@ public abstract class DifferencialStorage : IStoragePlugin
         return await SaveDifferencial(plugin, obj);
     }
 
-    public virtual void Dispose() { }
+    public virtual void Dispose()
+    {
+    }
 }

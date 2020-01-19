@@ -289,7 +289,6 @@ namespace HAL.Configuration
             return path;
         }
 
-
         private List<string> GetAttributesToObserve(JObject pluginConfig)
         {
             var differencial = pluginConfig[MagicStringEnumerator.JSONDifferencial];

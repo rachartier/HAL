@@ -23,6 +23,7 @@ namespace HAL.Server
                 Marked = marked;
             }
         }
+
         private readonly IDictionary<string, MarkedChecksum> serverSidedFiles = new Dictionary<string, MarkedChecksum>();
         private readonly string savePath;
         private bool firstUpdate = true;
@@ -148,6 +149,7 @@ namespace HAL.Server
             await StreamWriter.WriteLineAsync($"{MagicStringEnumerator.CMDAdd}\n{length};{path}\n{code}");
             await StreamWriter.FlushAsync();
         }
+
         private async Task SendUpdateCommand()
         {
             await StreamWriter.WriteLineAsync(MagicStringEnumerator.CMDUpd);

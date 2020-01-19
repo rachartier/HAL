@@ -65,7 +65,6 @@ namespace HAL.Connection.Client
             {
                 try
                 {
-
                     Log.Instance?.Info($"Connecting to {ip}:{port}...");
                     client.Connect(ip, port);
                     IsConnected = true;

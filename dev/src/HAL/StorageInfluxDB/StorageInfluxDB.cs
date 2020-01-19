@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using HAL.Plugin;
+﻿using HAL.Plugin;
 using InfluxDB.LineProtocol.Client;
 using InfluxDB.LineProtocol.Payload;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HAL.Storage
 {

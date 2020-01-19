@@ -36,6 +36,7 @@ namespace HAL
                 Log.Instance?.Error("Unexcepted program exit.");
             }
         }
+
         private static void Main(string[] args)
         {
             IConfigFileClient<JObject, JToken> configFileLocal = new JSONConfigFileClient();
@@ -85,7 +86,6 @@ namespace HAL
              * where desired above.
              */
             APluginManager pluginManager = new ScheduledPluginManager(pluginMaster);
-
 
             // We only want to configure all the plugins when the client has received all the informations and plugins
             client.OnReceiveDone += async (o, e) =>
@@ -180,7 +180,6 @@ namespace HAL
                             {
                                 Log.Instance?.Error("Storage failed.");
                             }
-
                         }
                         catch
                         {
