@@ -52,20 +52,27 @@ namespace HAL.Server
                     {
                         Parallel.ForEach(threadWitchClients.Clients, async (client) =>
                         {
-                            try
+                            if (client.HeartbeatStopwatch.ElapsedMilliseconds > client.HeartbeatUpdateTimeMs)
                             {
-                                client.SendHeartbeat();
-                            }
-                            catch
-                            {
-                                client.Disconnect();
-                                client.Dispose();
-                                OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
-                                return;
+                                client.HeartbeatStopwatch.Restart();
+
+                                try
+                                {
+                                    client.SendHeartbeat();
+                                }
+                                catch
+                                {
+                                    client.Disconnect();
+                                    client.Dispose();
+                                    OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
+                                    return;
+                                }
                             }
 
                             if (client.Stopwatch.ElapsedMilliseconds > updateTimeMs || client.IsFirstUpdate)
                             {
+                                client.Stopwatch.Restart();
+
                                 try
                                 {
                                     if (client.IsFirstUpdate)
@@ -103,8 +110,6 @@ namespace HAL.Server
                                     client.Dispose();
                                     OnClientDisconnected?.Invoke(this, new ClientStateChangedEventArgs(client));
                                 }
-
-                                client.Stopwatch.Restart();
                             }
                             else
                             {

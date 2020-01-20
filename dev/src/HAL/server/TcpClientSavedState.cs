@@ -13,20 +13,23 @@ namespace HAL.Server
         public readonly StreamReader StreamReader;
 
         public readonly Stopwatch Stopwatch;
+        public readonly Stopwatch HeartbeatStopwatch;
 
         public bool IsConnected { get; set; }
         public bool IsFirstUpdate { get; set; } = true;
 
         public readonly TcpClient reference;
-
+        public readonly int HeartbeatUpdateTimeMs = 6000;
         public TcpClientSavedState(TcpClient client)
         {
             StreamWriter = new StreamWriter(client.GetStream());
             StreamReader = new StreamReader(client.GetStream());
 
             Stopwatch = new Stopwatch();
+            HeartbeatStopwatch = new Stopwatch();
 
             Stopwatch.Start();
+            HeartbeatStopwatch.Start();
 
             reference = client;
             IsConnected = true;
@@ -44,6 +47,7 @@ namespace HAL.Server
         public void SendHeartbeat()
         {
             StreamWriter.WriteLine(MagicStringEnumerator.CMDHtb);
+            StreamWriter.Flush();
         }
 
         public void Disconnect()

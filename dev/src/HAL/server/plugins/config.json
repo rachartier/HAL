@@ -7,7 +7,7 @@
       "os": [
         "linux"
       ],
-      "heartbeat": 0.010,
+      "heartbeat": 0.010
     },
     "kernel_version.py": {
       "activated": "true",

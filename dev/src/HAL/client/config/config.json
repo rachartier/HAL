@@ -7,12 +7,7 @@
       "os": [
         "linux"
       ],
-      "heartbeat": 0.010,
-    },
-    "complex.py": {
-      "activated": "true",
-      "heartbeat": 0.010,
-      "differencial_all": true
+      "heartbeat": 0.010
     },
     "kernel_version.py": {
       "activated": "true",
