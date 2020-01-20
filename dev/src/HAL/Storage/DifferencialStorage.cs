@@ -44,7 +44,7 @@ public abstract class DifferencialStorage : IStoragePlugin
 
         foreach (var attr in attributesToObserve)
         {
-            string storedAttr = storedObject[key][attr]?.Value<string>();
+            var storedAttr = storedObject[key][attr];
 
             if (convertedJsonObject[attr] == null)
             {
@@ -52,7 +52,7 @@ public abstract class DifferencialStorage : IStoragePlugin
                 return true;
             }
 
-            if (!convertedJsonObject[attr]?.Value<string>().Equals(storedAttr) == true)
+            if (!convertedJsonObject[attr].Equals(storedAttr) == true)
             {
                 storedObject[key] = convertedJsonObject;
                 return true;

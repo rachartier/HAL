@@ -181,9 +181,9 @@ namespace HAL
                                 Log.Instance?.Error("Storage failed.");
                             }
                         }
-                        catch
+                        catch (Exception ex)
                         {
-                            Log.Instance?.Error("Storage failed.");
+                            Log.Instance?.Error($"Storage failed: {ex.Message}");
                         }
                     };
                 }

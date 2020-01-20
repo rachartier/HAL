@@ -9,6 +9,11 @@
       ],
       "heartbeat": 0.010,
     },
+    "complex.py": {
+      "activated": "true",
+      "heartbeat": 0.010,
+      "differencial_all": true
+    },
     "kernel_version.py": {
       "activated": "true",
       "heartbeat": 0.010,
