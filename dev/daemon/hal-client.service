@@ -1,0 +1,12 @@
+[Unit]
+Description=HAL client deamon
+After=network-online.target
+
+[Service]
+Type=simple
+User=hal-client
+Group=hal-client
+ExecStart=
+
+[Install]
+WantedBy=multi-user.target
