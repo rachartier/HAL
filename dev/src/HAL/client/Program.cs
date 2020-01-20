@@ -23,8 +23,8 @@ namespace HAL
         private static void CleanExit()
         {
             storage?.Dispose();
-            client.Disconnect();
-            client.Dispose();
+            client?.Disconnect();
+            client?.Dispose();
 
             if (receiveError)
             {
@@ -35,6 +35,8 @@ namespace HAL
             {
                 Log.Instance?.Error("Unexcepted program exit.");
             }
+
+            Environment.Exit(0);
         }
 
         private static void Main(string[] args)
@@ -48,17 +50,8 @@ namespace HAL
             catch (Exception ex)
             {
                 Log.Instance?.Error($"{MagicStringEnumerator.DefaultLocalConfigPath}: {ex.Message}");
-                return;
+                CleanExit();
             }
-
-            /*
-            * A storage is needed to save the output of the plugins
-            *
-            * the only purpose of text storage is to debug and do a showcase.
-            *
-            * you can switch on local file storage (wich will stock all the outputs on the client side)
-            * or by mongodb stockage.
-            */
 
             string ip = configFileLocal.GetAddress();
             int port = configFileLocal.GetPort();

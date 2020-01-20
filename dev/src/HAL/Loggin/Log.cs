@@ -1,6 +1,6 @@
 ﻿using NLog;
 using System;
-using System.IO;
+using HAL.MagicString;
 
 namespace HAL.Loggin
 {
@@ -12,7 +12,7 @@ namespace HAL.Loggin
         {
             try
             {
-                LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+                LogManager.LoadConfiguration(MagicStringEnumerator.DefaultNLogConfigPath);
                 Instance = LogManager.GetCurrentClassLogger();
             }
             catch (Exception)

@@ -1,4 +1,6 @@
-﻿namespace HAL.MagicString
+﻿using System;
+
+namespace HAL.MagicString
 {
     public static class MagicStringEnumerator
     {
@@ -9,10 +11,11 @@
         public static readonly string CMDSve = "SVE"; /* Save */
         public static readonly string CMDHtb = "HTB"; /* Heartbeat */
 
-        public static readonly string DefaultPluginPath = "plugins";
-        public static readonly string DefaultConfigPath = "config/config.json";
-        public static readonly string DefaultLocalConfigPath = "config/config_local.json";
-        public static readonly string DefaultConfigPathServerToClient = "plugins/config.json";
+        public static readonly string DefaultPluginPath = AppDomain.CurrentDomain.BaseDirectory + "plugins";
+        public static readonly string DefaultNLogConfigPath = AppDomain.CurrentDomain.BaseDirectory + "nlog.config";
+        public static readonly string DefaultConfigPath = AppDomain.CurrentDomain.BaseDirectory + "config/config.json";
+        public static readonly string DefaultLocalConfigPath = AppDomain.CurrentDomain.BaseDirectory + "config/config_local.json";
+        public static readonly string DefaultConfigPathServerToClient = AppDomain.CurrentDomain.BaseDirectory + "plugins/config.json";
 
         public static readonly string JSONPlugins = "plugins";
         public static readonly string JSONDifferencial = "differencial";

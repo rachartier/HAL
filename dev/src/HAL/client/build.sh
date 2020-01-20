@@ -2,7 +2,7 @@
 
 BUILDPATH=$(pwd)/bin/Release/netcoreapp3.0/linux-x64/publish
 
-dotnet publish -c Release /p:DefineConstants=PRODUCTION_BUILD /p:PublishSingleFile=true /p:Mode=CoreRT-Moderate /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true
+dotnet publish -c Release /p:DefineConstants=PRODUCTION_BUILD /p:Mode=CoreRT-Moderate /p:PublishTrimmed=true --self-contained true
 
 if [ ! -d $BUILDPATH/plugins ]; then
     mkdir $BUILDPATH/plugins
