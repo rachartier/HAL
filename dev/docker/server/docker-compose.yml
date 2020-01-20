@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   hal:
-    image: dockerhub.iut-clermont.uca.fr:443/hal_hal-server_dotnet3.1:1.0
+    image: dockerhub.iut-clermont.uca.fr:443/hal_hal-server_dotnet3.1:latest
     ports:
       - "11000:11000"
     restart: unless-stopped
