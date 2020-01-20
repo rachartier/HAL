@@ -103,7 +103,14 @@ namespace HAL.Connection.Client
                     break;
                 }
 
-                await UpdateAsync();
+                try
+                {
+                    await UpdateAsync();
+                }
+                catch
+                {
+                    Disconnect();
+                }
 
                 OnConnectionStateChanged?.Invoke(this, new ConnectionStateChangedEventArgs(ConnectionState.Updated));
                 Thread.Sleep(updateIntervalInMs);
@@ -136,7 +143,14 @@ namespace HAL.Connection.Client
         public void Disconnect()
         {
             IsConnected = false;
-            client.Close();
+
+            try
+            {
+                client.Close();
+            }
+            catch
+            {
+            }
         }
 
         public abstract Task UpdateAsync();
