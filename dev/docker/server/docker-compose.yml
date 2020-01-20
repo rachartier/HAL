@@ -6,7 +6,8 @@ services:
       - "11000:11000"
     restart: unless-stopped
     volumes:
-          - /data/TMP/hal_saves:/data
+          - ./results:/data
+          - ./plugins:/plugins
     environment:
       IP_HAL: "0.0.0.0"
       PORT_HAL: 11000
