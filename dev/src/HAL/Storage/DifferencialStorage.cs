@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 public abstract class DifferencialStorage : IStoragePlugin
 {
     private IDictionary<string, JObject> storedObject = new Dictionary<string, JObject>();
+    private JTokenEqualityComparer comparer = new JTokenEqualityComparer();
 
     public bool HasDifference<T>(APlugin plugin, T obj)
     {
@@ -52,7 +53,7 @@ public abstract class DifferencialStorage : IStoragePlugin
                 return true;
             }
 
-            if (!convertedJsonObject[attr].Equals(storedAttr) == true)
+            if (!comparer.Equals(convertedJsonObject[attr], storedAttr))
             {
                 storedObject[key] = convertedJsonObject;
                 return true;
