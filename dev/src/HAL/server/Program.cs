@@ -5,6 +5,7 @@ using HAL.MagicString;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
@@ -114,7 +115,9 @@ namespace HAL.Server
                     string path = file;
 
                     if (file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
-                        path = MagicStringEnumerator.DefaultConfigPath;
+                        path = MagicStringEnumerator.DefaultRelativeConfigPath + file.Split('/').Last();
+                    else
+                        path = MagicStringEnumerator.DefaultRelativePluginPath + file.Split('/').Last();
 
                     serverSidedFiles[file].Checksum = checksum;
 

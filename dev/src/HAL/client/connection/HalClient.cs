@@ -22,6 +22,10 @@ namespace HAL.Connection.Client
 
             OnConnected += async (o, e) =>
             {
+                if (!Directory.Exists(MagicStringEnumerator.DefaultPluginPath))
+                {
+                    Directory.CreateDirectory(MagicStringEnumerator.DefaultPluginPath);
+                }
                 var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
 
                 string configFileChecksum;
@@ -77,9 +81,14 @@ namespace HAL.Connection.Client
             char[] buffer = new char[bytesToRead];
 
             await StreamReader.ReadBlockAsync(buffer, 0, bytesToRead);
-            await File.WriteAllTextAsync(path, new string(buffer));
 
-            Log.Instance?.Info($"File received from server: {path}");
+            Console.WriteLine("#####" + AppDomain.CurrentDomain.BaseDirectory );
+            string absolutePath = AppDomain.CurrentDomain.BaseDirectory + path;
+            await File.WriteAllTextAsync(absolutePath, new string(buffer));
+
+            Console.WriteLine(absolutePath);
+
+            Log.Instance?.Info($"File received from server: {absolutePath}");
         }
 
         private async Task FuncDel()

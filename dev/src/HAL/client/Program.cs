@@ -59,12 +59,12 @@ namespace HAL
             Log.Instance?.Info($"Server ip: {ip}");
             Log.Instance?.Info($"Server port: {port}");
 
-            client = new HalClient(ip, port);
             AppDomain.CurrentDomain.ProcessExit += (o, e) =>
             {
                 CleanExit();
             };
 
+            client = new HalClient(ip, port);
             new Thread(async () =>
             {
                 await client.StartAsync();
@@ -100,7 +100,7 @@ namespace HAL
                 {
                     Log.Instance?.Error($"{MagicStringEnumerator.DefaultConfigPath}: {ex.Message}");
                     receiveError = true;
-                    return;
+                    CleanExit();
                 }
 
                 storage = StorageFactory.CreateStorage(configFile.GetStorageName());
