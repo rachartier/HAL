@@ -1,24 +1,29 @@
 {
   "storage": "server",
-
+	"interpreter": {
+		"linux": {
+			"python": "/usr/bin/python3"
+		}
+	},
   "plugins": {
     "upgrades_available.sh": {
       "activated": "true",
       "os": [
         "linux"
       ],
-      "heartbeat": 0.010
+      "heartbeat": 1,
+			"differencial_all": true
     },
     "kernel_version.py": {
       "activated": "true",
-      "heartbeat": 0.010,
+      "heartbeat": 1,
       "differencial_all": true
     },
     "connected_user.py": {
       "activated": "true",
-      "heartbeat": 0.010,
+      "heartbeat": 1,
       "differencial": [
-        "connected_user"
+        "connected_users"
       ]
     }
   }
