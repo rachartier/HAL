@@ -8,7 +8,7 @@
         "linux"
       ],
       "heartbeat": 1,
-			"differencial_all": true
+      "differencial_all": true
     },
     "kernel_version.py": {
       "activated": "true",
