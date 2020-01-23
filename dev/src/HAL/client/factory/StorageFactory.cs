@@ -21,8 +21,6 @@ namespace HAL.Factory
         public static IStoragePlugin CreateStorage(string storageName)
         {
             var sanitizedStorageName = storageName?.Trim().ToLower();
-
-            Console.WriteLine(sanitizedStorageName);
             /*
              * You also need to add a case here
              */

@@ -82,11 +82,8 @@ namespace HAL.Connection.Client
 
             await StreamReader.ReadBlockAsync(buffer, 0, bytesToRead);
 
-            Console.WriteLine("#####" + AppDomain.CurrentDomain.BaseDirectory );
             string absolutePath = AppDomain.CurrentDomain.BaseDirectory + path;
             await File.WriteAllTextAsync(absolutePath, new string(buffer));
-
-            Console.WriteLine(absolutePath);
 
             Log.Instance?.Info($"File received from server: {absolutePath}");
         }

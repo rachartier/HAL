@@ -20,6 +20,7 @@ namespace HAL.Server
 
         public readonly TcpClient reference;
         public readonly int HeartbeatUpdateTimeMs = 6000;
+
         public TcpClientSavedState(TcpClient client)
         {
             StreamWriter = new StreamWriter(client.GetStream());

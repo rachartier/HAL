@@ -3,5 +3,5 @@
   "port": 11000,
   "max_threads": 8,
   "update_rate": 1000,
-  "save_path": "/tmp/hal_saves/"
+  "save_path": "/tmp/hal_save"
 }

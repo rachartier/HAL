@@ -2,6 +2,7 @@
 using HAL.Configuration;
 using HAL.Loggin;
 using HAL.MagicString;
+using HAL.OSData;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -54,7 +55,6 @@ namespace HAL.Server
             string content = splitedResult[2];
 
             string folder = $"{savePath}/{MagicStringEnumerator.RootSaveResults}/{path}/";
-
             Directory.CreateDirectory(folder);
 
             using var fw = File.CreateText($"{folder}{filename}");
@@ -92,6 +92,7 @@ namespace HAL.Server
             bool filesUpdated = false;
 
             var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
+            char[] splitDelimiters = { '\\', '/' };
 
             foreach (var entry in serverSidedFiles.Values)
             {
@@ -115,9 +116,12 @@ namespace HAL.Server
                     string path = file;
 
                     if (file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
-                        path = MagicStringEnumerator.DefaultRelativeConfigPath + file.Split('/').Last();
+                    {
+                        path = MagicStringEnumerator.DefaultRelativeConfigPath + file.Split(splitDelimiters).Last();
+                        Console.WriteLine(path);
+                    }
                     else
-                        path = MagicStringEnumerator.DefaultRelativePluginPath + file.Split('/').Last();
+                        path = MagicStringEnumerator.DefaultRelativePluginPath + file.Split(splitDelimiters).Last();
 
                     serverSidedFiles[file].Checksum = checksum;
 

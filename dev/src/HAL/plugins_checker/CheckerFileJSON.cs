@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -23,8 +22,6 @@ namespace plugins_checker
 
             // root is composed of all the leaves
             Root = JObject.Parse(jsonData);
-
-            Console.WriteLine($"Configuration file {file} loaded");
 
             SetFoldersToCheck();
         }
