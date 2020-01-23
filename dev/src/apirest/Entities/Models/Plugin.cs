@@ -1,20 +1,23 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 
 namespace Entities.Models
 {
-    [Table("plugin")]
+    [MongoDatabase("plugin")]
     public class Plugin
     {
 
-        [Key]
-        [Column("_id")]
-        public string Id { get; set; }
+        [BsonId]
+        public ObjectId Id { get; set; }
 
-
-        public int HearthBeat { get; set; }
-        public int DateAdded { get; set; }
-        public int Version { get; set; }
+        [BsonElement("machine_name")]
+        public string MachineName { get; set; }
+        [BsonElement("name")]
+        public string Name { get; set; }
+        [BsonElement("result")]
+        public dynamic Result { get; set; }
     }
 }

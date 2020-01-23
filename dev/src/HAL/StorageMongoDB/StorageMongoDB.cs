@@ -34,6 +34,7 @@ namespace HAL.Storage
             propertyInfos = typeof(APlugin).GetProperties(BindingFlags.Public |
                                             BindingFlags.Static);
 
+            document.name = plugin.Infos.Name;
             document.machine_name = Environment.MachineName;
             document.result = BsonSerializer.Deserialize<dynamic>(obj.ToString());
 

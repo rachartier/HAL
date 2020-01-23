@@ -34,10 +34,10 @@ public static class ServiceExtensions
         services.AddSingleton<ILoggerManager, LoggerManager>();
     }
 
-    public static void ConfigureMySqlContext(this IServiceCollection services, IConfiguration config)
+    public static void ConfigureMongoDbContext(this IServiceCollection services, IConfiguration config)
     {
-        var connectionString = config["mysqlconnection:connectionString"];
-        services.AddDbContext<RepositoryContext>(o => o.UseMySql(connectionString));
+        var connectionString = config["mongodbconnection:connectionString"];
+        services.AddDbContext<RepositoryContext>(o => o.UseMongoDb(connectionString));
     }
 
     public static void ConfigureRepositoryWrapper(this IServiceCollection services)
