@@ -17,7 +17,7 @@
     },
     "connected_user.py": {
       "activated": "true",
-      "heartbeat": 0.01,
+      "heartbeat": 1,
       "differencial": [
         "connected_users"
       ]
