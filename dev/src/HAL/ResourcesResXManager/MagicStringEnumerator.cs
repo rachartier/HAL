@@ -12,13 +12,21 @@ namespace HAL.MagicString
         public static readonly string CMDHtb = "HTB"; /* Heartbeat */
 
         public static readonly string DefaultPluginPath = AppDomain.CurrentDomain.BaseDirectory + "plugins";
-        public static readonly string DefaultRelativePluginPath = "plugins/";
-        public static readonly string DefaultRelativeConfigPath = "config/";
         public static readonly string DefaultNLogConfigPath = AppDomain.CurrentDomain.BaseDirectory + "nlog.config";
+
+#if WINDOWS
+        public static readonly string DefaultConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\config.json";
+        public static readonly string DefaultLocalConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\config_local.json";
+        public static readonly string DefaultConfigPathServerToClient = AppDomain.CurrentDomain.BaseDirectory + @"plugins\config.json";
+        public static readonly string DefaultRelativeConfigPath = @"config\";
+        public static readonly string DefaultRelativePluginPath = @"plugins\";
+#else
         public static readonly string DefaultConfigPath = AppDomain.CurrentDomain.BaseDirectory + "config/config.json";
         public static readonly string DefaultLocalConfigPath = AppDomain.CurrentDomain.BaseDirectory + "config/config_local.json";
         public static readonly string DefaultConfigPathServerToClient = AppDomain.CurrentDomain.BaseDirectory + "plugins/config.json";
-
+        public static readonly string DefaultRelativeConfigPath = "config/";
+        public static readonly string DefaultRelativePluginPath = "plugins/";
+#endif
         public static readonly string JSONPlugins = "plugins";
         public static readonly string JSONDifferencial = "differencial";
         public static readonly string JSONDifferencialAll = "differencial_all";
