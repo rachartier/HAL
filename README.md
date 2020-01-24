@@ -94,9 +94,9 @@ NB: Si vous n'avez pas installé docker-compose suivez ce lien [docs.docker.com]
 
 Pour plus d'information concernant le docker-compose et sa configuration, référez vous au [README](dev/docker) du dossier docker du projet.
 
-Une fois le serveur lancé vous pouvez commencer à utilisé le serveur HAL. Par défaut le port de connection de HAL est le port 11000 et l'IP par défaut et l'IP local.
+Une fois le serveur lancé vous pouvez commencer à utilisé le serveur HAL. Par défaut le port de connexion de HAL est le port 11000 et l'IP par défaut et l'IP local.
 
-Vous pouvez maintenant commencer à écrire vos propres plugins afin de les transférer au clients.
+Vous pouvez maintenant commencer à écrire vos propres plugins afin de les transférer aux clients.
 
 ### Rédaction d'un plugin
 
@@ -501,7 +501,7 @@ Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini
 Stockage
 --------
 
-A l'heure actuelle, 4 formes de stockage existe:
+Actuellement, 4 formes de stockage existe:
 * Format texte, sortie sur la console
 * Sauvegarde en locale sur le client
 * Sauvegarde en base de donnée (MangoDB)
