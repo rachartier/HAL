@@ -11,12 +11,13 @@ The docker-compose.yml make the configuration easier for users
 version: "3.7"
 services:
   hal:
-    image: dockerhub.iut-clermont.uca.fr:443/hal_hal-server_dotnet3.1:1.0
+    image: dockerhub.iut-clermont.uca.fr:443/hal_hal-server_dotnet3.1:latest
     ports:
       - "11000:11000"
     restart: unless-stopped
     volumes:
-          - /data/TMP/hal_saves:/data
+          - /data/TMP/hal/results:/data
+          - /data/TMP/hal/plugins:/plugins
     environment:
       IP_HAL: "0.0.0.0"
       PORT_HAL: 11000
@@ -24,6 +25,13 @@ services:
       UPDATE_RATE_HAL: 1000
       SAVE_PATH_HAL: /data
 ```
+
+## Volumes
+
+The HOST volume (/data/TMP/hal/results here) contains the plugins results from the clients.
+The HOST volume (/data/TMP/hal/plugins here) contains the plugins to send to server.
+
+## Varenv
 
 Let's have a look to these variables environment:
  - IP\_HAL: Is the varenv which indicate the IP adresse of the server

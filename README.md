@@ -8,9 +8,9 @@ Contents
 - [Intro](#intro)
 - [Installation](#installation)
 - [Server](#server)
-- [Write your own plugin](#write-your-own-plugin)
+- [QuickStart](#quickstart)
 - [Stockage](#stockage)
-- [Add another file extension](#add-another-file-extension)
+- [Ajouter une extension personnalisée](#ajouter-une-extension-personnalisée)
 - [Docker](#docker)
 
 Intro
@@ -43,7 +43,6 @@ Pour le bon fonctionnement de HAL, il faut impérativement avoir
 
 Ou des erreurs peuvent subvenirs pendant l'éxecution des plugins.
 
-XXXXXXXXXXXXXXXX
 
 Server
 -------
@@ -71,15 +70,33 @@ Pour ajouter un plugin, il suffit uniquement de le deposer dans le dossier "plug
 
 Pour régler la connection au serveur d'un client, il faut ajouter dans le fichier de configuration local:
 
-```
+```json
 "server": {
     "ip": "<ip du serveur>",
     "port": <port du serveur>
 }
 ```
 
-Write your own plugin
+QuickStart
 ---------------------
+
+### Utilisation du serveur avec Docker
+
+1. Télécharger la dernière image docker du serveur [dockerhub.iut-clermont.uca.fr](https://dockerhub.iut-clermont.uca.fr/ui/library/hal_hal-server_dotnet3.1)
+
+`docker pull dockerhub.iut-clermont.uca.fr:443/hal_hal-server_dotnet3.1:latest`
+
+2. Télécharger le [docker-compose](/dev/docker/server) par défaut du serveur
+
+3. Lancer le docker-compose
+`docker-compose up \chemin du docker-compose du serveur\`
+NB: Si vous n'avez pas installé docker-compose suivez ce lien [docs.docker.com](https://docs.docker.com/compose/install/)
+
+Pour plus d'information concernant le docker-compose et sa configuration, référez vous au [README](dev/docker) du dossier docker du projet.
+
+Une fois le serveur lancé vous pouvez commencer à utilisé le serveur HAL. Par défaut le port de connexion de HAL est le port 11000 et l'IP par défaut et l'IP local.
+
+Vous pouvez maintenant commencer à écrire vos propres plugins afin de les transférer aux clients.
 
 ### Rédaction d'un plugin
 
@@ -111,7 +128,7 @@ print(json.dumps(osInfo));
 
 Le fichier de configuratin (global) peut être modifié pour accepter un intepréteur différent de celui par défaut.
 
-``` json
+```json
 {
 	"interpreter": {
 		"windows": {
@@ -127,7 +144,7 @@ Le fichier de configuratin (global) peut être modifié pour accepter un intepr�
 }
 ```
 
-3 familles de système d'exploitation sont disponibles:
+2 familles de système d'exploitation sont disponibles:
 	
 * windows (Windows 7, 8, 10...)
 * linux (toutes distribution utilisant le noyaux linux)
@@ -158,7 +175,7 @@ Par la suite, il faut ajouter la configuration du plugin portant le nom et exten
 
 Exemple de configuration:
 
-``` json
+```json
 {
 	"interpreter": {
 		"windows": {
@@ -189,7 +206,7 @@ Pour cela, il faut rajouter mettre "admin\_rights" à "true" et spécifier un ut
 
 Exemple:
 
-``` json 
+```json 
 "plugins": {
 	"script.sh": {
 		"activated": "true",
@@ -288,7 +305,7 @@ Compilation en .dll sous windows (si plugin compatible) avec utilisation de [Min
 
 puis copier ip_infos.so dans le dossier plugins et rajouter une entrée dans config.json:
 
-``` json
+```json
  ...
 	"plugins": {
 	    ...
@@ -311,7 +328,7 @@ puis copier ip_infos.so dans le dossier plugins et rajouter une entrée dans con
 
 Un point d'entrée est aussi obligatoire pour l'execution du plugin. Le retour du point d'entrée sera alors sauvegardé par le client. Il doit impérativement être en JSON.
 
-``` cs
+```cs
 namespace Plugin 
 {
 	public class NomPlugin 
@@ -352,7 +369,7 @@ Puis build la librairie:
 
 Finalement, copier et renommer si besoin plugin.dll et le mettre ensuite dans le dossier plugins et ajouter une entrée dans config.json:
 
-``` json
+```json
  ...
 	"plugins": {
 	    ...
@@ -371,7 +388,7 @@ Go est intéprété en tant que langage de script dans HAL. De ce fait, il doit 
 
 Exemple d'un plugin 
 
-``` go
+```go
 package main
 
 import (
@@ -386,7 +403,7 @@ func main() {
 
 Il est aussi possible de faire du Go compilé (sous forme de DLL). L'avantage étant que le client n'est pas obligé de posseder golang. 
 
-``` go
+```go
 package main
 
 import "C"
@@ -435,7 +452,7 @@ et un autre dossier, test2, contient quand à lui:
 
 Il faut alors tout simplement modifier le fichier "config.json" de plugins_checker comme suit:
 
-``` json
+```json
 {
   "paths": [
     "chemin/vers/test1",
@@ -455,13 +472,13 @@ peut signifier plusieurs choses:
 *  un intépreteur par défaut n'est pas installer, il faut vérifier si ruby, python3 et bash sont bien installés sur la machine
 *  le retour n'est pas du format json
 
-Add another file extension
+Ajouter une extension personnalisée
 ---------------------
 
 Pour ajouter une extension personnalisée, il suffit d'ajouter "custom_extensions" dans le fichier de configuration.
 Par exemple, pour ajouter une extension de PHP (.php):
 
-``` json
+```json
 {
   "custom_extensions": {
   	".php": "php"
@@ -484,7 +501,7 @@ Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini
 Stockage
 --------
 
-A l'heure actuelle, 4 formes de stockage existe:
+Actuellement, 4 formes de stockage existe:
 * Format texte, sortie sur la console
 * Sauvegarde en locale sur le client
 * Sauvegarde en base de donnée (MangoDB)
@@ -531,10 +548,5 @@ Docker
 --------
 
 Le serveur peut être utilisé via un conteneur Docker disponible sur [dockerhub.iut-clermont.uca.fr/ui/library/hal\_hal-server\_dotnet3.1](https://dockerhub.iut-clermont.uca.fr/ui/library/hal_hal-server_dotnet3.1).
-Pour plus d'informations se référer au README disponible dans le dossier dev/docker/
+Pour plus d'informations se référer au [README](dev/docker) disponible dans le dossier dev/docker/
 
-### Schema récapitulatif du projet
-![](documents/schemas/Schema_recap_fleche_png.png)
-
-### Schema général de hal
-![](documents/schema_hal.png)
