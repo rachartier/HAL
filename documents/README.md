@@ -6,14 +6,14 @@ Contenue
 --------
 
 - [Cahier des Charges](#cahier-des-charges)
-- [Tableau des fonctionnalités](#tableau-des-fonctionnalites)
-- [Schema récapitulatif](#schema-recapitulatif)
+- [Tableau des fonctionnalités](#tableau-des-fonctionnalités)
+- [Schema récapitulatif](#schema-récapitulatif)
 
 
 Cahier des charges
 ------------------
 
-Un document PDF rassemblant tout les éléments du cahier des charges et est disponible dans ce même repertoire. [Cahier des charges](cahierdescharges.pdf)
+Un document PDF rassemblant tous les éléments du cahier des charges et est disponible dans ce même repertoire. [Cahier des charges](cahierdescharges.pdf)
 
 Tableau des fonctionnalités
 ----------------------------
