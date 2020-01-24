@@ -31,9 +31,9 @@ namespace Repository
             Create(plugin);
         }
 
-        public void DeletePlugin(Plugin plugin)
-        {
-            Delete(plugin);
-        }
+		public void DeletePlugin(Plugin plugin)
+		{
+			Delete(plugin);
+		}
     }
 }

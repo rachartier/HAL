@@ -25,7 +25,7 @@ namespace HAL.Storage
         {
             var anonymousObject = JObject.Parse(obj.ToString());
 
-            var collection = defaultDatabase.GetCollection<dynamic>(plugin.Infos.Name);
+            var collection = defaultDatabase.GetCollection<dynamic>("Plugin");
             //await collection.InsertOneAsync(anonymousObject);
 
             dynamic document = new ExpandoObject() as IDictionary<string, object>;

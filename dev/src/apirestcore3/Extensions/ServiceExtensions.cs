@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Repository;
 using Blueshift.EntityFrameworkCore.MongoDB.Infrastructure;
-using Microsoft.OpenApi.Models;
 
 public static class ServiceExtensions
 {
@@ -45,13 +44,5 @@ public static class ServiceExtensions
     public static void ConfigureRepositoryWrapper(this IServiceCollection services)
     {
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-    }
-
-    public static void ConfigureSwagger(this IServiceCollection services)
-    {
-        services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "HAL API MONGO", Version = "v1" });
-        });
     }
 }

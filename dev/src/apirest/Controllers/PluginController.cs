@@ -1,6 +1,7 @@
 using System;
 using Contracts;
 using Entities.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Controllers
@@ -20,6 +21,8 @@ namespace Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetAllPlugins()
         {
             try
@@ -33,11 +36,13 @@ namespace Controllers
             catch (Exception e)
             {
                 logger.LogError($"Error in GetAllPlugins: {e.Message}");
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, $"Internal server error: ${e.Message}");
             }
         }
 
         [HttpGet("{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetPluginByName(string name)
         {
             try
@@ -56,60 +61,6 @@ namespace Controllers
             catch (Exception e)
             {
                 logger.LogError($"Error in GetPluginByName: {e.Message}");
-                return StatusCode(500, "Internal server error.");
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreatePlugin([FromBody]Plugin plugin)
-        {
-            try
-            {
-                if (plugin is null)
-                {
-                    logger.LogError("Plugin object sent from client is null.");
-                    return BadRequest("Plugin object is null.");
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    logger.LogError("Invalid plugin object sent from client.");
-                    return BadRequest("Invalid plugin model.");
-                }
-
-                repository.Plugin.CreatePlugin(plugin);
-                repository.Save();
-
-                return CreatedAtRoute("", new { name = plugin.Name }, plugin);
-            }
-            catch (Exception e)
-            {
-                logger.LogError($"Error in CreatePlugin: {e.Message}");
-                return StatusCode(500, "Internal server error.");
-            }
-        }
-
-        [HttpDelete("{name}")]
-        public IActionResult DeletePlugin(string name)
-        {
-            try
-            {
-                var plugin = repository.Plugin.GetPluginByName(name);
-
-                if (plugin is null)
-                {
-                    logger.LogError($"Plugin \"{name}\" not found in db.");
-                    return NotFound();
-                }
-
-                repository.Plugin.DeletePlugin(plugin);
-                repository.Save();
-
-                return NoContent();
-            }
-            catch (Exception e)
-            {
-                logger.LogError($"Error in DeletePlugin: {e.Message}");
                 return StatusCode(500, "Internal server error.");
             }
         }

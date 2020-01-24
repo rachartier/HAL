@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore;
+﻿using Entities.Models;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using MongoDB.Bson.Serialization;
 
 namespace apirest
 {
@@ -7,6 +9,10 @@ namespace apirest
     {
         public static void Main(string[] args)
         {
+            BsonClassMap.RegisterClassMap<Plugin>(cm =>
+            {
+                cm.AutoMap();
+            });
             CreateWebHostBuilder(args).Build().Run();
         }
 

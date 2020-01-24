@@ -6,12 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blueshift.EntityFrameworkCore.MongoDB-aleksamagicka" Version="2.2.0-rtm-1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.1" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.5.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
   </ItemGroup>
 
 
