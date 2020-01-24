@@ -10,7 +10,7 @@ Contents
 - [Server](#server)
 - [QuickStart](#quickstart)
 - [Stockage](#stockage)
-- [Ajouter une extension personnalisée](#ajouter-une-extension-personnalisee)
+- [Ajouter une extension personnalisée](#ajouter-une-extension-personnalisée)
 - [Docker](#docker)
 
 Intro
