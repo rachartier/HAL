@@ -88,7 +88,6 @@ namespace HAL.Server
                         fileName = MagicStringEnumerator.DefaultConfigPathServerToClient;
                     }
 
-                    Console.WriteLine($"{fileName} {args[1]}");
 
                     serverSidedFiles.Add(fileName, new MarkedChecksum(args[1]));
                 }
@@ -116,7 +115,6 @@ namespace HAL.Server
                 if (!serverSidedFiles.ContainsKey(fileName))
                 {
                     serverSidedFiles.Add(fileName, new MarkedChecksum("0"));
-                    Console.WriteLine($"pas bon: {fileName}");
                 }
 
                 if (serverSidedFiles[fileName]?.Checksum.Equals(checksum) == false)
@@ -128,7 +126,6 @@ namespace HAL.Server
                     if (file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
                     {
                         path = MagicStringEnumerator.DefaultRelativeConfigPath + fileName;
-                        Console.WriteLine(path);
                     }
                     else
                         path = MagicStringEnumerator.DefaultRelativePluginPath + fileName;
