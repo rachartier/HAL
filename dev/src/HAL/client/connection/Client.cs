@@ -142,14 +142,16 @@ namespace HAL.Connection.Client
 
         public void Disconnect()
         {
+            Log.Instance?.Info("Deconnection...");
             IsConnected = false;
 
             try
             {
                 client.Close();
             }
-            catch
+            catch(Exception e)
             {
+            Log.Instance?.Error($"Deconnection problem: {e.Message}");
             }
         }
 

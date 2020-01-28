@@ -2,6 +2,7 @@ using HAL.CheckSum;
 using HAL.Loggin;
 using HAL.MagicString;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -12,9 +13,13 @@ namespace HAL.Connection.Client
         public event EventHandler<EventArgs> OnReceiveDone;
 
         private readonly FuncManager funcManager = new FuncManager();
+        private readonly Stopwatch heartbeatStopwatch = new Stopwatch();
+        private int stopwatchDelay = 10000;
 
         public HalClient(string ip, int port, int updateIntervalInMs = 100) : base(ip, port, updateIntervalInMs)
         {
+            heartbeatStopwatch.Start();
+
             funcManager.AddFunc(MagicStringEnumerator.CMDAdd, FuncAdd);
             funcManager.AddFunc(MagicStringEnumerator.CMDDel, FuncDel);
             funcManager.AddFunc(MagicStringEnumerator.CMDUpd, FuncUpd);
@@ -57,6 +62,12 @@ namespace HAL.Connection.Client
 
         public override async Task UpdateAsync()
         {
+            if (heartbeatStopwatch.ElapsedMilliseconds > stopwatchDelay)
+            {
+                StreamWriter.WriteLine(MagicStringEnumerator.CMDHtb);
+                StreamWriter.Flush();
+                heartbeatStopwatch.Restart();
+            }
             string command = await StreamReader.ReadLineAsync();
 
             if (!string.IsNullOrEmpty(command))
