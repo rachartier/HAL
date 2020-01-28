@@ -256,7 +256,9 @@ namespace HAL.Configuration
             }
 
             var databaseRoot = Root[MagicStringEnumerator.JSONDatabase];
-            string[] connectionString = databaseRoot[MagicStringEnumerator.JSONConnectionString].ToObject<string[]>();
+            if(databaseRoot == null)
+                return null;
+            string[] connectionString = databaseRoot[MagicStringEnumerator.JSONConnectionString]?.ToObject<string[]>();
 
             return connectionString;
         }

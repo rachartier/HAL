@@ -141,7 +141,7 @@ namespace HAL
                 string[] connectionStrings = configFile.GetDataBaseConnectionStrings();
                 var databases = storages.Where(s => s is IDatabaseStorage).ToArray();
 
-                for (int i = 0; i < connectionStrings.Length; ++i)
+                for (int i = 0; i < connectionStrings?.Length; ++i)
                 {
                     var db = databases[i];
                     var connectionString = connectionStrings[i];
