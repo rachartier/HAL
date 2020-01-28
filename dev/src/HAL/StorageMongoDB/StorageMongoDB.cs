@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HAL.Storage
 {
-    public class StorageMongoDB : DifferencialStorage
+    public class StorageMongoDB : DifferencialStorage, IDatabaseStorage
     {
         private MongoClient client;
         private IMongoDatabase defaultDatabase;
@@ -25,7 +25,7 @@ namespace HAL.Storage
         {
             var anonymousObject = JObject.Parse(obj.ToString());
 
-            var collection = defaultDatabase.GetCollection<dynamic>("Plugin");
+            var collection = defaultDatabase.GetCollection<dynamic>("results");
             //await collection.InsertOneAsync(anonymousObject);
 
             dynamic document = new ExpandoObject() as IDictionary<string, object>;

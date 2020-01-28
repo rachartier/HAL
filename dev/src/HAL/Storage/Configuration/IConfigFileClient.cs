@@ -29,16 +29,16 @@ namespace HAL.Configuration
         public abstract void SetInterpreterNameConfiguration(IPluginMaster pluginMaster);
 
         /// <summary>
-        /// return the connection string if one is present
+        /// return one or more connection strings
         /// </summary>
-        /// <returns>the connection string if it exists, null otherwise</returns>
-        public abstract string GetDataBaseConnectionString();
+        /// <returns>connections strings if it exists, null otherwise</returns>
+        public abstract string[] GetDataBaseConnectionStrings();
 
         /// <summary>
-        /// return the storage name
+        /// return storage names
         /// </summary>
-        /// <returns>return storage name or null otherwise</returns>
-        public abstract string GetStorageName();
+        /// <returns>return storage names or null otherwise</returns>
+        public abstract string[] GetStorageNames();
 
         /// <summary>
         /// Get the port of the socket server

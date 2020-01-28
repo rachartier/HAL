@@ -5,7 +5,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Entities.Models
 {
-    [MongoCollection("Plugin")]
+    [MongoCollection("results")]
     public class Plugin
     {
         [BsonId]

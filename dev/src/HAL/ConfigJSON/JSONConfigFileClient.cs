@@ -248,26 +248,27 @@ namespace HAL.Configuration
             }
         }
 
-        public override string GetDataBaseConnectionString()
+        public override string[] GetDataBaseConnectionStrings()
         {
             if (Root == null)
             {
                 return null;
             }
 
-            string connectionString = Root[MagicStringEnumerator.JSONDatabase]?.Value<string>(MagicStringEnumerator.JSONConnectionString);
+            var databaseRoot = Root[MagicStringEnumerator.JSONDatabase];
+            string[] connectionString = databaseRoot[MagicStringEnumerator.JSONConnectionString].ToObject<string[]>();
 
             return connectionString;
         }
 
-        public override string GetStorageName()
+        public override string[] GetStorageNames()
         {
             if (Root == null)
             {
                 return null;
             }
 
-            string storageName = Root.Value<string>(MagicStringEnumerator.JSONStorageName);
+            string[] storageName = Root[MagicStringEnumerator.JSONStorageName].ToObject<string[]>();
 
             return storageName;
         }

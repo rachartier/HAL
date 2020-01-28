@@ -13,6 +13,7 @@ def get_username():
 	return os.popen('users').read()
 
 str_date = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
 if sys.platform.startswith('win32'):
 	connected_users = get_username()
 else:

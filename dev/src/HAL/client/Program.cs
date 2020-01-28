@@ -9,7 +9,9 @@ using HAL.Storage;
 using Newtonsoft.Json.Linq;
 using Plugin.Manager;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace HAL
@@ -17,12 +19,13 @@ namespace HAL
     public class Program
     {
         private static HalClient client;
-        private static IStoragePlugin storage;
+        private static List<IStoragePlugin> storages = new List<IStoragePlugin>();
         private static bool receiveError;
 
         private static void CleanExit()
         {
-            storage?.Dispose();
+            foreach (var storage in storages)
+                storage?.Dispose();
             client?.Disconnect();
             client?.Dispose();
 
@@ -103,15 +106,21 @@ namespace HAL
                     CleanExit();
                 }
 
-                storage = StorageFactory.CreateStorage(configFile.GetStorageName());
+                foreach (var storageName in configFile.GetStorageNames())
+                {
+                    var storage = StorageFactory.CreateStorage(storageName);
 
-                if (storage is StorageServerFile)
-                {
-                    (storage as StorageServerFile).StreamWriter = client.StreamWriter;
-                }
-                else if (storage is StorageLocalFile)
-                {
-                    (storage as StorageLocalFile).SavePath = configFile.GetSavePath();
+                    if (storage is StorageServerFile)
+                    {
+                        (storage as StorageServerFile).StreamWriter = client.StreamWriter;
+                    }
+                    else if (storage is StorageLocalFile)
+                    {
+                        (storage as StorageLocalFile).SavePath = configFile.GetSavePath();
+                    }
+
+                    storages.Add(storage);
+                    Log.Instance?.Info($"Storage \"{storageName}\" added.");
                 }
 
                 // TODO: fix that
@@ -128,13 +137,18 @@ namespace HAL
                 *
                 * if none is specified, then it will do nothing and return null.
                 */
-                string connectionString = configFile.GetDataBaseConnectionString();
 
-                /*
-                * If the storage need to be initialized (database...)
-                * then it's here.
-                */
-                storage.Init(connectionString);
+                string[] connectionStrings = configFile.GetDataBaseConnectionStrings();
+                var databases = storages.Where(s => s is IDatabaseStorage).ToArray();
+
+                for (int i = 0; i < connectionStrings.Length; ++i)
+                {
+                    var db = databases[i];
+                    var connectionString = connectionStrings[i];
+
+                    db.Init(connectionString);
+                    Log.Instance?.Info($"Database \"{db}\" with connection string \"{connectionString}\"");
+                }
 
                 /*
                 * Here pluginMaster will receive some customs user specifications,
@@ -165,18 +179,21 @@ namespace HAL
                 {
                     plugin.OnExecutionFinished += async (o, e) =>
                     {
-                        try
+                        foreach (var storage in storages)
                         {
-                            var code = await storage.Save(e.Plugin, e.Result);
-
-                            if (code == StorageCode.Failed)
+                            try
                             {
-                                Log.Instance?.Error("Storage failed.");
+                                var code = await storage.Save(e.Plugin, e.Result);
+
+                                if (code == StorageCode.Failed)
+                                {
+                                    Log.Instance?.Error("Storage failed.");
+                                }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Instance?.Error($"Storage failed: {ex.Message}");
+                            catch (Exception ex)
+                            {
+                                Log.Instance?.Error($"Storage failed: {ex.Message}");
+                            }
                         }
                     };
                 }

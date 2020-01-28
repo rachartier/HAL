@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HAL.Storage
 {
-    public class StorageInfluxDB : IStoragePlugin
+    public class StorageInfluxDB : IStoragePlugin, IDatabaseStorage
     {
         private string influxdbUri;
         private LineProtocolClient client;

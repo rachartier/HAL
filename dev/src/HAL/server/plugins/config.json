@@ -1,29 +1,27 @@
 {
-  "storage": "mongodb",
+    "storage": [
+        "server"
+    ],
 
-  "database": {
-    "connectionString": "mongodb://localhost:27017/repository"
-  },
-
-  "plugins": {
-    "upgrades_available.sh": {
-      "os": [
-        "linux"
-      ],
-      "heartbeat": 1,
-      "differencial_all": true
-    },
-    "kernel_version.py": {
-      "activated": "true",
-      "heartbeat": 1,
-      "differencial_all": true
-    },
-    "connected_user.py": {
-      "activated": "true",
-      "heartbeat": 1,
-      "differencial": [
-        "connected_users"
-      ]
+    "plugins": {
+        "upgrades_available.sh": {
+            "os": [
+                "linux"
+            ],
+            "heartbeat": 1,
+            "differencial_all": true
+        },
+        "kernel_version.py": {
+            "activated": "true",
+            "heartbeat": 1,
+            "differencial_all": true
+        },
+        "connected_user.py": {
+            "activated": "true",
+            "heartbeat": 1,
+            "differencial": [
+                "connected_users"
+            ]
+        }
     }
-  }
 }
