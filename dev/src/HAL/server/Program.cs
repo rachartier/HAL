@@ -2,7 +2,6 @@
 using HAL.Configuration;
 using HAL.Loggin;
 using HAL.MagicString;
-using HAL.OSData;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,6 +33,12 @@ namespace HAL.Server
             : base(client)
         {
             this.savePath = savePath;
+        }
+
+        private string ConvertUriAbsoluteToLocal(string uri)
+        {
+            char[] splitDelimiters = { '\\', '/' };
+            return uri.Split(splitDelimiters).Last();
         }
 
         public override async Task SaveAsync()
@@ -73,14 +78,17 @@ namespace HAL.Server
                 if (args[0].Equals(MagicStringEnumerator.CMDEnd))
                     break;
 
-                if (!serverSidedFiles.ContainsKey(args[0]))
+                string fileName = ConvertUriAbsoluteToLocal(args[0]);
+
+                if (!serverSidedFiles.ContainsKey(fileName))
                 {
-                    string fileName = args[0];
 
                     if (args[0] == MagicStringEnumerator.DefaultConfigPath)
                     {
                         fileName = MagicStringEnumerator.DefaultConfigPathServerToClient;
                     }
+
+                    Console.WriteLine($"{fileName} {args[1]}");
 
                     serverSidedFiles.Add(fileName, new MarkedChecksum(args[1]));
                 }
@@ -92,7 +100,6 @@ namespace HAL.Server
             bool filesUpdated = false;
 
             var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
-            char[] splitDelimiters = { '\\', '/' };
 
             foreach (var entry in serverSidedFiles.Values)
             {
@@ -104,31 +111,34 @@ namespace HAL.Server
                 var checksum = await CheckSumGenerator.HashOf(file);
                 var code = await File.ReadAllTextAsync(file);
 
-                if (!serverSidedFiles.ContainsKey(file))
+                string fileName = ConvertUriAbsoluteToLocal(file);
+
+                if (!serverSidedFiles.ContainsKey(fileName))
                 {
-                    serverSidedFiles.Add(file, new MarkedChecksum("0"));
+                    serverSidedFiles.Add(fileName, new MarkedChecksum("0"));
+                    Console.WriteLine($"pas bon: {fileName}");
                 }
 
-                if (serverSidedFiles[file]?.Checksum.Equals(checksum) == false)
+                if (serverSidedFiles[fileName]?.Checksum.Equals(checksum) == false)
                 {
                     filesUpdated = true;
 
-                    string path = file;
+                    string path;
 
                     if (file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
                     {
-                        path = MagicStringEnumerator.DefaultRelativeConfigPath + file.Split(splitDelimiters).Last();
+                        path = MagicStringEnumerator.DefaultRelativeConfigPath + fileName;
                         Console.WriteLine(path);
                     }
                     else
-                        path = MagicStringEnumerator.DefaultRelativePluginPath + file.Split(splitDelimiters).Last();
+                        path = MagicStringEnumerator.DefaultRelativePluginPath + fileName;
 
-                    serverSidedFiles[file].Checksum = checksum;
+                    serverSidedFiles[fileName].Checksum = checksum;
 
                     await SendAddCommand(code.Length, path, code);
                 }
 
-                serverSidedFiles[file].Marked = true;
+                serverSidedFiles[fileName].Marked = true;
             }
 
             if (filesUpdated || firstUpdate)
