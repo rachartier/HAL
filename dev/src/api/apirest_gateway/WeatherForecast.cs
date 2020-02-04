@@ -1,6 +1,6 @@
 using System;
 
-namespace apirestcore3
+namespace apirest_gateway
 {
     public class WeatherForecast
     {

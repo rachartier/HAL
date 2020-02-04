@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.3"
 services:
   hal:
     image: dockerhub.iut-clermont.uca.fr:443/hal_hal-server_dotnet3.1:latest
