@@ -18,8 +18,8 @@ Intro
 
 HAL est un projet de supervision destiné à récupérer différents donnés d'un parc informatique et à les envoyer sur un serveur, dans le but d'agréger les données en vue des traitres.
 Il utilise un système de plugins, qui sont chargés automatiquement au démarrage du client. Plusieurs langages pour écrire les plugins sont supportés:
-* C/C++/C# (.dll / .so)
-* Go (.go)
+* C/C++/C#/Go (.dll / .so)
+* Go Script (.go)
 * Python (.py)
 * Ruby (.rb)
 * Shell (.sh)
@@ -512,7 +512,9 @@ Le stockage sert a sauvegarder le résultat de chaque plugin pour pouvoir ensuit
 Pour séléctionner le stockage voulu, il faut créer un attribut dans le fichier "config.json":
 ```json
 {
-	"storage": "<NOM_DU_STOCKAGE>",
+	"storage": [
+	    "<NOM_DU_STOCKAGE>"
+	 ],
 
 	...
 	"plugins": {
@@ -528,12 +530,38 @@ NOM_DU_STOCKAGE peut être:
 * "influxdb" (sauvegarde sur une base influxdb)
 * "serveur" (sauvegarde sur le serveur avec des dossiers et fichiers json)
 
+
 Attention, si vous utilisez "mangodb" ou tout autre base de donnée, il faut alors généralement spécifier une connection string:
 ```json
 {
-	"storage": "mangodb",
+	"storage": [
+	    "mangodb"
+	],
 	"database": {
-		"connectionString": "mongodb://mongodb0.example.com:27017/admin"
+		"connectionString": [
+		    "mongodb://mongodb0.example.com:27017/admin"
+		]
+	},
+	...
+}
+```
+
+Il est possible de mettre autant de nom de stockage qui nécessaire. Pour lier les bonnes connectionString aux base de données, il faut alors les mettres dans l'ordre, exemple:
+
+```json
+{
+	"storage": [
+	    "<db1>",
+	    "<db2>",
+	    "server",
+	    "<db3>"
+	],
+	"database": {
+		"connectionString": [
+		    "<connection string de db1>",
+		    "<connection string de db2>",
+		    "<connection string de db3>"
+		 ]
 	},
 	...
 }
