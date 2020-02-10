@@ -45,6 +45,7 @@ namespace HAL
         private static void Main(string[] args)
         {
             IConfigFileClient<JObject, JToken> configFileLocal = new JSONConfigFileClient();
+
             try
             {
                 configFileLocal.Load(MagicStringEnumerator.DefaultLocalConfigPath);
@@ -170,6 +171,7 @@ namespace HAL
                  */
                 configFile.SetPluginsConfiguration(pluginMaster.Plugins);
                 configFileLocal.SetPluginsConfiguration(pluginMaster.Plugins);
+                configFileLocal.SetInterpreterNameConfiguration(pluginMaster);
 
                 /*
                  * An event is added when the plugin's execution is finished to save it where the user specified above.

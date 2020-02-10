@@ -1,5 +1,7 @@
 {
-  "storage": "server",
+  "storage": [
+      "server"
+  ],
 
   "plugins": {
     "upgrades_available.sh": {
