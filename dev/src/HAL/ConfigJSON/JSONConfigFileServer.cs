@@ -7,8 +7,8 @@ namespace HAL.Configuration
 {
     public class JSONConfigFileServer : IConfigFileServer<JObject, JToken>
     {
-        public static int DEFAULT_PORT = 11000;
-        public static int DEFAULT_UPDATE_RATE = 10000;
+        private static int DEFAULT_PORT = 11000;
+        private static int DEFAULT_UPDATE_RATE = 10000;
 
         public override void Load(string file)
         {

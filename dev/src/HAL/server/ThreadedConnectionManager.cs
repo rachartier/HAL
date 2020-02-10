@@ -83,6 +83,7 @@ namespace HAL.Server
                                         }
                                         catch
                                         {
+                                            // ignored
                                         }
                                     }
                                 }
@@ -103,6 +104,7 @@ namespace HAL.Server
                                 }
                                 catch
                                 {
+                                    // ignored
                                 }
                             }
                         });
@@ -121,7 +123,12 @@ namespace HAL.Server
             get
             {
                 var total = 0;
-                foreach (var t in threadPool) total += t.Clients.Count;
+                
+                lock (keyAccessPool)
+                {
+                    foreach (var t in threadPool) total += t.Clients.Count;
+                }
+                
                 return total;
             }
         }

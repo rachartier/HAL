@@ -23,7 +23,6 @@ namespace HAL.Server
             server = new TcpListener(IPAddress.Parse(ip), port);
 
             connectionManager.OnClientConnected += (o, e) => { OnClientConnected(o, e); };
-
             connectionManager.OnClientDisconnected += (o, e) => { OnClientDisconnected(o, e); };
         }
 

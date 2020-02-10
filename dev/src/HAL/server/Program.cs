@@ -95,6 +95,8 @@ namespace HAL.Server
 
                 if (!serverSidedFiles.ContainsKey(fileName)) serverSidedFiles.Add(fileName, new MarkedChecksum("0"));
 
+                Console.WriteLine(fileName);
+
                 if (serverSidedFiles[fileName]?.Checksum.Equals(checksum) == false)
                 {
                     filesUpdated = true;
