@@ -1,20 +1,18 @@
-using HAL.CheckSum;
-using HAL.Loggin;
-using HAL.MagicString;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using HAL.CheckSum;
+using HAL.Loggin;
+using HAL.MagicString;
 
 namespace HAL.Connection.Client
 {
     internal class HalClient : BaseClient
     {
-        public event EventHandler<EventArgs> OnReceiveDone;
-
         private readonly FuncManager funcManager = new FuncManager();
         private readonly Stopwatch heartbeatStopwatch = new Stopwatch();
-        private int stopwatchDelay = 10000;
+        private readonly int stopwatchDelay = 10000;
 
         public HalClient(string ip, int port, int updateIntervalInMs = 100) : base(ip, port, updateIntervalInMs)
         {
@@ -28,9 +26,7 @@ namespace HAL.Connection.Client
             OnConnected += async (o, e) =>
             {
                 if (!Directory.Exists(MagicStringEnumerator.DefaultPluginPath))
-                {
                     Directory.CreateDirectory(MagicStringEnumerator.DefaultPluginPath);
-                }
                 var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
 
                 string configFileChecksum;
@@ -60,6 +56,8 @@ namespace HAL.Connection.Client
             };
         }
 
+        public event EventHandler<EventArgs> OnReceiveDone;
+
         public override async Task UpdateAsync()
         {
             if (heartbeatStopwatch.ElapsedMilliseconds > stopwatchDelay)
@@ -68,7 +66,8 @@ namespace HAL.Connection.Client
                 StreamWriter.Flush();
                 heartbeatStopwatch.Restart();
             }
-            string command = await StreamReader.ReadLineAsync();
+
+            var command = await StreamReader.ReadLineAsync();
 
             if (!string.IsNullOrEmpty(command))
             {
@@ -81,19 +80,19 @@ namespace HAL.Connection.Client
 
         private async Task FuncAdd()
         {
-            string data = await StreamReader.ReadLineAsync();
-            string[] args = data.Split(';', 2);
+            var data = await StreamReader.ReadLineAsync();
+            var args = data.Split(';', 2);
 
-            string textBytesToRead = args[0];
-            string path = args[1];
+            var textBytesToRead = args[0];
+            var path = args[1];
 
-            int bytesToRead = int.Parse(textBytesToRead);
+            var bytesToRead = int.Parse(textBytesToRead);
 
-            char[] buffer = new char[bytesToRead];
+            var buffer = new char[bytesToRead];
 
             await StreamReader.ReadBlockAsync(buffer, 0, bytesToRead);
 
-            string absolutePath = AppDomain.CurrentDomain.BaseDirectory + path;
+            var absolutePath = AppDomain.CurrentDomain.BaseDirectory + path;
             await File.WriteAllTextAsync(absolutePath, new string(buffer));
 
             Log.Instance?.Info($"File received from server: {absolutePath}");
@@ -101,7 +100,7 @@ namespace HAL.Connection.Client
 
         private async Task FuncDel()
         {
-            string path = await StreamReader.ReadLineAsync();
+            var path = await StreamReader.ReadLineAsync();
 
             File.Delete(path);
 

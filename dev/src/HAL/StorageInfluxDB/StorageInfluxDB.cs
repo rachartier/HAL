@@ -1,17 +1,17 @@
-﻿using HAL.Plugin;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using HAL.Plugin;
 using InfluxDB.LineProtocol.Client;
 using InfluxDB.LineProtocol.Payload;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace HAL.Storage
 {
     public class StorageInfluxDB : IStoragePlugin, IDatabaseStorage
     {
-        private string influxdbUri;
         private LineProtocolClient client;
+        private string influxdbUri;
 
         public void Init(string connectionString)
         {
@@ -25,7 +25,7 @@ namespace HAL.Storage
                 plugin.Infos.Name,
                 new Dictionary<string, object>
                 {
-                    {"result", JsonConvert.DeserializeObject<dynamic>(obj.ToString()) }
+                    {"result", JsonConvert.DeserializeObject<dynamic>(obj.ToString())}
                 }
             );
 

@@ -1,32 +1,23 @@
-﻿using HAL.CheckSum;
-using HAL.Configuration;
-using HAL.Loggin;
-using HAL.MagicString;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using HAL.CheckSum;
+using HAL.Configuration;
+using HAL.Loggin;
+using HAL.MagicString;
 
 namespace HAL.Server
 {
     internal class HalTcpClientSavedState : TcpClientSavedState
     {
-        internal class MarkedChecksum
-        {
-            public string Checksum { get; set; }
-            public bool Marked { get; set; }
-
-            public MarkedChecksum(string checksum, bool marked = false)
-            {
-                Checksum = checksum;
-                Marked = marked;
-            }
-        }
-
-        private readonly IDictionary<string, MarkedChecksum> serverSidedFiles = new Dictionary<string, MarkedChecksum>();
         private readonly string savePath;
+
+        private readonly IDictionary<string, MarkedChecksum>
+            serverSidedFiles = new Dictionary<string, MarkedChecksum>();
+
         private bool firstUpdate = true;
 
         public HalTcpClientSavedState(TcpClient client, string savePath)
@@ -37,29 +28,26 @@ namespace HAL.Server
 
         private string ConvertUriAbsoluteToLocal(string uri)
         {
-            char[] splitDelimiters = { '\\', '/' };
+            char[] splitDelimiters = {'\\', '/'};
             return uri.Split(splitDelimiters).Last();
         }
 
         public override async Task SaveAsync()
         {
-            if (reference.Available <= 0)
-            {
-                return;
-            }
+            if (reference.Available <= 0) return;
 
-            string result = await StreamReader.ReadLineAsync();
+            var result = await StreamReader.ReadLineAsync();
 
             if (string.IsNullOrEmpty(result))
                 return;
 
             var splitedResult = result.Split(';', 3);
 
-            string path = splitedResult[0];
-            string filename = splitedResult[1];
-            string content = splitedResult[2];
+            var path = splitedResult[0];
+            var filename = splitedResult[1];
+            var content = splitedResult[2];
 
-            string folder = $"{savePath}/{MagicStringEnumerator.RootSaveResults}/{path}/";
+            var folder = $"{savePath}/{MagicStringEnumerator.RootSaveResults}/{path}/";
             Directory.CreateDirectory(folder);
 
             using var fw = File.CreateText($"{folder}{filename}");
@@ -78,16 +66,12 @@ namespace HAL.Server
                 if (args[0].Equals(MagicStringEnumerator.CMDEnd))
                     break;
 
-                string fileName = ConvertUriAbsoluteToLocal(args[0]);
+                var fileName = ConvertUriAbsoluteToLocal(args[0]);
 
                 if (!serverSidedFiles.ContainsKey(fileName))
                 {
-
                     if (args[0] == MagicStringEnumerator.DefaultConfigPath)
-                    {
                         fileName = MagicStringEnumerator.DefaultConfigPathServerToClient;
-                    }
-
 
                     serverSidedFiles.Add(fileName, new MarkedChecksum(args[1]));
                 }
@@ -96,26 +80,20 @@ namespace HAL.Server
 
         public override async Task UpdateAsync()
         {
-            bool filesUpdated = false;
+            var filesUpdated = false;
 
             var files = Directory.EnumerateFiles(MagicStringEnumerator.DefaultPluginPath);
 
-            foreach (var entry in serverSidedFiles.Values)
-            {
-                entry.Marked = false;
-            }
+            foreach (var entry in serverSidedFiles.Values) entry.Marked = false;
 
             foreach (var file in files)
             {
                 var checksum = await CheckSumGenerator.HashOf(file);
                 var code = await File.ReadAllTextAsync(file);
 
-                string fileName = ConvertUriAbsoluteToLocal(file);
+                var fileName = ConvertUriAbsoluteToLocal(file);
 
-                if (!serverSidedFiles.ContainsKey(fileName))
-                {
-                    serverSidedFiles.Add(fileName, new MarkedChecksum("0"));
-                }
+                if (!serverSidedFiles.ContainsKey(fileName)) serverSidedFiles.Add(fileName, new MarkedChecksum("0"));
 
                 if (serverSidedFiles[fileName]?.Checksum.Equals(checksum) == false)
                 {
@@ -124,9 +102,7 @@ namespace HAL.Server
                     string path;
 
                     if (file.Equals(MagicStringEnumerator.DefaultConfigPathServerToClient))
-                    {
                         path = MagicStringEnumerator.DefaultRelativeConfigPath + fileName;
-                    }
                     else
                         path = MagicStringEnumerator.DefaultRelativePluginPath + fileName;
 
@@ -169,6 +145,18 @@ namespace HAL.Server
             await StreamWriter.WriteLineAsync(MagicStringEnumerator.CMDUpd);
             await StreamWriter.FlushAsync();
         }
+
+        internal class MarkedChecksum
+        {
+            public MarkedChecksum(string checksum, bool marked = false)
+            {
+                Checksum = checksum;
+                Marked = marked;
+            }
+
+            public string Checksum { get; set; }
+            public bool Marked { get; set; }
+        }
     }
 
     internal class Program
@@ -188,11 +176,11 @@ namespace HAL.Server
                 return;
             }
 
-            string ip = configFile.GetAddress();
-            string savePath = configFile.GetSavePath();
-            int port = configFile.GetPort();
-            int maxThreads = configFile.GetMaxThreads();
-            int updateTimeMs = configFile.GetUpdateRate();
+            var ip = configFile.GetAddress();
+            var savePath = configFile.GetSavePath();
+            var port = configFile.GetPort();
+            var maxThreads = configFile.GetMaxThreads();
+            var updateTimeMs = configFile.GetUpdateRate();
 
             if (string.IsNullOrEmpty(ip))
             {
@@ -223,10 +211,7 @@ namespace HAL.Server
                 Log.Instance?.Info($"New client connected... (actual clients: {server.ClientsCount})");
             };
 
-            server.OnClientDisconnected += (o, e) =>
-            {
-                Log.Instance?.Info($"A client has been disconnected.");
-            };
+            server.OnClientDisconnected += (o, e) => { Log.Instance?.Info("A client has been disconnected."); };
 
             server.StartUniqueClientType<HalTcpClientSavedState>(savePath);
         }

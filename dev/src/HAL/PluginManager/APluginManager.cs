@@ -1,6 +1,6 @@
-﻿using HAL.Executor;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using HAL.Executor;
 
 namespace HAL.Plugin.Mananger
 {
@@ -9,15 +9,12 @@ namespace HAL.Plugin.Mananger
         public IPluginExecutor Executor { get; protected set; }
 
         /// <summary>
-        /// run a plugin depending it's type
+        ///     run a plugin depending it's type
         /// </summary>
         /// <param name="plugin">plugin to be executed</param>
         public void Run(APlugin plugin)
         {
-            if (!plugin.CanBeRun())
-            {
-                return;
-            }
+            if (!plugin.CanBeRun()) return;
 
             switch (plugin.Type)
             {

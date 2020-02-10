@@ -1,13 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using HAL.DllImportMethods;
 using HAL.Loggin;
 using HAL.MagicString;
 using HAL.OSData;
 using HAL.Plugin;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace HAL.Configuration
 {
@@ -15,18 +15,11 @@ namespace HAL.Configuration
     {
         private static readonly int DEFAULT_PORT = 11000;
 
-        public JSONConfigFileClient()
-        {
-        }
-
         public override void Load(string file)
         {
-            if (!File.Exists(file))
-            {
-                throw new FileNotFoundException($"'{file} not found.'");
-            }
+            if (!File.Exists(file)) throw new FileNotFoundException($"'{file} not found.'");
 
-            string jsonData = File.ReadAllText(file);
+            var jsonData = File.ReadAllText(file);
 
             // root is composed of all the leaves
             Root = JObject.Parse(jsonData);
@@ -43,20 +36,18 @@ namespace HAL.Configuration
 
         public override void SetPluginConfiguration(APlugin plugin)
         {
-            if (Root == null)
-            {
-                return;
-            }
+            if (Root == null) return;
 
-            JObject pluginConfig = Root[MagicStringEnumerator.JSONPlugins].Value<JObject>(plugin.Infos.FileName);
+            var pluginConfig = Root[MagicStringEnumerator.JSONPlugins].Value<JObject>(plugin.Infos.FileName);
 
             T _SetAttribute<T>(string name, T fallback) where T : struct
             {
-                T? val = pluginConfig[name]?.Value<T?>();
+                var val = pluginConfig[name]?.Value<T?>();
 
                 if (val == null)
                 {
-                    Log.Instance?.Warn($"{plugin.Infos.FileName} has not \"{name}\" set. Default value used \"{fallback}\".");
+                    Log.Instance?.Warn(
+                        $"{plugin.Infos.FileName} has not \"{name}\" set. Default value used \"{fallback}\".");
                     return fallback;
                 }
 
@@ -65,25 +56,22 @@ namespace HAL.Configuration
 
             // plugin needs to have a specific configuration, otherwise it can't be run
             if (pluginConfig == null)
-            {
                 throw new NullReferenceException($"Plugin {plugin.Infos.FileName} does not have any configuration.");
-            }
 
             plugin.Heartbeat = _SetAttribute(MagicStringEnumerator.JSONHeartbeat, 1.0f);
             plugin.Activated = _SetAttribute(MagicStringEnumerator.JSONActivated, false);
 
             if (OSAttribute.IsLinux)
             {
-                bool needAdministratorRights = _SetAttribute(MagicStringEnumerator.JSONAdminRights, false);
+                var needAdministratorRights = _SetAttribute(MagicStringEnumerator.JSONAdminRights, false);
 
                 if (needAdministratorRights)
                 {
-                    string administratorUsername = pluginConfig[MagicStringEnumerator.JSONAdminUsername]?.Value<string>();
+                    var administratorUsername = pluginConfig[MagicStringEnumerator.JSONAdminUsername]?.Value<string>();
 
                     if (string.IsNullOrEmpty(administratorUsername))
-                    {
-                        throw new ArgumentException($"Adminstrator username must be specified in {plugin.Infos.FileName}'.");
-                    }
+                        throw new ArgumentException(
+                            $"Adminstrator username must be specified in {plugin.Infos.FileName}'.");
 
                     plugin.AdministratorUsername = administratorUsername;
                 }
@@ -91,21 +79,15 @@ namespace HAL.Configuration
 
             // if no os is specified then all of them are authorized
             if (pluginConfig[MagicStringEnumerator.JSONOs] == null)
-            {
                 plugin.OsAuthorized |= OSAttribute.TargetFlag.All;
-            }
             else
-            {
                 foreach (var os in pluginConfig[MagicStringEnumerator.JSONOs].ToObject<string[]>())
                 {
                     if (!OSAttribute.OSNameToTargetFlag.ContainsKey(os))
-                    {
                         throw new ArgumentException($"OS {os} is not recognized.");
-                    }
 
                     plugin.OsAuthorized |= OSAttribute.OSNameToTargetFlag[os];
                 }
-            }
 
             if (pluginConfig[MagicStringEnumerator.JSONDifferencialAll]?.Value<bool>() == true)
             {
@@ -114,21 +96,15 @@ namespace HAL.Configuration
             else
             {
                 var attributesToObserve = GetAttributesToObserve(pluginConfig);
-                if (attributesToObserve != null)
-                {
-                    plugin.AttributesToObserve = attributesToObserve;
-                }
+                if (attributesToObserve != null) plugin.AttributesToObserve = attributesToObserve;
             }
         }
 
         public override int GetPort()
         {
-            if (Root == null)
-            {
-                return DEFAULT_PORT;
-            }
+            if (Root == null) return DEFAULT_PORT;
 
-            int? port = Root[MagicStringEnumerator.JSONServer]?.Value<int?>(MagicStringEnumerator.JSONPort);
+            var port = Root[MagicStringEnumerator.JSONServer]?.Value<int?>(MagicStringEnumerator.JSONPort);
 
             if (port == null)
                 return DEFAULT_PORT;
@@ -138,29 +114,22 @@ namespace HAL.Configuration
 
         public override string GetAddress()
         {
-            if (Root == null)
-            {
-                return null;
-            }
+            if (Root == null) return null;
 
-            string address = Root[MagicStringEnumerator.JSONServer]?.Value<string>(MagicStringEnumerator.JSONAddress);
+            var address = Root[MagicStringEnumerator.JSONServer]?.Value<string>(MagicStringEnumerator.JSONAddress);
 
             return address;
         }
 
         public override void SetScriptExtensionsConfiguration(IPluginMaster pluginMaster)
         {
-            if (Root == null)
-            {
-                return;
-            }
+            if (Root == null) return;
 
             try
             {
-                JToken[] extensionsConfig = Root[MagicStringEnumerator.JSONCustomExtensions].Values<JToken>().ToArray();
+                var extensionsConfig = Root[MagicStringEnumerator.JSONCustomExtensions].Values<JToken>().ToArray();
 
                 foreach (var ext in extensionsConfig)
-                {
                     try
                     {
                         pluginMaster.AddScriptExtension((ext as JProperty).Name, ext.ToObject<string>());
@@ -169,7 +138,6 @@ namespace HAL.Configuration
                     {
                         Log.Instance?.Error(ex.Message);
                     }
-                }
             }
             catch (NullReferenceException)
             {
@@ -179,22 +147,20 @@ namespace HAL.Configuration
 
         public override void SetInterpreterNameConfiguration(IPluginMaster pluginMaster)
         {
-            if (Root == null)
-            {
-                return;
-            }
+            if (Root == null) return;
 
             var interpreterConfig = Root[MagicStringEnumerator.JSONIntepreter];
 
             foreach (var fileType in pluginMaster.AcceptedFilesTypes[PluginFileInfos.FileType.Script])
             {
-                string key = fileType;
-                string val = "";
+                var key = fileType;
+                var val = "";
 
                 try
                 {
                     // an intepreter can change depending the os
-                    val = interpreterConfig[OSAttribute.GetOSFamillyName()]?.Value<string>(pluginMaster.ExtensionsNames[fileType]);
+                    val = interpreterConfig[OSAttribute.GetOSFamillyName()]
+                        ?.Value<string>(pluginMaster.ExtensionsNames[fileType]);
                 }
                 catch (NullReferenceException)
                 {
@@ -203,7 +169,8 @@ namespace HAL.Configuration
 
                     if (OSAttribute.IsWindows)
                     {
-                        foreach (EnvironmentVariableTarget enumValue in Enum.GetValues(typeof(EnvironmentVariableTarget)))
+                        foreach (EnvironmentVariableTarget enumValue in Enum.GetValues(
+                            typeof(EnvironmentVariableTarget)))
                         {
                             val = Environment.GetEnvironmentVariable(extensionName, enumValue);
 
@@ -221,73 +188,50 @@ namespace HAL.Configuration
                         val = dllimport.UseLaunchCommand($"printenv | grep {extensionName} | cut -d '=' -f 2").Trim();
 
                         if (!string.IsNullOrEmpty(val))
-                        {
                             Log.Instance?.Info($"Environment variable found: {extensionName} : {val}");
-                        }
                     }
                 }
-                // if it can't be found, the default one is choose
-                if (string.IsNullOrEmpty(val))
-                {
-                    val = pluginMaster.ExtensionsNames[fileType];
-                }
 
-                if (!File.Exists(val))
-                {
-                    return;
-                }
+                // if it can't be found, the default one is choose
+                if (string.IsNullOrEmpty(val)) val = pluginMaster.ExtensionsNames[fileType];
+
+                if (!File.Exists(val)) return;
 
                 if (!pluginMaster.ExtensionsNames.ContainsKey(key))
-                {
                     pluginMaster.AddScriptExtension(key, val);
-                }
                 else
-                {
                     pluginMaster.ExtensionsNames[key] = val;
-                }
             }
         }
 
         public override string[] GetDataBaseConnectionStrings()
         {
-            if (Root == null)
-            {
-                return null;
-            }
+            if (Root == null) return null;
 
             var databaseRoot = Root[MagicStringEnumerator.JSONDatabase];
-            if(databaseRoot == null)
+            if (databaseRoot == null)
                 return null;
-            string[] connectionString = databaseRoot[MagicStringEnumerator.JSONConnectionString]?.ToObject<string[]>();
+            var connectionString = databaseRoot[MagicStringEnumerator.JSONConnectionString]?.ToObject<string[]>();
 
             return connectionString;
         }
 
         public override string[] GetStorageNames()
         {
-            if (Root == null)
-            {
-                return null;
-            }
+            if (Root == null) return null;
 
-            string[] storageName = Root[MagicStringEnumerator.JSONStorageName].ToObject<string[]>();
+            var storageName = Root[MagicStringEnumerator.JSONStorageName].ToObject<string[]>();
 
             return storageName;
         }
 
         public override string GetSavePath()
         {
-            if (Root == null)
-            {
-                return null;
-            }
+            if (Root == null) return null;
 
-            string path = Root.Value<string>(MagicStringEnumerator.JSONSavePath);
+            var path = Root.Value<string>(MagicStringEnumerator.JSONSavePath);
 
-            if (string.IsNullOrEmpty(path))
-            {
-                return "results/";
-            }
+            if (string.IsNullOrEmpty(path)) return "results/";
 
             return path;
         }

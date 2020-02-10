@@ -1,6 +1,6 @@
+using System;
 using HAL.Scheduler;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace SchedulerTest
 {

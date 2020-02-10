@@ -1,10 +1,9 @@
-﻿using HAL.Executor.ThreadPoolExecutor;
-using HAL.Loggin;
-using HAL.Scheduler;
-using System;
-
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HAL.Executor.ThreadPoolExecutor;
+using HAL.Loggin;
+using HAL.Scheduler;
 
 namespace HAL.Plugin.Mananger
 {
@@ -16,15 +15,12 @@ namespace HAL.Plugin.Mananger
         }
 
         /// <summary>
-        /// schedule a plugin to be executed at each heartbeat
+        ///     schedule a plugin to be executed at each heartbeat
         /// </summary>
         /// <param name="plugin">the plugin to be scheduled</param>
         public override void SchedulePlugin(APlugin plugin)
         {
-            if (!plugin.CanBeRun())
-            {
-                return;
-            }
+            if (!plugin.CanBeRun()) return;
 
             try
             {
@@ -49,31 +45,23 @@ namespace HAL.Plugin.Mananger
         }
 
         /// <summary>
-        /// schedule a list of plugins to be executed
+        ///     schedule a list of plugins to be executed
         /// </summary>
         /// <param name="plugins">a collection of plugins</param>
         public override void SchedulePlugins(IEnumerable<APlugin> plugins)
         {
-            foreach (var plugin in plugins)
-            {
-                SchedulePlugin(plugin);
-            }
+            foreach (var plugin in plugins) SchedulePlugin(plugin);
         }
 
         public override void UnscheduleAllPlugins(IEnumerable<APlugin> plugins)
         {
-            foreach (var plugin in plugins)
-            {
-                SchedulerService.Instance.UnscheduleTask($"task_{plugin.Infos.FileName}");
-            }
+            foreach (var plugin in plugins) SchedulerService.Instance.UnscheduleTask($"task_{plugin.Infos.FileName}");
         }
 
-        public async override Task UnscheduleAllPluginsAsync(IEnumerable<APlugin> plugins)
+        public override async Task UnscheduleAllPluginsAsync(IEnumerable<APlugin> plugins)
         {
             foreach (var plugin in plugins)
-            {
                 await SchedulerService.Instance.UnscheduleTaskAsync($"task_{plugin.Infos.FileName}");
-            }
         }
     }
 }

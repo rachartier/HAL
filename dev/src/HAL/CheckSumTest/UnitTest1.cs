@@ -1,6 +1,6 @@
+using System.IO;
 using HAL.CheckSum;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
 
 namespace CheckSumTest
 {
@@ -53,8 +53,8 @@ namespace CheckSumTest
         [TestMethod]
         public void CheckSume_HashStringIsEqual()
         {
-            string data1 = "dataTest";
-            string data2 = "dataTest";
+            var data1 = "dataTest";
+            var data2 = "dataTest";
 
             var hash1 = CheckSumGenerator.HashOfASimpleString(data1);
             var hash2 = CheckSumGenerator.HashOfASimpleString(data2);
@@ -65,8 +65,8 @@ namespace CheckSumTest
         [TestMethod]
         public void CheckSume_HashStringIsNotEqual()
         {
-            string data1 = "dataTest";
-            string data2 = "data";
+            var data1 = "dataTest";
+            var data2 = "data";
 
             var hash1 = CheckSumGenerator.HashOfASimpleString(data1);
             var hash2 = CheckSumGenerator.HashOfASimpleString(data2);

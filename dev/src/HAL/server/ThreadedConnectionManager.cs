@@ -1,8 +1,8 @@
-using HAL.Loggin;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using HAL.Loggin;
 
 namespace HAL.Server
 {
@@ -14,26 +14,10 @@ namespace HAL.Server
 
     public class ThreadedConnectionManager
     {
-        public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
-
-        public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
-
-        public int ClientsCount
-        {
-            get
-            {
-                int total = 0;
-                foreach (var t in threadPool)
-                {
-                    total += t.Clients.Count;
-                }
-                return total;
-            }
-        }
+        private readonly object keyAccessPool = new object();
+        private readonly int threadCount;
 
         private readonly ThreadWithClients[] threadPool;
-        private readonly int threadCount;
-        private readonly object keyAccessPool = new object();
 
         public ThreadedConnectionManager(int threadCount, int updateTimeMs = 1000, int heartbeatWaitTimeMs = 5_000)
         {
@@ -41,7 +25,7 @@ namespace HAL.Server
 
             threadPool = new ThreadWithClients[threadCount];
 
-            for (int i = 0; i < threadCount; ++i)
+            for (var i = 0; i < threadCount; ++i)
             {
                 threadPool[i] = new ThreadWithClients();
                 var threadWitchClients = threadPool[i];
@@ -50,7 +34,7 @@ namespace HAL.Server
                 {
                     while (true)
                     {
-                        Parallel.ForEach(threadWitchClients.Clients, async (client) =>
+                        Parallel.ForEach(threadWitchClients.Clients, async client =>
                         {
                             if (client.HeartbeatStopwatch.ElapsedMilliseconds > client.HeartbeatUpdateTimeMs)
                             {
@@ -132,15 +116,26 @@ namespace HAL.Server
             }
         }
 
+        public int ClientsCount
+        {
+            get
+            {
+                var total = 0;
+                foreach (var t in threadPool) total += t.Clients.Count;
+                return total;
+            }
+        }
+
+        public event EventHandler<ClientStateChangedEventArgs> OnClientConnected;
+
+        public event EventHandler<ClientStateChangedEventArgs> OnClientDisconnected;
+
         public void KillAllConnections()
         {
-            for (int i = 0; i < threadCount; ++i)
+            for (var i = 0; i < threadCount; ++i)
             {
                 var threadWitchClients = threadPool[i];
-                foreach (var client in threadWitchClients.Clients)
-                {
-                    client.Dispose();
-                }
+                foreach (var client in threadWitchClients.Clients) client.Dispose();
 
                 threadWitchClients.UpdateThread.Interrupt();
             }
@@ -157,10 +152,10 @@ namespace HAL.Server
 
         private int GetMinimumWorkingThread()
         {
-            int threadIndex = 0;
-            int minClientsInThread = threadPool[0].Clients.Count;
+            var threadIndex = 0;
+            var minClientsInThread = threadPool[0].Clients.Count;
 
-            for (int i = 1; i < threadCount; ++i)
+            for (var i = 1; i < threadCount; ++i)
             {
                 var count = threadPool[i].Clients.Count;
 

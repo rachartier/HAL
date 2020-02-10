@@ -27,14 +27,14 @@ namespace HAL.OSData
         public static bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         public static bool IsOSX = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-        public static IDictionary<TargetFlag, string> TargetOSName = new Dictionary<TargetFlag, string>()
+        public static IDictionary<TargetFlag, string> TargetOSName = new Dictionary<TargetFlag, string>
         {
             [TargetFlag.Linux] = FamillyLinuxName,
             [TargetFlag.Windows] = FamillyWindowsName,
             [TargetFlag.OSX] = FamillyOSXName
         };
 
-        public static IDictionary<string, TargetFlag> OSNameToTargetFlag = new Dictionary<string, TargetFlag>()
+        public static IDictionary<string, TargetFlag> OSNameToTargetFlag = new Dictionary<string, TargetFlag>
         {
             [FamillyLinuxName] = TargetFlag.Linux,
             [FamillyWindowsName] = TargetFlag.Windows,
@@ -42,13 +42,13 @@ namespace HAL.OSData
         };
 
         /// <summary>
-        /// get the running os familly name
-        /// it can be: windows, linux or osx
+        ///     get the running os familly name
+        ///     it can be: windows, linux or osx
         /// </summary>
         /// <returns>the os name</returns>
         public static string GetOSFamillyName()
         {
-            string name = "";
+            var name = "";
 
             name = IsLinux ? TargetOSName[TargetFlag.Linux] : name;
             name = IsWindows ? TargetOSName[TargetFlag.Windows] : name;

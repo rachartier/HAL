@@ -1,13 +1,12 @@
-﻿using HAL.Plugin;
-using System;
+﻿using System;
+using HAL.Plugin;
 
 namespace HAL.Executor
 {
     public interface IPluginExecutor
     {
-        event EventHandler OnAllPluginsExecuted;
-
         string MethodEntryPointName { get; set; }
+        event EventHandler OnAllPluginsExecuted;
 
         void RunFromDLL(APlugin plugin);
 

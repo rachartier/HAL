@@ -1,4 +1,9 @@
-﻿using HAL.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using HAL.Configuration;
 using HAL.Connection.Client;
 using HAL.Factory;
 using HAL.Loggin;
@@ -8,18 +13,13 @@ using HAL.Plugin.Mananger;
 using HAL.Storage;
 using Newtonsoft.Json.Linq;
 using Plugin.Manager;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
 
 namespace HAL
 {
     public class Program
     {
         private static HalClient client;
-        private static List<IStoragePlugin> storages = new List<IStoragePlugin>();
+        private static readonly List<IStoragePlugin> storages = new List<IStoragePlugin>();
         private static bool receiveError;
 
         private static void CleanExit()
@@ -34,10 +34,8 @@ namespace HAL
                 Log.Instance?.Error("Program closed due to errors.");
                 return;
             }
-            else
-            {
-                Log.Instance?.Error("Unexcepted program exit.");
-            }
+
+            Log.Instance?.Error("Unexcepted program exit.");
 
             Environment.Exit(0);
         }
@@ -57,22 +55,16 @@ namespace HAL
                 CleanExit();
             }
 
-            string ip = configFileLocal.GetAddress();
-            int port = configFileLocal.GetPort();
+            var ip = configFileLocal.GetAddress();
+            var port = configFileLocal.GetPort();
 
             Log.Instance?.Info($"Server ip: {ip}");
             Log.Instance?.Info($"Server port: {port}");
 
-            AppDomain.CurrentDomain.ProcessExit += (o, e) =>
-            {
-                CleanExit();
-            };
+            AppDomain.CurrentDomain.ProcessExit += (o, e) => { CleanExit(); };
 
             client = new HalClient(ip, port);
-            new Thread(async () =>
-            {
-                await client.StartAsync();
-            }).Start();
+            new Thread(async () => { await client.StartAsync(); }).Start();
 
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
@@ -112,13 +104,9 @@ namespace HAL
                     var storage = StorageFactory.CreateStorage(storageName);
 
                     if (storage is StorageServerFile)
-                    {
                         (storage as StorageServerFile).StreamWriter = client.StreamWriter;
-                    }
                     else if (storage is StorageLocalFile)
-                    {
                         (storage as StorageLocalFile).SavePath = configFile.GetSavePath();
-                    }
 
                     storages.Add(storage);
                     Log.Instance?.Info($"Storage \"{storageName}\" added.");
@@ -139,10 +127,10 @@ namespace HAL
                 * if none is specified, then it will do nothing and return null.
                 */
 
-                string[] connectionStrings = configFile.GetDataBaseConnectionStrings();
+                var connectionStrings = configFile.GetDataBaseConnectionStrings();
                 var databases = storages.Where(s => s is IDatabaseStorage).ToArray();
 
-                for (int i = 0; i < connectionStrings?.Length; ++i)
+                for (var i = 0; i < connectionStrings?.Length; ++i)
                 {
                     var db = databases[i];
                     var connectionString = connectionStrings[i];
@@ -162,9 +150,7 @@ namespace HAL
                 * All the plugins in the directory "plugins" will be loaded and added to the plugin master
                 */
                 foreach (var file in Directory.GetFiles(MagicStringEnumerator.DefaultPluginPath))
-                {
                     pluginMaster.AddPlugin(file);
-                }
 
                 /*
                  * Then the configuration of all of the plugins is set.
@@ -178,27 +164,20 @@ namespace HAL
                  */
                 var savePath = configFile.GetSavePath();
                 foreach (var plugin in pluginMaster.Plugins)
-                {
                     plugin.OnExecutionFinished += async (o, e) =>
                     {
                         foreach (var storage in storages)
-                        {
                             try
                             {
                                 var code = await storage.Save(e.Plugin, e.Result);
 
-                                if (code == StorageCode.Failed)
-                                {
-                                    Log.Instance?.Error("Storage failed.");
-                                }
+                                if (code == StorageCode.Failed) Log.Instance?.Error("Storage failed.");
                             }
                             catch (Exception ex)
                             {
                                 Log.Instance?.Error($"Storage failed: {ex.Message}");
                             }
-                        }
                     };
-                }
 
                 /*
                  * All the plugins are then schelduled to be launched when needed.
@@ -208,7 +187,7 @@ namespace HAL
                 Log.Instance?.Info("Configuration reloaded.");
             };
 
-            while (!receiveError) { Thread.Sleep(100); }
+            while (!receiveError) Thread.Sleep(100);
 
             CleanExit();
         }

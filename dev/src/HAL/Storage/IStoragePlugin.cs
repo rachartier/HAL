@@ -1,18 +1,18 @@
-using HAL.Plugin;
 using System;
 using System.Threading.Tasks;
+using HAL.Plugin;
 
 namespace HAL.Storage
 {
     public interface IStoragePlugin : IDisposable
     {
         /// <summary>
-        /// Initialize, if needed, the storage
+        ///     Initialize, if needed, the storage
         /// </summary>
         void Init(string connectionString);
 
         /// <summary>
-        /// method to save an object
+        ///     method to save an object
         /// </summary>
         /// <typeparam name="T">an object type</typeparam>
         /// <param name="plugin">plugin to be saved</param>

@@ -1,7 +1,7 @@
-using HAL.Plugin;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using HAL.Plugin;
 
 namespace HAL.Storage
 {
@@ -15,12 +15,12 @@ namespace HAL.Storage
 
         public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
         {
-            string dirName = "results/";
+            var dirName = "results/";
 
-            string strTodayDate = DateTime.Now.ToString("yyyy-MM-dd");
-            string completeTodayDate = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            var strTodayDate = DateTime.Now.ToString("yyyy-MM-dd");
+            var completeTodayDate = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
-            string folder = $"{SavePath}/{dirName}{strTodayDate}/{plugin.Infos.Name}/";
+            var folder = $"{SavePath}/{dirName}{strTodayDate}/{plugin.Infos.Name}/";
 
             Directory.CreateDirectory(folder);
 

@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/.Rider2019.3/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.3/system/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_HAL.1334215773.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/16.0.1/build/netcoreapp1.0" t="Include">
+      <e p="Microsoft.NET.Test.Sdk.Program.cs" t="Include" />
+    </e>
+    <e p="$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/16.3.0/build/netcoreapp1.0" t="Include">
+      <e p="Microsoft.NET.Test.Sdk.Program.cs" t="Include" />
+    </e>
+    <e p="$USER_HOME$/.nuget/packages/mstest.testadapter/2.0.0/build/_common/Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mstest.testadapter/2.0.0/build/_common/Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mstest.testadapter/2.0.0/build/netcoreapp1.0/Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll" t="Include" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="BasePlugin" t="IncludeRecursive">
+        <e p="BasePlugin.cs" t="Include" />
+        <e p="PluginBase.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="PluginBase.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="CheckSum" t="IncludeRecursive">
+        <e p="CheckSum.csproj" t="IncludeRecursive" />
+        <e p="CheckSumGenerator.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="CheckSum.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="CheckSumTest" t="IncludeRecursive">
+        <e p="CheckSumTest.csproj" t="IncludeRecursive" />
+        <e p="UnitTest1.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="CheckSumTest.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="test" t="Include">
+          <e p="ip_address.c" t="Include" />
+          <e p="script.pl" t="Include" />
+          <e p="script.py" t="Include" />
+          <e p="script.rb" t="Include" />
+          <e p="script.sh" t="Include" />
+          <e p="testso.so" t="Include" />
+          <e p="tictactoe.c" t="Include" />
+        </e>
+        <e p="test2" t="Include">
+          <e p="ip_address.c" t="Include" />
+          <e p="script.pl" t="Include" />
+          <e p="script.py" t="Include" />
+          <e p="script.rb" t="Include" />
+          <e p="script.sh" t="Include" />
+          <e p="testso.so" t="Include" />
+          <e p="tictactoe.c" t="Include" />
+        </e>
+      </e>
+      <e p="ConfigJSON" t="IncludeRecursive">
+        <e p="ConfigJSON.csproj" t="IncludeRecursive" />
+        <e p="JSONConfigFileClient.cs" t="Include" />
+        <e p="JSONConfigFileServer.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="ConfigJSON.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="DllImportMethods" t="IncludeRecursive">
+        <e p="BaseDLLImport.cs" t="Include" />
+        <e p="DllImportEntryPoint.cs" t="Include" />
+        <e p="DllImportLaunchCmdUnix.cs" t="Include" />
+        <e p="DllImportMethods.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="DllImportMethods.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Executor" t="IncludeRecursive">
+        <e p="Executor.csproj" t="IncludeRecursive" />
+        <e p="IPluginExecutor.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="Executor.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="HAL.sln" t="IncludeFlat" />
+      <e p="LocalStorageFile" t="IncludeRecursive">
+        <e p="StorageLocalFile.cs" t="Include" />
+        <e p="StorageLocalFile.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="StorageLocalFile.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Loggin" t="IncludeRecursive">
+        <e p="Log.cs" t="Include" />
+        <e p="Loggin.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="Loggin.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Plugin" t="IncludeRecursive">
+        <e p="APlugin.cs" t="Include" />
+        <e p="APluginMaster.cs" t="Include" />
+        <e p="IPluginMaster.cs" t="Include" />
+        <e p="OSData" t="Include">
+          <e p="OSAttribute.cs" t="Include" />
+        </e>
+        <e p="Plugin.csproj" t="IncludeRecursive" />
+        <e p="PluginFileInfos.cs" t="Include" />
+        <e p="PluginSocketInfo.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="Plugin.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="PluginManager" t="IncludeRecursive">
+        <e p="APluginManager.cs" t="Include" />
+        <e p="PluginManager.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="PluginManager.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="PluginMasterBasePlugin" t="IncludeRecursive">
+        <e p="PluginMasterBasePlugin.cs" t="Include" />
+        <e p="PluginMasterBasePlugin.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="PluginMasterBasePlugin.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="PluginTest" t="IncludeRecursive">
+        <e p="PluginTest.csproj" t="IncludeRecursive" />
+        <e p="UnitTest1.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="nlog.config" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="PluginTest.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="test" t="Include">
+          <e p="ip_address.c" t="Include" />
+          <e p="script.pl" t="Include" />
+          <e p="script.py" t="Include" />
+          <e p="script.rb" t="Include" />
+          <e p="script.sh" t="Include" />
+          <e p="testso.so" t="Include" />
+          <e p="tictactoe.c" t="Include" />
+        </e>
+      </e>
+      <e p="ResourcesResXManager" t="IncludeRecursive">
+        <e p="MagicStringEnumerator.cs" t="Include" />
+        <e p="MagicStringEnumerator.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="MagicStringEnumerator.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="ScheduledPluginManager" t="IncludeRecursive">
+        <e p="PluginManagerScheduled.csproj" t="IncludeRecursive" />
+        <e p="ScheduledPluginManager.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="PluginManagerScheduled.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Scheduler" t="IncludeRecursive">
+        <e p="Scheduler.csproj" t="IncludeRecursive" />
+        <e p="ScheldulerService.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="Scheduler.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="ScheldulerTest" t="IncludeRecursive">
+        <e p="ScheldulerTest.csproj" t="IncludeRecursive" />
+        <e p="UnitTest1.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="ScheldulerTest.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Storage" t="IncludeRecursive">
+        <e p="Configuration" t="Include">
+          <e p="IConfigFile.cs" t="Include" />
+          <e p="IConfigFileClient.cs" t="Include" />
+          <e p="IConfigFileServer.cs" t="Include" />
+        </e>
+        <e p="DifferencialStorage.cs" t="Include" />
+        <e p="IDatabaseStorage.cs" t="Include" />
+        <e p="IStoragePlugin.cs" t="Include" />
+        <e p="Storage.csproj" t="IncludeRecursive" />
+        <e p="StorageCode.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="Storage.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="StorageInfluxDB" t="IncludeRecursive">
+        <e p="StorageInfluxDB.cs" t="Include" />
+        <e p="StorageInfluxDB.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="StorageInfluxDB.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="StorageMongoDB" t="IncludeRecursive">
+        <e p="StorageMongoDB.cs" t="Include" />
+        <e p="StorageMongoDB.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="StorageMongoDB.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="StorageServerFile" t="IncludeRecursive">
+        <e p="StorageServerFile.cs" t="Include" />
+        <e p="StorageServerFile.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="StorageServerFile.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="TextStorage" t="IncludeRecursive">
+        <e p="StorageText.csproj" t="IncludeRecursive" />
+        <e p="TextStorage.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="StorageText.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="ThreadPoolExecutor" t="IncludeRecursive">
+        <e p="ExecutorDLL.cs" t="Include" />
+        <e p="ExecutorSO.cs" t="Include" />
+        <e p="ExecutorScript.cs" t="Include" />
+        <e p="ExecutorThreadPool.csproj" t="IncludeRecursive" />
+        <e p="ThreadPoolPluginExecutor.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="ExecutorThreadPool.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="client" t="IncludeRecursive">
+        <e p="Program.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="build.sh" t="Include" />
+        <e p="client.csproj" t="IncludeRecursive" />
+        <e p="config" t="Include">
+          <e p="config.json" t="Include" />
+          <e p="config_local.json" t="Include" />
+        </e>
+        <e p="connection" t="Include">
+          <e p="Client.cs" t="Include" />
+          <e p="FuncManager.cs" t="Include" />
+          <e p="HalClient.cs" t="Include" />
+        </e>
+        <e p="examples" t="Include">
+          <e p="other_examples" t="Include">
+            <e p="config" t="Include">
+              <e p="config.json" t="Include" />
+            </e>
+            <e p="plugins" t="Include">
+              <e p="cputemp.sh" t="Include" />
+              <e p="disk_usage.py" t="Include" />
+              <e p="guid.rb" t="Include" />
+              <e p="ip_address.c" t="Include" />
+              <e p="ip_address.so" t="Include" />
+              <e p="last_weekend.pl" t="Include" />
+              <e p="os_informations.py" t="Include" />
+              <e p="ping.sh" t="Include" />
+              <e p="random_numbers.lua" t="Include" />
+              <e p="tictactoe.c" t="Include" />
+              <e p="tictactoe.so" t="Include" />
+              <e p="whois.rb" t="Include" />
+            </e>
+            <e p="plugins_src" t="Include">
+              <e p="complex.c" t="Include" />
+              <e p="complex.go" t="Include" />
+              <e p="simple.c" t="Include" />
+              <e p="simple.go" t="Include" />
+            </e>
+          </e>
+          <e p="simple_complex" t="Include">
+            <e p="config" t="Include">
+              <e p="config.json" t="Include" />
+            </e>
+            <e p="plugins" t="Include">
+              <e p="complex.py" t="Include" />
+              <e p="complex.rb" t="Include" />
+              <e p="complex_c.so" t="Include" />
+              <e p="complex_go.dll" t="Include" />
+              <e p="simple.py" t="Include" />
+              <e p="simple.rb" t="Include" />
+              <e p="simple.sh" t="Include" />
+              <e p="simple_c.so" t="Include" />
+              <e p="simple_go.dll" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="factory" t="Include">
+          <e p="StorageFactory.cs" t="Include" />
+        </e>
+        <e p="lib" t="Include">
+          <e p="liblaunchcmdunix.dll" t="Include" />
+          <e p="liblaunchcmdunix.so" t="Include" />
+          <e p="libreadso.dll" t="Include" />
+          <e p="libreadso.so" t="Include" />
+        </e>
+        <e p="nlog.config" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="client.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="plugins" t="Include">
+          <e p="complex.py" t="Include" />
+          <e p="connected_user.py" t="Include" />
+          <e p="kernel_version.py" t="Include" />
+          <e p="upgrades_available.sh" t="Include" />
+        </e>
+      </e>
+      <e p="implementations" t="Include">
+        <e p="config" t="Include" />
+        <e p="executor" t="Include" />
+        <e p="plugin" t="Include" />
+        <e p="pluginmanager" t="Include" />
+        <e p="pluginmaster" t="Include" />
+        <e p="storage" t="Include" />
+      </e>
+      <e p="lib" t="Include" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="plugins_checker" t="IncludeRecursive">
+        <e p="CheckerFileJSON.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="SimplePluginManager.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="config.json" t="Include" />
+        <e p="lib" t="Include">
+          <e p="liblaunchcmdunix.dll" t="Include" />
+          <e p="liblaunchcmdunix.so" t="Include" />
+          <e p="libreadso.dll" t="Include" />
+          <e p="libreadso.so" t="Include" />
+        </e>
+        <e p="nlog.config" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="plugins_checker.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="plugins_checker.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="server" t="IncludeRecursive">
+        <e p="ClientStateChangedEventArgs.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="Server.cs" t="Include" />
+        <e p="TcpClientSavedState.cs" t="Include" />
+        <e p="ThreadedConnectionManager.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="build.sh" t="Include" />
+        <e p="config" t="Include">
+          <e p="config.json" t="Include" />
+        </e>
+        <e p="nlog.config" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.0" t="Include">
+              <e p="server.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="plugins" t="Include">
+          <e p="complex.py" t="Include" />
+          <e p="config.json" t="Include" />
+          <e p="connected_user.py" t="Include" />
+          <e p="kernel_version.py" t="Include" />
+          <e p="upgrades_available.sh" t="Include" />
+        </e>
+        <e p="server.csproj" t="IncludeRecursive" />
+        <e p="server_stress_test.sh" t="Include" />
+      </e>
+      <e p="unitTests" t="Include" />
+    </e>
+  </component>
+</project>

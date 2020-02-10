@@ -12,7 +12,7 @@ namespace HAL.DllImportMethods
 #pragma warning restore IDE1006
 
         /// <summary>
-        /// run_entrypoint_sharedobject wrapper, to allocate the memory needed for the correct execution
+        ///     run_entrypoint_sharedobject wrapper, to allocate the memory needed for the correct execution
         /// </summary>
         /// <param name="InputFile">dll/so path</param>
         /// <returns>the converted result string</returns>

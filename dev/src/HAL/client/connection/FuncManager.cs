@@ -15,10 +15,7 @@ namespace HAL.Connection.Client
 
         public Func<Task> GetFunc(string name)
         {
-            if (functions.TryGetValue(name, out Func<Task> func))
-            {
-                return func;
-            }
+            if (functions.TryGetValue(name, out var func)) return func;
 
             return null;
         }

@@ -1,8 +1,9 @@
+using System;
+using HAL.OSData;
 using HAL.Plugin;
 using HAL.Plugin.Mananger;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Plugin.Manager;
-using System;
 
 namespace PluginTest
 {
@@ -31,7 +32,8 @@ namespace PluginTest
 
             pluginMaster.AddScriptExtension(".aa", "aaa");
 
-            Assert.ThrowsException<ArgumentException>(() => pluginMaster.AddScriptExtension(".aa", "aaa"), "AddScriptExtension should had have raised an exception");
+            Assert.ThrowsException<ArgumentException>(() => pluginMaster.AddScriptExtension(".aa", "aaa"),
+                "AddScriptExtension should had have raised an exception");
         }
 
         /*
@@ -64,10 +66,10 @@ namespace PluginTest
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
             APluginManager pluginManager = new ScheduledPluginManager(pluginMaster);
 
-            BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py")
+            var plugin = new BasePlugin(pluginMaster, "test/script.py")
             {
                 Activated = true,
-                OsAuthorized = HAL.OSData.OSAttribute.TargetFlag.All
+                OsAuthorized = OSAttribute.TargetFlag.All
             };
 
             try
@@ -87,10 +89,7 @@ namespace PluginTest
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
             APluginManager pluginManager = new ScheduledPluginManager(pluginMaster);
 
-            for (int i = 0; i < nbPlugins; ++i)
-            {
-                pluginMaster.AddPlugin("test/script.py");
-            }
+            for (var i = 0; i < nbPlugins; ++i) pluginMaster.AddPlugin("test/script.py");
 
             try
             {
@@ -137,7 +136,7 @@ namespace PluginTest
         {
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
-            BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py")
+            var plugin = new BasePlugin(pluginMaster, "test/script.py")
             {
                 Activated = false
             };
@@ -150,10 +149,10 @@ namespace PluginTest
         {
             IPluginMaster pluginMaster = new PluginMasterBasePlugin();
 
-            BasePlugin plugin = new BasePlugin(pluginMaster, "test/script.py")
+            var plugin = new BasePlugin(pluginMaster, "test/script.py")
             {
                 Activated = true,
-                OsAuthorized = HAL.OSData.OSAttribute.TargetFlag.All
+                OsAuthorized = OSAttribute.TargetFlag.All
             };
 
             Assert.AreEqual(plugin.CanBeRun(), true, "Plugin should be executable");

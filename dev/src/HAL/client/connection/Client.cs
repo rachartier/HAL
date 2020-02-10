@@ -1,9 +1,9 @@
-using HAL.Loggin;
 using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using HAL.Loggin;
 
 namespace HAL.Connection.Client
 {
@@ -14,36 +14,15 @@ namespace HAL.Connection.Client
             None,
             Connected,
             Updated,
-            Closed,
+            Closed
         }
-
-        public class ConnectionStateChangedEventArgs
-        {
-            public readonly ConnectionState State;
-
-            public ConnectionStateChangedEventArgs(ConnectionState state)
-            {
-                State = state;
-            }
-        }
-
-        public event EventHandler<ConnectionStateChangedEventArgs> OnConnectionStateChanged;
-
-        public event EventHandler OnConnected;
-
-        public event EventHandler OnClosed;
-
-        public StreamWriter StreamWriter { get; private set; }
-        public StreamReader StreamReader { get; private set; }
-
-        public bool IsConnected { get; protected set; } = false;
-
-        private TcpClient client;
-
-        private readonly int updateIntervalInMs;
 
         private readonly string ip;
         private readonly int port;
+
+        private readonly int updateIntervalInMs;
+
+        private TcpClient client;
 
         public BaseClient(string ip, int port, int updateIntervalInMs = 100)
         {
@@ -54,15 +33,33 @@ namespace HAL.Connection.Client
             Connect();
         }
 
+        public StreamWriter StreamWriter { get; private set; }
+        public StreamReader StreamReader { get; private set; }
+
+        public bool IsConnected { get; protected set; }
+
+        public void Dispose()
+        {
+            StreamWriter.Dispose();
+            StreamReader.Dispose();
+
+            client.Dispose();
+        }
+
+        public event EventHandler<ConnectionStateChangedEventArgs> OnConnectionStateChanged;
+
+        public event EventHandler OnConnected;
+
+        public event EventHandler OnClosed;
+
         private void Connect()
         {
-            client = new TcpClient()
+            client = new TcpClient
             {
-                NoDelay = true,
+                NoDelay = true
             };
 
             while (!IsConnected)
-            {
                 try
                 {
                     Log.Instance?.Info($"Connecting to {ip}:{port}...");
@@ -74,7 +71,6 @@ namespace HAL.Connection.Client
                     Log.Instance?.Error($"Can't connect to {ip}:{port}, retry in 5 seconds...");
                     Thread.Sleep(5000);
                 }
-            }
 
             StreamWriter = new StreamWriter(client.GetStream());
             StreamReader = new StreamReader(client.GetStream());
@@ -124,7 +120,6 @@ namespace HAL.Connection.Client
             Log.Instance?.Info("Trying to reconnect...");
 
             while (!client.Connected)
-            {
                 try
                 {
                     Connect();
@@ -134,7 +129,6 @@ namespace HAL.Connection.Client
                     Log.Instance?.Info($"Trying to reconnect... {e.Message}");
                     Thread.Sleep(1000);
                 }
-            }
 
             Log.Instance?.Info("Reconnection successful.");
             await StartAsync();
@@ -149,20 +143,22 @@ namespace HAL.Connection.Client
             {
                 client.Close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-            Log.Instance?.Error($"Deconnection problem: {e.Message}");
+                Log.Instance?.Error($"Deconnection problem: {e.Message}");
             }
         }
 
         public abstract Task UpdateAsync();
 
-        public void Dispose()
+        public class ConnectionStateChangedEventArgs
         {
-            StreamWriter.Dispose();
-            StreamReader.Dispose();
+            public readonly ConnectionState State;
 
-            client.Dispose();
+            public ConnectionStateChangedEventArgs(ConnectionState state)
+            {
+                State = state;
+            }
         }
     }
 }

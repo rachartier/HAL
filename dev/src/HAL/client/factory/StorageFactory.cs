@@ -1,5 +1,4 @@
 ﻿using HAL.Storage;
-using System;
 
 namespace HAL.Factory
 {
@@ -37,7 +36,7 @@ namespace HAL.Factory
                 *
                 * you may want to change this.
                 */
-                _ => new StorageText(),
+                _ => new StorageText()
             };
         }
     }

@@ -1,25 +1,37 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using HAL.Loggin;
 using HAL.Plugin;
 using HAL.Storage;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 public abstract class DifferencialStorage : IStoragePlugin
 {
-    private IDictionary<string, JObject> storedObject = new Dictionary<string, JObject>();
-    private JTokenEqualityComparer comparer = new JTokenEqualityComparer();
+    private readonly JTokenEqualityComparer comparer = new JTokenEqualityComparer();
+    private readonly IDictionary<string, JObject> storedObject = new Dictionary<string, JObject>();
+
+    public virtual void Init(string connectionString)
+    {
+    }
+
+    public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
+    {
+        if (!HasDifference(plugin, obj)) return StorageCode.Pass;
+
+        return await SaveDifferencial(plugin, obj);
+    }
+
+    public virtual void Dispose()
+    {
+    }
 
     public bool HasDifference<T>(APlugin plugin, T obj)
     {
-        if (!plugin.ObserveAllAttributes && plugin.AttributesToObserve == null)
-        {
-            return true;
-        }
+        if (!plugin.ObserveAllAttributes && plugin.AttributesToObserve == null) return true;
 
-        string key = plugin.Infos.Name;
+        var key = plugin.Infos.Name;
 
-        JObject convertedJsonObject = JObject.Parse(obj.ToString());
+        var convertedJsonObject = JObject.Parse(obj.ToString());
 
         if (!storedObject.ContainsKey(plugin.Infos.Name))
         {
@@ -33,10 +45,7 @@ public abstract class DifferencialStorage : IStoragePlugin
         {
             attributesToObserve = new List<string>();
 
-            foreach (var token in convertedJsonObject)
-            {
-                attributesToObserve.Add(token.Key);
-            }
+            foreach (var token in convertedJsonObject) attributesToObserve.Add(token.Key);
         }
         else
         {
@@ -49,7 +58,8 @@ public abstract class DifferencialStorage : IStoragePlugin
 
             if (convertedJsonObject[attr] == null)
             {
-                Log.Instance?.Warn($"Attribute {attr} in differencial mode on plugin '{plugin.Infos.FileName}' is uknown. Difference returned is true.");
+                Log.Instance?.Warn(
+                    $"Attribute {attr} in differencial mode on plugin '{plugin.Infos.FileName}' is uknown. Difference returned is true.");
                 return true;
             }
 
@@ -64,22 +74,4 @@ public abstract class DifferencialStorage : IStoragePlugin
     }
 
     public abstract Task<StorageCode> SaveDifferencial<T>(APlugin plugin, T obj);
-
-    public virtual void Init(string connectionString)
-    {
-    }
-
-    public async Task<StorageCode> Save<T>(APlugin plugin, T obj)
-    {
-        if (!HasDifference(plugin, obj))
-        {
-            return StorageCode.Pass;
-        }
-
-        return await SaveDifferencial(plugin, obj);
-    }
-
-    public virtual void Dispose()
-    {
-    }
 }

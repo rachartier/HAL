@@ -1,25 +1,22 @@
-using HAL.MagicString;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using HAL.MagicString;
 
 namespace HAL.Server
 {
     public abstract class TcpClientSavedState : IDisposable
     {
-        public readonly StreamWriter StreamWriter;
-        public readonly StreamReader StreamReader;
-
-        public readonly Stopwatch Stopwatch;
         public readonly Stopwatch HeartbeatStopwatch;
-
-        public bool IsConnected { get; set; }
-        public bool IsFirstUpdate { get; set; } = true;
+        public readonly int HeartbeatUpdateTimeMs = 6000;
 
         public readonly TcpClient reference;
-        public readonly int HeartbeatUpdateTimeMs = 6000;
+
+        public readonly Stopwatch Stopwatch;
+        public readonly StreamReader StreamReader;
+        public readonly StreamWriter StreamWriter;
 
         public TcpClientSavedState(TcpClient client)
         {
@@ -34,6 +31,17 @@ namespace HAL.Server
 
             reference = client;
             IsConnected = true;
+        }
+
+        public bool IsConnected { get; set; }
+        public bool IsFirstUpdate { get; set; } = true;
+
+        public void Dispose()
+        {
+            StreamWriter.Dispose();
+            StreamReader.Dispose();
+
+            reference.Dispose();
         }
 
         public virtual async Task FirstUpdateAsync()
@@ -55,14 +63,6 @@ namespace HAL.Server
         {
             reference.Close();
             IsConnected = false;
-        }
-
-        public void Dispose()
-        {
-            StreamWriter.Dispose();
-            StreamReader.Dispose();
-
-            reference.Dispose();
         }
     }
 }

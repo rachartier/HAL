@@ -13,12 +13,6 @@ namespace HAL.Plugin
             SharedObject
         }
 
-        public string FileName { get; protected set; }
-        public string FilePath { get; protected set; }
-        public string FileExtension { get; protected set; }
-        public string Name { get; protected set; }
-        public string CheckSum { get; protected set; }
-
         public PluginFileInfos(string path)
         {
             FileName = Path.GetFileName(path);
@@ -27,22 +21,19 @@ namespace HAL.Plugin
             Name = Path.GetFileNameWithoutExtension(FilePath);
         }
 
+        public string FileName { get; protected set; }
+        public string FilePath { get; protected set; }
+        public string FileExtension { get; protected set; }
+        public string Name { get; protected set; }
+        public string CheckSum { get; protected set; }
+
         public bool Equals(PluginFileInfos other)
         {
-            if (other is null)
-            {
-                return false;
-            }
+            if (other is null) return false;
 
-            if (this == other)
-            {
-                return true;
-            }
+            if (this == other) return true;
 
-            if (other == null)
-            {
-                return false;
-            }
+            if (other == null) return false;
 
             return FileName.Equals(other.FileName) && CheckSum.Equals(other.CheckSum);
         }

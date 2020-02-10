@@ -1,6 +1,6 @@
-﻿using HAL.MagicString;
+﻿using System;
+using HAL.MagicString;
 using NLog;
-using System;
 
 namespace HAL.Loggin
 {

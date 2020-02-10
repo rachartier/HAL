@@ -12,7 +12,7 @@ namespace HAL.DllImportMethods
 #pragma warning restore IDE1006
 
         /// <summary>
-        /// launch a command from the shell (unix)
+        ///     launch a command from the shell (unix)
         /// </summary>
         /// <param name="command">command to be executedpath</param>
         /// <returns>the command's result</returns>

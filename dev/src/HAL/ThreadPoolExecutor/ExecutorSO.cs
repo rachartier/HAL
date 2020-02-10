@@ -1,9 +1,9 @@
-﻿using HAL.DllImportMethods;
+﻿using System;
+using System.Threading;
+using HAL.DllImportMethods;
 using HAL.Loggin;
 using HAL.OSData;
 using HAL.Plugin;
-using System;
-using System.Threading;
 
 namespace HAL.Executor.ThreadPoolExecutor
 {
@@ -11,7 +11,7 @@ namespace HAL.Executor.ThreadPoolExecutor
 
     {
         /// <summary>
-        /// run a code from a shared object fille
+        ///     run a code from a shared object fille
         /// </summary>
         /// <param name="plugin">plugin to be executed</param>
         public void RunFromSO(APlugin plugin)
@@ -21,7 +21,7 @@ namespace HAL.Executor.ThreadPoolExecutor
             {
                 QueueLength++;
 
-                ThreadPool.QueueUserWorkItem(new WaitCallback((obj) =>
+                ThreadPool.QueueUserWorkItem(obj =>
                 {
                     try
                     {
@@ -38,7 +38,7 @@ namespace HAL.Executor.ThreadPoolExecutor
                     {
                         Consume();
                     }
-                }));
+                });
             }
         }
     }

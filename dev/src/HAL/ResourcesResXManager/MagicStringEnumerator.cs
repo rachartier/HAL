@@ -16,14 +16,21 @@ namespace HAL.MagicString
 
 #if WINDOWS
         public static readonly string DefaultConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\config.json";
-        public static readonly string DefaultLocalConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\config_local.json";
-        public static readonly string DefaultConfigPathServerToClient = AppDomain.CurrentDomain.BaseDirectory + @"plugins\config.json";
+        public static readonly string DefaultLocalConfigPath =
+ AppDomain.CurrentDomain.BaseDirectory + @"config\config_local.json";
+        public static readonly string DefaultConfigPathServerToClient =
+ AppDomain.CurrentDomain.BaseDirectory + @"plugins\config.json";
         public static readonly string DefaultRelativeConfigPath = @"config\";
         public static readonly string DefaultRelativePluginPath = @"plugins\";
 #else
         public static readonly string DefaultConfigPath = AppDomain.CurrentDomain.BaseDirectory + "config/config.json";
-        public static readonly string DefaultLocalConfigPath = AppDomain.CurrentDomain.BaseDirectory + "config/config_local.json";
-        public static readonly string DefaultConfigPathServerToClient = AppDomain.CurrentDomain.BaseDirectory + "plugins/config.json";
+
+        public static readonly string DefaultLocalConfigPath =
+            AppDomain.CurrentDomain.BaseDirectory + "config/config_local.json";
+
+        public static readonly string DefaultConfigPathServerToClient =
+            AppDomain.CurrentDomain.BaseDirectory + "plugins/config.json";
+
         public static readonly string DefaultRelativeConfigPath = "config/";
         public static readonly string DefaultRelativePluginPath = "plugins/";
 #endif
@@ -44,6 +51,7 @@ namespace HAL.MagicString
 
         /** Server **/
         public static readonly string JSONPort = "port";
+
         public static readonly string JSONMaxThreads = "max_threads";
         public static readonly string JSONAddress = "ip";
         public static readonly string JSONUpdateRate = "update_rate";

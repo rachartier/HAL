@@ -1,13 +1,12 @@
-﻿using HAL.Loggin;
+﻿using System;
+using HAL.Loggin;
 using HAL.Plugin;
-using System;
 
 namespace Plugin.Manager
 {
     public class PluginMasterBasePlugin : APluginMaster<BasePlugin>
     {
         public PluginMasterBasePlugin()
-            : base()
         {
             // all officialy supported extensions
             AddScriptExtension(".py", "python");
@@ -18,16 +17,14 @@ namespace Plugin.Manager
         }
 
         /// <summary>
-        /// add a custom script extension
+        ///     add a custom script extension
         /// </summary>
         /// <param name="extension">extension name</param>
         /// <param name="name">complete name</param>
         public override void AddScriptExtension(string extension, string name)
         {
             if (AcceptedFilesTypes[PluginFileInfos.FileType.Script].Contains(extension))
-            {
                 throw new ArgumentException($"{extension} is already definded.");
-            }
 
             AcceptedFilesTypes[PluginFileInfos.FileType.Script].Add(extension);
 
@@ -36,7 +33,7 @@ namespace Plugin.Manager
         }
 
         /// <summary>
-        /// add a plugin by its path
+        ///     add a plugin by its path
         /// </summary>
         /// <param name="path">path of the plugin</param>
         public override void AddPlugin(string path)
