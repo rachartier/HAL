@@ -8,7 +8,8 @@ namespace HAL.Scheduler
 {
     public class SchedulerService
     {
-        public static uint NB_MILLIS_IN_MINUTE = 60_000;
+        private static uint NB_MILLIS_IN_MINUTE = 60_000;
+        private static uint MAX_RETRY = 10;
 
         private static SchedulerService instance;
 
@@ -63,13 +64,21 @@ namespace HAL.Scheduler
         {
             if (timers.TryGetValue(taskName, out var timer))
             {
+                int retry = 0;
+                
                 await timer.DisposeAsync();
 
-                Log.Instance?.Info($"{taskName} unscheduled");
 
-                return timers.Remove(taskName);
+                while (timers.Remove(taskName) && retry < MAX_RETRY)
+                {
+                    retry++;
+                }
+
+                Log.Instance?.Info($"{taskName} unscheduled");
+                return true;
             }
 
+            Log.Instance?.Error($"{taskName} not found.");
             return false;
         }
     }

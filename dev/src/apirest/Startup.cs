@@ -60,6 +60,9 @@ namespace apirest
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "HAL MONGO API");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseWebSockets();
+            
             app.UseMvc();
         }
     }

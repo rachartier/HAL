@@ -10,8 +10,7 @@ namespace HAL.Configuration
         private static int DEFAULT_PORT = 11000;
         private static int DEFAULT_UPDATE_RATE = 10000;
 
-        public override void Load(string file)
-        {
+        public override void Load(string file) {
             if (!File.Exists(file)) throw new FileNotFoundException($"'{file} not found.'");
 
             var jsonData = File.ReadAllText(file);

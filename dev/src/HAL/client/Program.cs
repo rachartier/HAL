@@ -112,11 +112,6 @@ namespace HAL
                     Log.Instance?.Info($"Storage \"{storageName}\" added.");
                 }
 
-                // TODO: fix that
-                // if this method isnt here twice, then its possible to the schelduled plugin not to be deleted
-                // why? I dont know yet
-                // update: if the heartbeat is to low, then it need to be called 3 times or more
-                await pluginManager.UnscheduleAllPluginsAsync(pluginMaster.Plugins);
                 await pluginManager.UnscheduleAllPluginsAsync(pluginMaster.Plugins);
 
                 pluginMaster.RemoveAllPlugins();
