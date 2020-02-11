@@ -71,6 +71,7 @@ namespace HAL.Scheduler
 
                 while (timers.Remove(taskName) && retry < MAX_RETRY)
                 {
+                    await Task.Delay(100);
                     retry++;
                 }
 
