@@ -16,6 +16,8 @@ namespace apirest
         {
             LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
+
+            ConfigurationOptions.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -47,7 +49,7 @@ namespace apirest
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {

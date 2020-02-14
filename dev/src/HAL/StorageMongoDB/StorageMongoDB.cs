@@ -17,6 +17,7 @@ namespace HAL.Storage
         public override void Init(string connectionString)
         {
             client = new MongoClient(connectionString);
+            Console.WriteLine(MongoUrl.Create(connectionString).DatabaseName);
             defaultDatabase = client.GetDatabase(MongoUrl.Create(connectionString).DatabaseName);
         }
 
@@ -25,14 +26,10 @@ namespace HAL.Storage
             var anonymousObject = JObject.Parse(obj.ToString());
 
             var collection = defaultDatabase.GetCollection<dynamic>("results");
-            //await collection.InsertOneAsync(anonymousObject);
 
             dynamic document = new ExpandoObject();
 
-            PropertyInfo[] propertyInfos;
-            propertyInfos = typeof(APlugin).GetProperties(BindingFlags.Public |
-                                                          BindingFlags.Static);
-
+            document.date = DateTime.UtcNow.ToString("s");
             document.name = plugin.Infos.Name;
             document.machine_name = Environment.MachineName;
             document.result = BsonSerializer.Deserialize<dynamic>(obj.ToString());

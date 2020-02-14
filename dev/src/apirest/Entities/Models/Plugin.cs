@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Blueshift.EntityFrameworkCore.MongoDB.Annotations;
 using MongoDB.Bson;
@@ -11,6 +12,9 @@ namespace Entities.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
+        
+        [BsonElement("date")]
+        public DateTime Date { get; set; }
 
         [BsonElement("machine_name")]
         public string MachineName { get; set; }

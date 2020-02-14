@@ -16,14 +16,15 @@ namespace Repository
         public IEnumerable<Plugin> GetAllPlugins()
         {
             return FindAll()
-                .OrderBy(x => x.Name)
+                .OrderBy(x => x.Date)
                 .ToList();
         }
 
-        public Plugin GetPluginByName(string name)
+        public IEnumerable<Plugin> GetPluginByName(string name)
         {
             return FindByCondition(x => x.Name.Equals(name))
-                .FirstOrDefault();
+                .OrderBy(x => x.Date)
+                .ToList();
         }
 
         public void CreatePlugin(Plugin plugin)

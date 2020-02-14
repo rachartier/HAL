@@ -50,7 +50,7 @@ namespace HAL.Server
             var folder = $"{savePath}/{MagicStringEnumerator.RootSaveResults}/{path}/";
             Directory.CreateDirectory(folder);
 
-            using var fw = File.CreateText($"{folder}{filename}");
+            await using var fw = File.CreateText($"{folder}{filename}");
             await fw.WriteAsync(content);
 
             //Log.Instance?.Info($"{path} {filename} {content}");
@@ -94,8 +94,6 @@ namespace HAL.Server
                 var fileName = ConvertUriAbsoluteToLocal(file);
 
                 if (!serverSidedFiles.ContainsKey(fileName)) serverSidedFiles.Add(fileName, new MarkedChecksum("0"));
-
-                Console.WriteLine(fileName);
 
                 if (serverSidedFiles[fileName]?.Checksum.Equals(checksum) == false)
                 {

@@ -1,7 +1,12 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using apirest;
 using Contracts;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
@@ -44,7 +49,7 @@ namespace Controllers
                 return StatusCode(500, $"Internal server error: ${e.Message}");
             }
         }
-
+/*
         [HttpGet("{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -69,27 +74,71 @@ namespace Controllers
                 return StatusCode(500, "Internal server error.");
             }
         }
-
-        [HttpGet("ws/{name}")]
+*/
+        [HttpGet("{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetPluginByNameWs(string name)
         {
+            if (ConfigurationOptions.UseWebSockets == false)
+            {
+                return StatusCode(403,
+                    "Websockets not enabled. You should not enable it, but if you want, please set \"UseWebSockets\" in \"appsettings.json\" to true, then build the project.");
+            }
+
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
                 webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
                 
-                var buffer = new byte[1024 * 4];
-                WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                
-                while (!result.CloseStatus.HasValue)
+                DateTime? lastDate = null;
+            
+                var timer = new Timer(async _ =>
                 {
-                    await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
+                
+                    /*
+                     * il faudrait que notre base mongddb integre automatiquement les dates
+                     * algo:
+                     *     récupérer la dernière date ajoutée (à l'instant où la ws est appelée)
+                     *
+                     *     attendre X secondes
+                     *
+                     *     récupérer tous les plugins, les ranger par ordre de date
+                     *     récupérer jusqu'à la dernière date ajoutée
+                     *
+                     *     dernière date ajoutée = dernière date recupérée
+                     */
+//                var lastResults = fetchDatabase().
 
-                    result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    if (lastDate == null)
+                    {
+                        lastDate = fetchDatabase(name).Last().Date;
+                        return;
+                    }
+
+                    IEnumerable<Plugin> lastResults = fetchDatabase(name).Where(p => p.Date.CompareTo(lastDate.Value) >= 0);
+
+                    foreach (var result in lastResults)
+                    {
+                        var resultBytes = Encoding.ASCII.GetBytes(result.Result.ToString());
+                        await webSocket.SendAsync(new ArraySegment<byte>(resultBytes, 0, resultBytes.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                }, null, 0, 1000);
+                
+                while (webSocket.State == WebSocketState.Open)
+                {
+                    await Task.Delay(100);
                 }
-                await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+
+                return Ok();
+                //await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
             }
+
+            return BadRequest();
+        }
+
+        public IEnumerable<Plugin> fetchDatabase(string name)
+        {
+            return repository.Plugin.GetPluginByName(name);
         }
     }
 }
