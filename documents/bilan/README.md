@@ -2,6 +2,7 @@
 
 
 
+
 Contenue
 --------
 
@@ -10,6 +11,7 @@ Contenue
     - [Base de données](#base-de-données)
     - [API REST](#api-rest)
     - [Vues](#vues)
+- [Interview Client](#interview-client)
 - [Retour sur experience](#retour-sur-experience)
 
 
@@ -64,6 +66,26 @@ Nous utilisons Grafana, qui est un outil permettant de visualiser des données d
 Grafana permet aussi l'utilisation d'un système d'alerte entiérement configurable par les administrateurs, en utilisant le système d'alerte de base ou bien utilisé un autre outil d'alerting parmis ceux proposé par Grafana (AlertMe, Alertmanager ...). Grafana fournis aussi une solution d'administration et un système de droit au sein de son application, c'est-à-dire qu'il est possible de faire plusieurs groupe au sein d'un ensemble de tableau de bord pour permettre à certains utilisateur d'obtenir simplement la visualisation de ceux-ci, ou bien l'administration, la modification etc...
 
 
+Interview Client
+-----------------
+
+Après plusieurs rendez-vous avec notre client, nous avons pus avoir différents retours de sa part sur le travail fournis durant ces derniers mois.
+Avec du retard sur le délai prévu de la première mise en production, nous avons respecter la contrainte de la première mise en production tout en ayant respecter les besoins principaux de l'outil.
+
+Notre client nous a fait un retour très positif sur le travail et les résultats fournis, de plus nous avons eu le privilèges d'avoir une confiance totale de notre client et d'avoir pus mettre en production nous même notre outil, récompense de notre travail fournis durant ces mois.
+
+Si on reprend le [CDC](../cahierdescharges.pdf):
+
+| Besoins            | Réalisé ?     |
+| ------------------ |:-------------:|
+| Recolte de données | Oui           |
+| Créer des plugins  | Oui           |
+| Configuration des plugins | Oui    |
+| Configurer les intérpréteurs | Oui |
+| Ajout/suppression/màj des plguins| Pas encore en prod mais fonctionnel |
+| Abstraction pour implémentation de bdd | Oui |
+
+Voici le tableau qui récapitule les besoins résolus dans la période. 
 
 Retour sur experience
 ----------------------
