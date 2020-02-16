@@ -1,7 +1,25 @@
 Documentation API
 =================
 
-## Schema
+Vous pouvez retrouver ici toute la documentation explicative des choix portées sur l'API REST de HAL.
+
+
+Contenue
+--------
+
+- [Schema](#schema)
+    - [Base de donnée](#base-de-donnée)
+    - [API Gateway](#api-gateway)
+- [Description des choix](#description-des-choix)
+- [Sécurité](#sécurité)
+    - [HTTP](#http-:-les-données-ne-sont-pas-chiffrées)
+    - [HTTPS](#https-:-connexions-chiffrées)
+
+
+
+Schema
+--------
+
 ![](files/diag_api.png)
 
 Notre architecture respecte l'architure classique d'une API REST:
@@ -11,27 +29,32 @@ Notre architecture respecte l'architure classique d'une API REST:
 * Base de données avec MongoDB
 
 Remise en contexte:
-Notre sujet est de créer une application permettant de faire remonter des données au serveur grace à l'execution de plugins, fait par le client. Ces données, sous format JSON, sont envoyé sur un serveur, pour permettre un stockage sur ce dernier, ou bien envoyé dans une base de données (MongoDB, InfluxDB). 
-Chaque execution des plugins enverra donc ce résultat, si quelque chose a changé, dans la base de données, avec d'autres informations comme le nom de la machine, la date.
+Notre sujet est de créer une application permettant de faire remonter des données au serveur grace à l'execution de plugins, faite par le client. Ces données, sous format JSON, sont envoyées sur un serveur, pour permettre un stockage sur ce dernier, ou bien envoyées dans une base de données (MongoDB, InfluxDB). 
+Chaque execution des plugins enverra donc ce résultat s'il est différent du précédent dans la base de donnée, avec d'autres informations comme le nom de la machine, la date...
 
-### Base de donnée
-La base de données MongoDB est donc alimentée par les clients. Cette base va stocker tous les résultats sous forme de document, ce qui permet de stocker une grande quantitée de données, mais à comme défaut d'être peut performante dans des reqûetes relationnelles.
+## Base de donnée
 
-### API Gateway
+
+La base de données MongoDB est donc alimentée par les clients. Cette base va stocker tous les résultats sous forme de document, ce qui permet de stocker une grande quantitée de données, mais a comme défaut d'être peu performante dans des reqûetes relationnelles.
+
+## API Gateway
+
+
 L'API Gateway a été réalisée avec Ocelot, qui permet de facilement manager ses liens et ses api.
 
 
 
+Description des choix
+---------------------
 
-
-## Description des choix des 2 types d'API
 Nous avons choisi de faire une API RESTfull et une API utilisant des websockets.
 
-L'API RESTfull est basiqu. Elle permet de retrouver tous les résultats de tous les plugins.
-
+L'API RESTfull est basique. Elle permet de retrouver tous les résultats de tous les plugins.
 
 
 ## Sécurité
+
+
 
 ### HTTP : les données ne sont pas chiffrées
 HTTP utilisent un protocole simple de transfert hypertexte, il a été créé au début des années 1990 par Tim Berners-Lee.
