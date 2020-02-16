@@ -82,7 +82,7 @@ Si on reprend le [CDC](../cahierdescharges.pdf):
 | Créer des plugins  | Oui           |
 | Configuration des plugins | Oui    |
 | Configurer les intérpréteurs | Oui |
-| Ajout/suppression/màj des plguins| Pas encore en prod mais fonctionnel |
+| Ajout/suppression/màj des plguins| Oui |
 | Abstraction pour implémentation de bdd | Oui |
 
 Voici le tableau qui récapitule les besoins résolus dans la période. 
