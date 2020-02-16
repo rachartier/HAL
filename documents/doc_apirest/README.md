@@ -12,8 +12,9 @@ Contenu
     - [API Gateway](#api-gateway)
 - [Description des choix](#description-des-choix)
 - [Sécurité](#sécurité)
-    - [HTTP](#http-:-les-données-ne-sont-pas-chiffrées)
-    - [HTTPS](#https-:-connexions-chiffrées)
+    - [HTTP](#http-les-données-ne-sont-pas-chiffrées)
+    - [HTTPS](#https-connexions-chiffrées)
+- [Besoins du client et API](#besoins-du-client-et-lapi) 
 
 
 
@@ -119,4 +120,5 @@ Besoins du client et l'API
 ----------------
 
 Par rapport à notre [cahier des charges](../cahierdescharges.pdf) notre API n'est, pour l'instant, d'aucune utilité à notre client. Etant donnée que nous lui fournissons une vue admin depuis l'outil Grafana, le client n'a pas d'intérêt à utiliser l'API afin d'aller chercher les informations qui pourraient lui être nécéssaire dans la base de donnée.
+
 Notre API a, pour le moment, surtout un but éducatif. Cependant, rien n'exclus la prise en main de l'API par le client et, pourquoi pas, l'extension de fonctionnalité dans cette voie la. Si dans le futur, le client veut pouvoir utiliser l'API au détriment de l'outil Grafana, nous aurons déjà une base pour compléter les nouveaux besoins du client.
