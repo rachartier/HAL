@@ -53,7 +53,7 @@ Ce schema réprésente une version simplifié de l'algorithmie de HAL.
 API REST
 --------
 
-La documentation de l'API REST se situe dans le dossier coresspondant de la [documentation](doc_apirest).
+La documentation de l'API REST se situe dans le dossier correspondant de la [documentation](doc_apirest).
 
 Bilan du projet
 ----------------
