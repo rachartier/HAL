@@ -113,3 +113,10 @@ HTTPS et HTTP, tous deux sont des protocoles de transfert hypertexte qui permett
 Le protocole HTTPS est une extension de HTTP. Le  "S" signifie "Secure" et il fonctionne grâce au protocole TLS (Transport Layer Security), le successeur du protocole SSL (Secure Sockets Layer), la technologie de sécurité standard pour établir une connexion chiffrée entre un serveur web et un navigateur.
 En plus de chiffrer les données transmises entre un serveur et le navigateur, le protocole TLS authentifie également le serveur auquel le client se connecte et protège les données transmises de toute altération.
 
+
+
+Besoins du client et l'API
+----------------
+
+Par rapport à notre [cahier des charges](../cahierdescharges.pdf) notre API n'est, pour l'instant, d'aucune utilité à notre client. Etant donnée que nous lui fournissons une vue admin depuis l'outil Grafana, le client n'a pas d'intérêt à utiliser l'API afin d'aller chercher les informations qui pourraient lui être nécéssaire dans la base de donnée.
+Notre API a, pour le moment, surtout un but éducatif. Cependant, rien n'exclus la prise en main de l'API par le client et, pourquoi pas, l'extension de fonctionnalité dans cette voie la. Si dans le futur, le client veut pouvoir utiliser l'API au détriment de l'outil Grafana, nous aurons déjà une base pour compléter les nouveaux besoins du client.
