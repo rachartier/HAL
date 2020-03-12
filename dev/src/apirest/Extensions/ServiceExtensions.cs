@@ -1,3 +1,5 @@
+using apirest.Helpers;
+using apirest.Services;
 using Contracts;
 using Entities;
 using LoggerService;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Repository;
 using Blueshift.EntityFrameworkCore.MongoDB.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
 
 public static class ServiceExtensions
@@ -53,5 +56,15 @@ public static class ServiceExtensions
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "HAL API MONGO", Version = "v1" });
         });
+    }
+
+    public static void ConfigureBasicAuth(this IServiceCollection services)
+    {
+        services.AddAuthorization();
+        
+        services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+        
+        services.AddScoped<IUserService, UserService>();
     }
 }

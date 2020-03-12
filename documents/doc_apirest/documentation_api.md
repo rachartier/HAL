@@ -1,7 +1,8 @@
 Documentation API
 =================
 
-## Schema
+## Schema
+
 ![](files/diag_api.png)
 
 Notre architecture respecte l'architure classique d'une API REST:
