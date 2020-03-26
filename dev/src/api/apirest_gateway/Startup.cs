@@ -10,8 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
 
-namespace apirestcore3
+namespace apirest_gateway
 {
     public class Startup
     {
@@ -26,12 +28,7 @@ namespace apirestcore3
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.ConfigureCors();
-            services.ConfigureIISIntegration();
-            services.ConfigureLoggerService();
-            services.ConfigureMongoDbContext(Configuration);
-            services.ConfigureRepositoryWrapper();
-
+            services.AddOcelot();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,13 +43,13 @@ namespace apirestcore3
 
             app.UseRouting();
 
+            app.UseOcelot().Wait();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace apirestcore3.Controllers
+namespace apirest_gateway.Controllers
 {
     [ApiController]
     [Route("[controller]")]
