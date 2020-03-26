@@ -29,6 +29,13 @@ Puis, dans un autre terminal, lancer Ocelot: `cd dev/src/api/apirest_gateway && 
 
 Il faudra bien sûr aussi lancer HAL Serveur et le client et le configurer pour avoir les résultats dans la base de donnée.
 
+Pour utiliser les endpoints, il faudra configurer Postman (par exemple) en mode "Basic Auth".
+
+| user | password |
+| ------ | ------ |
+| admin | admin |
+
+
 Les endpoints:
 
 | endpoints | fonction |
