@@ -6,7 +6,7 @@ Vous pouvez retrouver ici toute la documentation explicative des choix portées 
 
 Contenu
 --------
-
+- [Lancement](#lancement)
 - [Schema](#schema)
     - [Base de donnée](#base-de-donnée)
     - [API Gateway](#api-gateway)
@@ -16,6 +16,27 @@ Contenu
     - [HTTPS](#https-connexions-chiffrées)
 - [Besoins du client et API](#besoins-du-client-et-lapi) 
 
+
+Lancement
+---------
+
+Lancer le docker Mongo: `cd dev/src/api/apirest && docker-compose up -d`
+
+Lancer l'API REST: `dotnet run`
+
+Puis, dans un autre terminal, lancer Ocelot: `cd dev/src/api/apirest_gateway && dotnet run`
+
+
+Il faudra bien sûr aussi lancer HAL Serveur et le client et le configurer pour avoir les résultats dans la base de donnée.
+
+Les endpoints:
+
+| endpoints | fonction |
+| ------ | ------ |
+| /api/v1/user | renvois la liste des utilisateurs disponibles |
+| /api/v1/plugin | renvois les résultats des plugins | 
+| /api/v1/plugin/{name} | renvois les résultats des plugins en fonction du nom de ce dernier | 
+| /api/v1/plugin/{name} | peut être utilisé avec le protocol websocket |
 
 
 Schema
