@@ -4,7 +4,7 @@
 [![pipeline status](https://gitlab.iut-clermont.uca.fr/rachartier/hal/badges/master/pipeline.svg)](https://gitlab.iut-clermont.uca.fr/rachartier/hal/commits/master)
 
 
-Retrouvez tout les éléments de documentation dans la partie [documentation](documents/) du projet
+***Retrouvez tout les éléments de documentation dans la partie [documentation](documents/) du projet***
 
 Contents
 --------
