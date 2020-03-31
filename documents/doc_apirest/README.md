@@ -42,10 +42,9 @@ Les endpoints:
 | ------ | ------ |
 | /api/v1/user | renvois la liste des utilisateurs disponibles |
 | /api/v1/plugin | renvois les résultats des plugins | 
-| /api/v1/plugin/{name} | renvois les résultats des plugins en fonction du nom de ce dernier | 
-| /api/v1/plugin/{name} | peut être utilisé avec le protocol websocket |
+| /api/v1/plugin/{name} | renvois les résultats des plugins en fonction du nom de ce dernier avec le protocol websocket | 
 
-Pour utiliser les websockets, il est préférable d'utiliser [](websocket.org/echo.html)
+Pour utiliser les websockets, il est préférable d'utiliser [websocket.org/echo.html](websocket.org/echo.html)
 
 Schema
 --------
