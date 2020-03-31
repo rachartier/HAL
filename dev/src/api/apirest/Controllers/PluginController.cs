@@ -47,7 +47,7 @@ namespace Controllers
             }
             catch (Exception e)
             {
-                logger.LogError($"Error in GetAllPlugins: {e.Message}");
+                logger?.LogError($"Error in GetAllPlugins: {e.Message}");
                 return StatusCode(500, $"Internal server error: ${e.Message}");
             }
         }
@@ -133,7 +133,6 @@ namespace Controllers
                 }
 
                 return Ok();
-                //await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
             }
 
             return BadRequest();

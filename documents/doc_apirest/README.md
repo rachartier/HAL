@@ -45,6 +45,7 @@ Les endpoints:
 | /api/v1/plugin/{name} | renvois les résultats des plugins en fonction du nom de ce dernier | 
 | /api/v1/plugin/{name} | peut être utilisé avec le protocol websocket |
 
+Pour utiliser les websockets, il est préférable d'utiliser [](websocket.org/echo.html)
 
 Schema
 --------

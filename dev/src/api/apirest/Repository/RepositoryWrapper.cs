@@ -12,7 +12,7 @@ namespace Repository
         {
             get
             {
-                plugin = plugin ?? new PluginRepository(repositoryContext);
+                plugin ??= new PluginRepository(repositoryContext);
                 return plugin;
             }
         }
@@ -22,7 +22,8 @@ namespace Repository
             this.repositoryContext = repositoryContext;
         }
 
-		public void Save() {
+		public void Save() 
+        {
 			repositoryContext.SaveChanges();
 		}
     }
