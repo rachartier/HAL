@@ -577,9 +577,9 @@ Il faut impérativement créer une classe héritant de IStoragePlugin, et par la
 Ensuite, il faut modifier le fichier: client/factory/StorageFactory.cs pour y rajouter votre stockage personnalisé. Toutes les informations de comment procéder sont mit en commentaires dans ce fichier.
 
 Docker
-
 --------
 
 Le serveur peut être utilisé via un conteneur Docker disponible sur [dockerhub.iut-clermont.uca.fr/ui/library/hal\_hal-server\_dotnet3.1](https://dockerhub.iut-clermont.uca.fr/ui/library/hal_hal-server_dotnet3.1).
 Pour plus d'informations se référer au [README](dev/docker) disponible dans le dossier dev/docker/
 
+Si vous souhaiter utiliser le serveur avec grafana et influxdb il faudra alors utiliser le docker-compose approprié, lien vers la [documentation](dev/docker/influxdb-grafana-hal-server)

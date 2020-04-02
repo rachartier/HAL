@@ -3,6 +3,7 @@
 
 
 
+
 Contents
 --------
 
@@ -16,7 +17,9 @@ Contents
 
 This docker-compose include hal-server docker-compose.
 
+
 ## Influxdb
+
 
 
 You will have to mount a volume data into your host if you want to access the persisted container data
@@ -34,6 +37,7 @@ Get more information in [docker hub documentation of influxdb](https://hub.docke
 
 
 ## Grafana
+
 
 
 Same as for the influxdb container, if you want to access the persisted container data you'll have to mount a volume in your host.
@@ -95,7 +99,6 @@ You'll find more about writing data into influxdb database in documentation and 
 ## Link it to HAL 
 
 In preparation to link it with HAL, HAL client's will have to push their data into the wanted database in influxdb. Grafana will request the wanted data from influxdb and will able to display it in modern view and dashboard.
-
 The name of the influxdb database is 'hal_data', so in your client you can configure it like that:
 
 ```json
@@ -105,5 +108,5 @@ The name of the influxdb database is 'hal_data', so in your client you can confi
     ]
 
 ```
-
+You will have to change the [config.json](../../../README.md#stockage) of your client's
 Severals dashboard can be made, severals user can also be made and user-access can be restricted with grafana.
