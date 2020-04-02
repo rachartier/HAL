@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  influxdb:
+    image: influxdb:latest
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+    env_file:
+      - 'env.influxdb'
+    volumes:
+      # Data persistency
+      # sudo mkdir -p /srv/docker/influxdb/data
+      - /srv/docker/influxdb/data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - 'env.grafana'
+    user: "0"
+    links:
+      - influxdb
+    volumes:
+      # Data persistency
+      # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
+      - /srv/docker/grafana/data:/var/lib/grafana
+
+
+  hal:
+    image: dockerhub.iut-clermont.uca.fr:443/hal_hal-server_dotnet3.1:latest
+    ports:
+      - "11000:11000"
+    restart: unless-stopped
+    volumes:
+          - /data/TMP/hal/results:/root/data
+          - /data/TMP/hal/plugins:/root/plugins
+    environment:
+      IP_HAL: "127.0.0.1"
+      PORT_HAL: 11000
+      MAX_THREADS_HAL: 8
+      UPDATE_RATE_HAL: 1000
+      SAVE_PATH_HAL: /data
