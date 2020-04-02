@@ -1,18 +1,15 @@
 # Influxdb/Grafana/HAL Server Docker-Compose
 
 
-
-
-
 Contents
 --------
 
 - [InfluxDB](#influxdb)
+- [InfluxDB API](#influxdb-api)
 - [Grafana](#grafana)
     - [Web UI](#web-ui)
     - [Data source](#data-source)
     - [InfluxQL](#influxql)
-- [InfluxDB API](#influxdb-api)
 - [Link it to HAL](#link-it-to-hal)
 
 This docker-compose include hal-server docker-compose.
@@ -36,8 +33,26 @@ By default the path to persisted data is `/srv/docker/influxdb/data`, create it 
 Get more information in [docker hub documentation of influxdb](https://hub.docker.com/_/influxdb)
 
 
-## Grafana
+## Influxdb API
 
+You can check all the databases presents in influxdb with `curl -G http://localhost:8086/query --data-urlencode "q=SHOW DATABASES"`
+
+If you want to create a database use the influxdb API with `curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE hal_data"`.
+
+You can also create data directly with the API : `curl -i -XPOST 'http://localhost:8086/write?db=hal_data' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'`
+
+For more information about the write endpoint please check [write http endpoint documentation](https://docs.influxdata.com/influxdb/v1.7/tools/api/#write-http-endpoint)
+
+You'll find more about writing data into influxdb database in documentation and a guide in [influxdb API guide](https://docs.influxdata.com/influxdb/v1.7/guides/writing_data/)
+
+If you want to test HAL using grafana and influxdb, adding to the previous task, you'll have to:
+- Create the database 'hal_data' (`curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE hal_data"`)
+- Check if it is added correctly (`curl -G http://localhost:8086/query --data-urlencode "q=SHOW DATABASES"`)
+
+That's all for the influxdb API part
+
+
+## Grafana
 
 
 Same as for the influxdb container, if you want to access the persisted container data you'll have to mount a volume in your host.
@@ -75,6 +90,7 @@ Configure the URL where you can access the HTTP API of your influxdb, here it's 
 
 And then you can fill in the **InfluxDB Details** as you want ! Here the datasource will get the information of the 'hal_data' database
 
+
 ### InfluxQL
 
 Now that you've config grafana and influxdb, you will be able to collect data and display it to somes dashboard !
@@ -83,17 +99,13 @@ Now that you've config grafana and influxdb, you will be able to collect data an
 
 All the request of the data will be made by the Influx query langage, [InfluxQL](https://docs.influxdata.com/influxdb/v1.7/query_language/)
 
-## Influxdb API
+You can now create a query and display it into a navigation view:
 
-You can check all the databases presents in influxdb with `curl -G http://localhost:8086/query --data-urlencode "q=SHOW DATABASES"`
+![connected users](imgs/connected_users.png)
 
-If you want to create a database use the influxdb API with `curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE hal_data"`.
-You can also create data directly with the API : `curl -i -XPOST 'http://localhost:8086/write?db=hal_data' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'`
-
-For more information about the write endpoint please check [write http endpoint documentation](https://docs.influxdata.com/influxdb/v1.7/tools/api/#write-http-endpoint)
-
-You'll find more about writing data into influxdb database in documentation and a guide in [influxdb API guide](https://docs.influxdata.com/influxdb/v1.7/guides/writing_data/)
-
+This is a example of what can be done with grafana using the results of hal plugins. Here we're using the __connected\_users__ plugin.
+The query displayed here is equivalent to
+`curl -G "http://localhost:8086/query?pretty=true" --data-urlencode "db=hal_data" --data-urlencode "q=SELECT "result" FROM "connected_user" WHERE time >= now() - 30m"`
 
 
 ## Link it to HAL 
@@ -101,12 +113,36 @@ You'll find more about writing data into influxdb database in documentation and 
 In preparation to link it with HAL, HAL client's will have to push their data into the wanted database in influxdb. Grafana will request the wanted data from influxdb and will able to display it in modern view and dashboard.
 The name of the influxdb database is 'hal_data', so in your client you can configure it like that:
 
+Write the configuration in the config_local.json in the server-side.
+
 ```json
-"database":
+{
+  "server": {
+    "ip": "127.0.0.1",
+    "port": 11000
+  },
+
+  "storage": [
+    "influxdb"
+  ],
+
+  "database": {
     "connectionString": [
-        "http://localhost:8086"
+        "http://localhost:8086/"
     ]
+  }
+}
 
 ```
-You will have to change the [config.json](../../../README.md#stockage) of your client's
+You will have to change the [config_local.json](../../../README.md#fichier-de-configuration) of your client's
+** For test purpose, if you want to test in local you'll have to remove hal server from the compose and launch it manually **
+
+Process for testing HAL using grafana and influxdb in **local**:
+- Remove hal server from the docker file (**only if it's local**) and launch it manually
+- Write the right configuration of influxdb storage in **config_local.json**
+- Create the database 'hal_data' (`curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE hal_data"`)
+- Check if it is added correctly (`curl -G http://localhost:8086/query --data-urlencode "q=SHOW DATABASES"`)
+- Connect to grafana at localhost:3000 using admin user
+- Query hal_data base with InfluxQL (the example show above was querying connected\_users results plugin )
+
 Severals dashboard can be made, severals user can also be made and user-access can be restricted with grafana.
