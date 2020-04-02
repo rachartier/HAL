@@ -79,7 +79,8 @@ All the request of the data will be made by the Influx query langage, [InfluxQL]
 You can check all the databases presents in influxdb with `curl -G http://localhost:8086/query --data-urlencode "q=SHOW DATABASES"`
 
 If you want to create a database use the influxdb API with `curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"` replace 'mydb' with the name of your db.
-You can also create data directly with the API : `curl -i -XPOST 'http://localhost:8086/write?db=mydb' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'`
+You can also create data directly with the API : 
+`curl -i -XPOST 'http://localhost:8086/write?db=mydb' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'`
 
 For more information about the write endpoint please check [write http endpoint documentation](https://docs.influxdata.com/influxdb/v1.7/tools/api/#write-http-endpoint)
 
@@ -88,4 +89,5 @@ You'll find more about writing data into influxdb database in documentation and 
 ## Link it to HAL 
 
 In preparation to link it with HAL, HAL client's will have to push their data into the wanted database in influxdb. Grafana will request the wanted data from influxdb and will able to display it in modern view and dashboard.
+You will have to change the [config.json](../../../README.md#stockage) of your client's
 Severals dashboard can be made, severals user can also be made and user-access can be restricted with grafana.
