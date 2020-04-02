@@ -12,6 +12,7 @@ Contenue
 - [Tableau des fonctionnalités](#tableau-des-fonctionnalités)
 - [Schema récapitulatif](#schema-récapitulatif)
 - [API REST](#api-rest)
+- [Grafana et Influxdb](#grafana_et_influxdb)
 - [Bilan du projet](#bilan-du-projet)
 
 
@@ -54,6 +55,11 @@ API REST
 --------
 
 La documentation de l'API REST se situe dans le dossier correspondant de la [documentation](doc_apirest).
+
+Grafana et Influxdb
+------------------
+
+Grafana et influxdb peuvent être utilisé avec HAl afin d'obtenir une interface graphique ergonomique et user-friendly. En savoir plus sur la [documentation](../dev/docker/influxdb-grafana-hal-server)
 
 Bilan du projet
 ----------------
