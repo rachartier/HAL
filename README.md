@@ -10,12 +10,46 @@ Contents
 --------
 
 - [Intro](#intro)
-- [Installation](#installation)
-- [Server](#server)
-- [QuickStart](#quickstart)
-- [Stockage](#stockage)
-- [Ajouter une extension personnalisée](#ajouter-une-extension-personnalisée)
-- [Docker](#docker)
+- Choix Installations
+    - Serveur
+        - Docker
+            - Exigence
+            - Installation avec Docker
+        - Installation manuelle
+            - Exigence
+            - Installation
+    - Client
+        - Installation manuelle
+            - Exigence
+            - Installation    
+- Installation
+    - Serveur
+        - Docker
+            - Mise à jour (docker pull)
+            - Installation InfluxDB (optionnel) (autre page)
+                - Présentation
+                - Installation (docker-compose)
+                - Volume monté
+                - API InfluxDB
+                    - Création d'une base de donnée
+                    - InfluxQL
+                - Liason avec HAL
+            - Installation Grafana (optionnel) (autre page)
+                - Présentation  
+                - Installation (docker-compose)
+                - Volume monté
+                - Présentation rapide de l'interface
+                - InfluxQL avec Grafana
+            - Installation API (optionnel) (autre page)
+                - Installation 
+                - Configuration
+                - Lancement
+                - Endpoints
+            - Tout-en-un 
+                - Rédaction du docker compose
+        - Installation manuelle
+    - Client
+        - Installation manuelle
 
 Intro
 ------------
