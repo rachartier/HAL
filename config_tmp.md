@@ -1,42 +1,20 @@
 - [Configuration](#configuration)
-  - [Comprendre `config_global.json` et `config_local.json`](#comprendre-config_globaljson-et-config_localjson)
-  - [Configurer le serveur](#configurer-le-serveur)
-    - [Changement d'ip et de port](#changement-dip-et-de-port)
+	- [Comprendre `config.json` et `config_local.json`](#comprendre-configjson-et-config_localjson)
+	- [Configurer le serveur](#configurer-le-serveur)
+		- [Changement d'ip et de port](#changement-dip-et-de-port)
+	- [Configurer le client](#configurer-le-client)
+		- [Attributs](#attributs)
+		- [Mode administrateur](#mode-administrateur)
+		- [Mode differencial](#mode-differencial)
 - [Rédaction plugins](#rédaction-plugins)
-  - [Difference entre AssemblyDLL, DLL classique, shared object et script](#difference-entre-assemblydll-dll-classique-shared-object-et-script)
-  - [Rédaction de plugins via langages supportés par défaut](#rédaction-de-plugins-via-langages-supportés-par-défaut)
-      - [Exemple en C/C++ (DLL classique, Shared Object)](#exemple-en-cc-dll-classique-shared-object)
-      - [Exemple en C# (AssemblyDLL)](#exemple-en-c-assemblydll)
-  - [Exemple en GO (Script / DLL classique)](#exemple-en-go-script--dll-classique)
-      - [Exemple en Python (Script)](#exemple-en-python-script)
+	- [Difference entre AssemblyDLL, DLL classique, shared object et script](#difference-entre-assemblydll-dll-classique-shared-object-et-script)
+	- [Rédaction de plugins via langages supportés par défaut](#rédaction-de-plugins-via-langages-supportés-par-défaut)
+			- [Exemple en C/C++ (DLL classique, Shared Object)](#exemple-en-cc-dll-classique-shared-object)
+			- [Exemple en C# (AssemblyDLL)](#exemple-en-c-assemblydll)
+	- [Exemple en GO (Script / DLL classique)](#exemple-en-go-script--dll-classique)
+			- [Exemple en Python (Script)](#exemple-en-python-script)
 	
-
-	- Configurer les clients
-		- Interpreteurs
-			- Sous Linux 
-			- Sous Windows
-		- Plugins
-			- Attributs 
-				- activated
-				- heartbeat
-				- os
-			- Mode "administrateur"
-				- admin_rights
-				- admin_username
-			- Mode "differencial"
-				- differencial_all
-				- differencial (avec champs)
-	- Configuration des clients par le serveur 
-	- Configurer les sauvegardes des résultats
-		- Sortie console
-		- Local
-		- Serveur
-		- MangoDB
-		- InfluxDB
-		- Ajout de bases de données personnalisées
-
-
-		- Via langage non supporté par défaut
+    - Via langage non supporté par défaut
 			- Ajout d'un interpreteur (explications poussées)
 	- Vérification des sorties des plugins 
 		- Présentation du plugins_checker
@@ -45,7 +23,7 @@
 
 Configuration
 -------------
-### Comprendre `config_global.json` et `config_local.json` 
+### Comprendre `config.json` et `config_local.json` 
 
 2 types de fichiers de configurations sont présents:
 *  config\_local.json
@@ -53,9 +31,9 @@ Configuration
 
 `config_local.json`: sert uniquement à rajouter des configurations de plugin. Il est déposé en local dans le dossier "config" sur les *clients*, et ne sera en aucun cas supprimé ou modifié par le serveur.
 
-`config_global.json`: sert à modifier tous ce qui est possible dans HAL. Tout est détaillés plus bas dans la documentation. Ce fichier sera distribué à tous les clients via le serveur.
+`config.json`: sert à modifier tous ce qui est possible dans HAL. Tout est détaillés plus bas dans la documentation. Ce fichier sera distribué et mit à jour à tout les clients via le serveur.
 
-Il sera impératif de rédiger son propre `config_global.json`, et de l'ajouter dans le dossier "plugins" du serveur.
+Il sera impératif de rédiger son propre `config.json`, et de l'ajouter dans le dossier "plugins" du serveur.
 
 ### Configurer le serveur
 #### Changement d'ip et de port
@@ -63,14 +41,219 @@ Il sera impératif de rédiger son propre `config_global.json`, et de l'ajouter 
 Pour régler la connection au serveur d'un client, il faut ajouter dans le fichier `config_local.json`, présent sur les clients:
 
 ```json
-"server": {
-    "ip": "<ip du serveur>",
-    "port": <port du serveur>
+{
+	"server": {
+		"ip": "<ip du serveur>",
+		"port": <port du serveur>
+	}
 }
 ```
 
 - `ip`: l'ip d'un des serveurs HAL
 - `port`: port d'un des serveurs HAL, par défaut `11000`
+
+**Exemple d'un `config.json` (\<dossier du serveur\>/plugins/config.json)**:
+
+```json
+{
+  "storage": [
+      "server"
+  ],
+
+  "plugins": {
+    "upgrades_available.sh": {
+      "activated": "true",
+      "os": [
+        "linux"
+      ],
+      "heartbeat": 0.010
+    },
+    "kernel_version.py": {
+      "activated": "true",
+      "heartbeat": 0.010,
+      "differencial_all": true
+    },
+    "connected_user.py": {
+      "activated": "true",
+      "heartbeat": 0.010,
+      "differencial": [
+        "connected_user"
+      ]
+    }
+  }
+}
+```
+
+**Exemple d'un `config_local.json` (\<dossier du client\>/config/config_local.json)**:
+```json 
+{
+  "server": {
+    "ip": "XX.XX.XX.XX",
+    "port": 11000
+  }
+}
+```
+
+### Configurer le client
+
+La configuration du client du client peut se faire dans le fichier `config.json`, présent dans le dossier "plugins" du serveur, ce qui permettra de facilement ajouter, supprimer, modifier la configuration de tout les clients sans problèmes.
+
+Si besoin, un client peut avoir d'autres plugins en plus, pour cela, il faut les ajouter dans `config_local.json`.
+
+
+#### Attributs
+
+| Nom       | Optionnel |   Type   | Signification |
+| --------- | :-------: | :------: | ------------------------------------------------------------------------------------------- |
+| activated |           |   bool   | le plugin est activé si `"true"`, desactivé si `"false"`                                             |
+| heartbeat |           |   uint   | fréquence d'éxecution du plugin, 1 heartbeat = 1 execution par minute, 2 = 2 par minute ... |
+| os        |     X     | string[] | sur quel système d'exploitation sera executé le plugin. Valeurs possible: `linux / windows`. Si non spécifié, le plugin sera executé sur tout les OS. |
+| admin_rights | X | bool | execute le plugin en mode administrateur si `"true"`, mode utilisateur si `"false"` |
+| admin_username | X | string | si admin_rights est activé, lance le plugin en mode administrateur avec l'utilisateur spécifié |
+|differencial_all| X | bool | vérifie si le résultat json du plugin est différent de l'ancien pour TOUT ses attributs. Si tout les résultats des attributs sont identiques, alors le retour est ignoré  |
+| differencial | X | string[] | vérifie si le résultat json du plugin est différent de l'ancien pour les attributs . Si tout les résultats des attributs explicités sont identiques, alors le retour est ignoré  |
+
+**Exemple**:
+
+```json 
+{
+  "plugins": {
+    "upgrades_available.sh": {
+      "activated": "true",
+      "os": [
+        "linux"
+      ],
+      "heartbeat": 0.010
+    },
+    "kernel_version.py": {
+      "activated": "true",
+      "heartbeat": 0.010,
+      "differencial_all": true
+    },
+    "connected_user.py": {
+      "activated": "true",
+      "heartbeat": 0.010,
+      "differencial": [
+        "connected_user"
+      ]
+    },
+	"do_upgrades.sh": {
+      "activated": "true",
+      "os": [
+        "linux"
+      ],
+      "heartbeat": 0.001,
+	  "admin_rights": "true",
+	  "admin_username": "usr_do_upgrades"
+	}
+  }
+}
+```
+
+#### Mode administrateur
+
+Le mode administrateur fonctionne sur Windows et Linux. Il permet d'éxecuter un plugin avec les droits supplémentaires offerts par le système d'exploitation.
+Un utilisateur doit être assigné, car l'execution d'un plugin en mode administrateur doit se faire sans mot de passe, pour des raisons de sécurité.
+
+Il faut être très vigileant en utilisant le mode administrateur, car les plugins font exactement ce qu'on leur demande de faire, et une erreur peut être vite arrivé.
+
+Nous conseillons de l'utiliser en dernier recours et de bien avoir fait les tests nécessaires avant de le mettre en production.
+
+#### Mode differencial
+
+Le mode differencial permet d'économiser de l'espace disque et de l'utilisation réseau.
+
+En effet, pour un plugin, il se peut que son retour soit très souvent le même. Pour éviter, si besoin, de stocker les répétitions, le mode differencial existe.
+
+Prenons l'exemple d'un plugin qui va renvoyer:
+	
+- l'utilisateur connecté
+- l'heure à laquelle le plugin est executé
+- le système d'exploitation
+
+Toutes les 5 minutes.
+
+Exemple d'un retour:
+
+```json
+{
+	"user": "XXX",
+	"date": "2020-05-28T14:00:00.000Z",
+	"os": "debian"
+}
+```
+
+Il est alors interessant de n'avoir l'information qu'uniquement quand un nouvel utilisateur est connecté sur la machine.
+
+Dans les attributs du plugin, il faut alors ajouter le mode differencial sur l'attribut "user" et "os".
+
+```json
+{
+	...
+	"plugins": {
+		...
+		"user_info.sh": {
+			"activated": "true",
+			"heartbeat": 0.2,
+			"differencial": [
+				"user",
+				"os"
+			]
+		}
+		...
+	}
+	...
+}
+```
+
+Si, et uniquement si le résultat des attributs "user" OU "os" sont différents, alors le retour sera sauvegardé.
+
+Maintenant, prenons l'exemple d'un plugin qui va renvoyer la liste auto-générée complète des packages installés sur la machine avec leur version.
+
+Exemple d'un retour:
+
+```json
+{
+	"package1": {
+		"version": "1.0.0",
+		"updated": "2020-02-20T14:00:00.000Z"
+	},
+	"package2": {
+		"version": "1.0.1",
+		"updated": "2020-01-1T12:00:00.000Z"
+	},
+	"package3": {
+		"version": "4.0.0",
+		"updated": "2019-03-02T17:00:00.000Z"
+	},
+	...
+	"package300": {
+		"version": "1.2.0",
+		"updated": "2018-10-10T18:00:00.000Z"
+	}
+}
+```
+
+Le mode differencial ne suffirait pas, car les entrées sont trop différentes et inconnus d'avance.
+Il faudra alors utiliser le mode "differencial_all" qui lui va regarder TOUT les attributs, si le résultat du nouveau est différent du résultat de l'ancien, alors le retour sera sauvegardé.  
+
+
+```json
+{
+	...
+	"plugins": {
+		...
+		"packages_list.sh": {
+			"activated": "true",
+			"heartbeat": 0.2,
+			"differencial_all": "true"
+		}
+		...
+	}
+	...
+}
+```
+
 
 Rédaction plugins
 -----------------
@@ -92,7 +275,6 @@ Le manageur de plugins de HAL permet de lire différents types de DLL pour les p
 Ces différents format de plugins peuvent être combinés à souhait poour avoir une liste de plugins aussi personalisable que possible.
 
 ### Rédaction de plugins via langages supportés par défaut
-
 
 ##### Exemple en C/C++ (DLL classique, Shared Object)
 
