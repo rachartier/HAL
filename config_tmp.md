@@ -15,17 +15,13 @@
 		- [Exemple en C# (AssemblyDLL)](#exemple-en-c-assemblydll)
 		- [Exemple en GO (Script / DLL classique)](#exemple-en-go-script--dll-classique)
 		- [Exemple en Python (Script)](#exemple-en-python-script)
-	- [Via langage non supporté par défaut](#vialangagenonsupportépardéfaut)
-		- [Ajout d'un interpreteur](#ajoutduninterpreteur)
+	- [Via langage non supporté par défaut (ET scripts Windows)](#vialangagenonsupportépardéfaut-et-scripts-windows)
+		- [Ajout d'un interpreteur via fichier de configuration](#ajoutduninterpreteur-via-fichier-de-configuration)
+		- [Ajout d'une extension de plugin personnalisée](#ajout-dune-extension-de-plugin-personnalisée)
+		- [Ajout d'in interpreteur via variables d'environnements](#ajout-din-interpreteur-via-variables-denvironnements)
 - [Vérification des sorties des plugins](#vérificationdessortiesdesplugins)
 	- [Présentation du plugins_checker](#présentationduplugins_checker)
 - [Configurer les sauvegardes des résultats](#configurer-les-sauvegardes-des-résultats-1)
-	- [Sortie console](#sortieconsole)
-	- [Local](#local)
-	- [Serveur](#serveur)
-	- [MangoDB](#mangodb)
-	- [InfluxDB](#influxdb)
-	- [Ajout de bases de données personnalisées](#ajoutdebasesdedonnéespersonnalisées)
 
 Configuration
 -------------
@@ -274,6 +270,8 @@ Pour une efficacité optimal, il convient de normaliser les soties de vos plugin
 
 Chaque plugin doit être mit dans le dossier "plugins" du serveur, qui se chargera de les transmettres aux clients. De plus, une entrée doit être écrite dans le fichier config.json pour avoir les informations nécéssaire au bon déroulement du plugin. 
 
+***[Si utilisation de langage de scripts sous Windows](#vialangagenonsupportépardéfaut-et-scripts-windows)***
+
 ### Difference entre AssemblyDLL, DLL classique, shared object et script
 
 Le manageur de plugins de HAL permet de lire différents types de DLL pour les plugins, ce qui en fait un outil extrémement modulable.
@@ -465,8 +463,87 @@ Compilation: `go build -o testplugin.dll -buildmode=c-shared`
 
  - Déplacer le fichier dans le répertoire "plugins" du serveur
 
-### Via langage non supporté par défaut
-#### Ajout d'un interpreteur
+### Via langage non supporté par défaut (ET scripts Windows)
+#### Ajout d'un interpreteur via fichier de configuration
+
+***Il faut impérativement configurer le chemin des intérpreteurs sur Windows***
+
+Un langage n'est peut être pas supporté par défaut, ou bien l'interpreteur par défaut d'un certain langage ne vous convients pas, il faudra alors pour cela en ajouter un nouveau pour pouvoir executer le plugin.
+
+Il faudra alors modifier le fichier `server/plugins/config.json` pour y ajouter des attributs JSON.
+
+L'attribut `interpreter` possède une liste de système d'exploitation (`windows` et `linux`)
+
+Liste des clé d'intepréteur par défaut:
+
+	- python
+	- ruby
+	- powershell
+	- bash
+
+```json
+{
+	"interpreter": {
+		"windows": {
+			"python": "<chemin vers python>\python.exe"
+		},
+		"linux": {
+			"python": "/usr/bin/python3",
+		},
+	},
+
+	"plugins": {
+	}
+}
+```
+
+#### Ajout d'une extension de plugin personnalisée
+
+Pour ajouter une extension personnalisée, il suffit d'ajouter l'attribut `custom_extensions` dans le fichier de configuration.
+
+Il faut impérativement que la clé soit l'extension du fichier, et la valeur le nom de l'intérpreteur, qui sera utilisé par l'attribut `interpreter`
+
+```json
+{
+  "custom_extensions": {
+  	".php": "php",
+	".lua": "lua"
+  },
+  "interpreter": {
+	"linux": {
+	  "php": "path/to/php",
+	  "lua": "path/to/lua",
+	}
+	...
+  },
+
+  "plugins": {
+	"my_plugin.php": {
+		...
+	},
+	"my_plugin.lua": {
+		...
+	}
+  }
+}
+```
+Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini par défaut, que ce soit via config.json ou les variables d'environnements.
+
+
+#### Ajout d'in interpreteur via variables d'environnements
+
+Il existe aussi la possibilité de configurer une variable d'environnement (en fonction de votre OS), contenant alors le chemin vers l'intepréteur. Il n'est donc pas obligé de modifier le fichier de configuration avec cette méthode.
+La variable d'environnement doit avoir comme clé le nom en majuscule (ex: PYTHON, RUBY, POWERSHELL...) et comme valeur le chemin vers l'intepréteur
+
+Exemple sous Linux:
+```
+PYTHON=/usr/bin/python3
+RUBY=/usr/bin/ruby
+BASH=/usr/bin/bash
+```
+
+Pour linux, des intepréteurs par défaut sont déjà configurés, il n'est pas alors obligé de les spécifier pour les types de scripts supportés, bien que cela soit très recommandés.
+
 
 Vérification des sorties des plugins 
 ------------------------------------
@@ -476,9 +553,68 @@ Vérification des sorties des plugins 
 Configurer les sauvegardes des résultats
 -------------------------------------------
 
-### Sortie console
-### Local
-### Serveur
-### MangoDB
-### InfluxDB
-### Ajout de bases de données personnalisées 
+Le stockage sert a sauvegarder le résultat de chaque plugin pour pouvoir ensuite manipuler ces données.
+Pour séléctionner le stockage voulu, il faut créer un attribut dans le fichier "config.json":
+
+```json
+{
+	"storage": [
+	    "<NOM_DU_STOCKAGE>"
+	 ],
+
+	...
+	"plugins": {
+		...
+	}
+}
+```
+
+NOM_DU_STOCKAGE peut être:
+
+  - "text" (sauvegarde sur la sortie console)
+  - "local" (sauvegarde sur la machine client)
+  - "mangodb" (sauvegarde sur une base mongodb)
+  - "influxdb" (sauvegarde sur une base influxdb)
+  - "server" (sauvegarde sur le serveur avec des dossiers et fichiers json sous format hiérarchique)
+
+Attention, si vous utilisez `mangodb`, `influxdb` ou tout autre base de donnée, il faut alors généralement spécifier une connection string:
+
+```json
+{
+	"storage": [
+	    "mangodb"
+	],
+	"database": {
+		"connectionString": [
+		    "mongodb://mongodb0.example.com:27017/admin"
+		]
+	},
+	...
+}
+```
+
+Il est possible de mettre autant de nom de stockage qui nécessaire. Pour lier les bonnes connectionString aux base de données, il faut alors les mettres dans l'ordre, exemple:
+
+```json
+{
+	"storage": [
+	    "mongodb",
+	    "influxdb",
+	    "server",
+	    "mongodb",
+		"local"
+	],
+	"database": {
+		"connectionString": [
+		    "mongodb://mongodb0.example.com:27017/admin",
+		    "http://influxdb.example.com:8086 ",
+		    "mongodb://mongodb0.example.com:33333/admin"
+		 ]
+	},
+	...
+}
+```
+
+Pour rajouter un stockage, il faut alors modifier le code source.
+Il faut impérativement créer une classe héritant de IStoragePlugin, et par la suite créer ce dont vous avez besoin.
+Ensuite, il faut modifier le fichier: client/factory/StorageFactory.cs pour y rajouter votre stockage personnalisé. Toutes les informations de comment procéder sont mit en commentaires dans ce fichier.
