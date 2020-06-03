@@ -6,6 +6,8 @@
 		- [Attributs](#attributs)
 		- [Mode administrateur](#mode-administrateur)
 		- [Mode differencial](#mode-differencial)
+- [Configuration des clients par le serveur](#configuration-des-clients-par-le-serveur)
+- [Configurer les sauvegardes des résultats](#configurer-les-sauvegardes-des-résultats)
 - [Rédaction plugins](#rédaction-plugins)
 	- [Difference entre AssemblyDLL, DLL classique, shared object et script](#difference-entre-assemblydll-dll-classique-shared-object-et-script)
 	- [Rédaction de plugins via langages supportés par défaut](#rédaction-de-plugins-via-langages-supportés-par-défaut)
@@ -13,7 +15,17 @@
 		- [Exemple en C# (AssemblyDLL)](#exemple-en-c-assemblydll)
 		- [Exemple en GO (Script / DLL classique)](#exemple-en-go-script--dll-classique)
 		- [Exemple en Python (Script)](#exemple-en-python-script)
-
+	- [Via langage non supporté par défaut](#vialangagenonsupportépardéfaut)
+		- [Ajout d'un interpreteur](#ajoutduninterpreteur)
+- [Vérification des sorties des plugins](#vérificationdessortiesdesplugins)
+	- [Présentation du plugins_checker](#présentationduplugins_checker)
+- [Configurer les sauvegardes des résultats](#configurer-les-sauvegardes-des-résultats-1)
+	- [Sortie console](#sortieconsole)
+	- [Local](#local)
+	- [Serveur](#serveur)
+	- [MangoDB](#mangodb)
+	- [InfluxDB](#influxdb)
+	- [Ajout de bases de données personnalisées](#ajoutdebasesdedonnéespersonnalisées)
 
 Configuration
 -------------
@@ -248,6 +260,11 @@ Il faudra alors utiliser le mode "differencial_all" qui lui va regarder TOUT les
 }
 ```
 
+Configuration des clients par le serveur 
+-----------------------------------------
+
+Configurer les sauvegardes des résultats
+-----------------------------------------
 
 Rédaction plugins
 -----------------
@@ -313,7 +330,7 @@ puis copier ip_infos.so dans le dossier plugins et rajouter une entrée dans con
  ...
 	"plugins": {
 	    ...
-		"ip\_infos.dll": {
+		"ip_infos.dll": {
 			"activated": "true",
 			"heartbeat": "1",
 			"os": ["linux"]
@@ -447,3 +464,21 @@ Compilation: `go build -o testplugin.dll -buildmode=c-shared`
     ```
 
  - Déplacer le fichier dans le répertoire "plugins" du serveur
+
+### Via langage non supporté par défaut
+#### Ajout d'un interpreteur
+
+Vérification des sorties des plugins 
+------------------------------------
+       
+### Présentation du plugins_checker 
+
+Configurer les sauvegardes des résultats
+-------------------------------------------
+
+### Sortie console
+### Local
+### Serveur
+### MangoDB
+### InfluxDB
+### Ajout de bases de données personnalisées 
