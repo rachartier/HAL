@@ -9,16 +9,10 @@
 - [Rédaction plugins](#rédaction-plugins)
 	- [Difference entre AssemblyDLL, DLL classique, shared object et script](#difference-entre-assemblydll-dll-classique-shared-object-et-script)
 	- [Rédaction de plugins via langages supportés par défaut](#rédaction-de-plugins-via-langages-supportés-par-défaut)
-			- [Exemple en C/C++ (DLL classique, Shared Object)](#exemple-en-cc-dll-classique-shared-object)
-			- [Exemple en C# (AssemblyDLL)](#exemple-en-c-assemblydll)
-	- [Exemple en GO (Script / DLL classique)](#exemple-en-go-script--dll-classique)
-			- [Exemple en Python (Script)](#exemple-en-python-script)
-	
-    - Via langage non supporté par défaut
-			- Ajout d'un interpreteur (explications poussées)
-	- Vérification des sorties des plugins 
-		- Présentation du plugins_checker
-
+		- [Exemple en C/C++ (DLL classique, Shared Object)](#exemple-en-cc-dll-classique-shared-object)
+		- [Exemple en C# (AssemblyDLL)](#exemple-en-c-assemblydll)
+		- [Exemple en GO (Script / DLL classique)](#exemple-en-go-script--dll-classique)
+		- [Exemple en Python (Script)](#exemple-en-python-script)
 
 
 Configuration
@@ -31,7 +25,7 @@ Configuration
 
 `config_local.json`: sert uniquement à rajouter des configurations de plugin. Il est déposé en local dans le dossier "config" sur les *clients*, et ne sera en aucun cas supprimé ou modifié par le serveur.
 
-`config.json`: sert à modifier tous ce qui est possible dans HAL. Tout est détaillés plus bas dans la documentation. Ce fichier sera distribué et mit à jour à tout les clients via le serveur.
+`config.json`: sert à modifier tout ce qui est possible dans HAL. Tout est détaillés plus bas dans la documentation. Ce fichier sera distribué et mit à jour à tout les clients via le serveur.
 
 Il sera impératif de rédiger son propre `config.json`, et de l'ajouter dans le dossier "plugins" du serveur.
 
@@ -276,7 +270,7 @@ Ces différents format de plugins peuvent être combinés à souhait poour avoir
 
 ### Rédaction de plugins via langages supportés par défaut
 
-##### Exemple en C/C++ (DLL classique, Shared Object)
+#### Exemple en C/C++ (DLL classique, Shared Object)
 
 Un point d'entrée est obligatoire pour l'execution du plugin en DLL classique et SO. Le retour de ce point d'entrée sera alors sauvegardé par le client. Il doit impérativement être en JSON.
 
@@ -334,7 +328,7 @@ puis copier ip_infos.so dans le dossier plugins et rajouter une entrée dans con
  ...
 ```
 
-##### Exemple en C# (AssemblyDLL)
+#### Exemple en C# (AssemblyDLL)
 
 Un point d'entrée est aussi obligatoire pour l'execution du plugin. Le retour du point d'entrée sera alors sauvegardé par le client. Il doit impérativement être en JSON.
 
@@ -392,7 +386,7 @@ Finalement, copier et renommer si besoin plugin.dll et le mettre ensuite dans le
  ...
 ```
 
-### Exemple en GO (Script / DLL classique)
+#### Exemple en GO (Script / DLL classique)
 
 Go est intéprété en tant que langage de script dans HAL. De ce fait, il doit respecter les contraintes des autres langages de script, c'est à dire defaire sortir le JSON sur la sortie standard.
 
@@ -432,7 +426,7 @@ Il est imépratif d'avoir le commentaire "export run" pour que cela fonctionne. 
 Compilation: `go build -o testplugin.dll -buildmode=c-shared`
 
 
-##### Exemple en Python (Script)
+#### Exemple en Python (Script)
 
 - Créer un fichier `osinfo.py`
 - Y ajouter:
