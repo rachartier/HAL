@@ -550,6 +550,58 @@ Vérification des sorties des plugins 
        
 ### Présentation du plugins_checker 
 
+Un outil a été crée dans le but de vérifier si une collection de plugins renvoient un json valide.
+Pour ça, il faut se rendre dans "plugins_checker" et modifier le fichier "config.json" pour mettre un ou plusieurs chemins de là où se trouve les plugins et le fichier de configuration de ces derniers.
+Il faut impérativement suivre ce schéma:
+
+- dossier
+  - config.json
+  - plugins
+    - nomplugin1...
+    - nomplugin2...
+    - nomplugin3...
+...
+
+
+Le fichier `config.json` est un fichier de configuration normal. Il faut bien mettre `activated` à `true` pour que le plugin soit correctement executé.
+
+Example:
+Un dossier "test1" contient:
+
+- config.json
+- plugins/
+  - cpu_temperature.py
+  - kernel_version.sh
+
+
+et un autre dossier, test2, contient quand à lui:
+
+- config.json
+- plugins/
+  - connected_user.sh
+  - os_informations.rb 
+
+
+Il faut alors tout simplement modifier le fichier "config.json" de plugins_checker comme suit:
+```json
+{
+  "paths": [
+    "chemin/vers/test1",
+    "chemin/vers/test2"
+  ]
+}
+```
+
+Puis finalement executer le programme.
+Démonstration avec les plugins dans client et client/examples:
+
+<a href="https://asciinema.org/a/iidUR3zKPFVWJvNndhzm8RHMV"><img src="https://asciinema.org/a/iidUR3zKPFVWJvNndhzm8RHMV.png" width="836"/></a>
+
+L'erreur: "Error reading JToken from JsonReader. Path '', line 0, position 0."
+peut signifier plusieurs choses:
+*  un intépreteur par défaut n'est pas installer, il faut vérifier si ruby, python3 et bash sont bien installés sur la machine
+*  le retour n'est pas du format json
+
 Configurer les sauvegardes des résultats
 -------------------------------------------
 
@@ -616,5 +668,6 @@ Il est possible de mettre autant de nom de stockage qui nécessaire. Pour lier l
 ```
 
 Pour rajouter un stockage, il faut alors modifier le code source.
+
 Il faut impérativement créer une classe héritant de IStoragePlugin, et par la suite créer ce dont vous avez besoin.
 Ensuite, il faut modifier le fichier: client/factory/StorageFactory.cs pour y rajouter votre stockage personnalisé. Toutes les informations de comment procéder sont mit en commentaires dans ce fichier.
