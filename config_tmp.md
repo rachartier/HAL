@@ -31,16 +31,17 @@ Configuration
 *  config\_local.json
 *  config\_global.json
 
-`config_local.json`: sert uniquement à rajouter des configurations de plugin. Il est déposé en local dans le dossier "config" sur les *clients*, et ne sera en aucun cas supprimé ou modifié par le serveur.
+`config_local.json`: sert uniquement à rajouter des configurations de plugins. Il est déposé en local dans le dossier "config" sur les *clients*, et ne sera en aucun cas supprimé ou modifié par le serveur.
 
-`config.json`: sert à modifier tout ce qui est possible dans HAL. Tout est détaillés plus bas dans la documentation. Ce fichier sera distribué et mit à jour à tout les clients via le serveur.
+`config.json`: sert à modifier tout ce qui est possible dans HAL. Tout est détaillé plus bas dans la documentation. Ce fichier sera distribué à tous les clients et mis à jour via le serveur.
 
 Il sera impératif de rédiger son propre `config.json`, et de l'ajouter dans le dossier "plugins" du serveur.
+//Pourquoi est-ce impératif ?
 
 ### Configurer le serveur
 #### Changement d'ip et de port
 
-Pour régler la connection au serveur d'un client, il faut ajouter dans le fichier `config_local.json`, présent sur les clients:
+Pour régler la connexion au serveur d'un client, il faut ajouter dans le fichier `config_local.json`, présent sur les clients :
 
 ```json
 {
@@ -98,7 +99,7 @@ Pour régler la connection au serveur d'un client, il faut ajouter dans le fichi
 
 ### Configurer le client
 
-La configuration du client du client peut se faire dans le fichier `config.json`, présent dans le dossier "plugins" du serveur, ce qui permettra de facilement ajouter, supprimer, modifier la configuration de tout les clients sans problèmes.
+La configuration du client peut se faire dans le fichier `config.json`, présent dans le dossier "plugins" du serveur, ce qui permettra de facilement ajouter, supprimer, modifier la configuration de tous les clients sans problème.
 
 Si besoin, un client peut avoir d'autres plugins en plus, pour cela, il faut les ajouter dans `config_local.json`.
 
@@ -109,11 +110,11 @@ Si besoin, un client peut avoir d'autres plugins en plus, pour cela, il faut les
 | --------- | :-------: | :------: | ------------------------------------------------------------------------------------------- |
 | activated |           |   bool   | le plugin est activé si `"true"`, desactivé si `"false"`                                             |
 | heartbeat |           |   uint   | fréquence d'éxecution du plugin, 1 heartbeat = 1 execution par minute, 2 = 2 par minute ... |
-| os        |     X     | string[] | sur quel système d'exploitation sera executé le plugin. Valeurs possible: `linux / windows`. Si non spécifié, le plugin sera executé sur tout les OS. |
+| os        |     X     | string[] | sur quel système d'exploitation sera executé le plugin. Valeurs possibles : `linux / windows`. Si non spécifié, le plugin sera executé sur tout les OS. |
 | admin_rights | X | bool | execute le plugin en mode administrateur si `"true"`, mode utilisateur si `"false"` |
 | admin_username | X | string | si admin_rights est activé, lance le plugin en mode administrateur avec l'utilisateur spécifié |
-|differencial_all| X | bool | vérifie si le résultat json du plugin est différent de l'ancien pour TOUT ses attributs. Si tout les résultats des attributs sont identiques, alors le retour est ignoré  |
-| differencial | X | string[] | vérifie si le résultat json du plugin est différent de l'ancien pour les attributs . Si tout les résultats des attributs explicités sont identiques, alors le retour est ignoré  |
+|differencial_all| X | bool | vérifie si le résultat json du plugin est différent de l'ancien pour TOUS ses attributs. Si tous les résultats des attributs sont identiques, alors le retour est ignoré  |
+| differencial | X | string[] | vérifie si le résultat json du plugin est différent de l'ancien pour les attributs . Si tous les résultats des attributs explicités sont identiques, alors le retour est ignoré  |
 
 **Exemple**:
 
@@ -155,9 +156,10 @@ Si besoin, un client peut avoir d'autres plugins en plus, pour cela, il faut les
 #### Mode administrateur
 
 Le mode administrateur fonctionne sur Windows et Linux. Il permet d'éxecuter un plugin avec les droits supplémentaires offerts par le système d'exploitation.
-Un utilisateur doit être assigné, car l'execution d'un plugin en mode administrateur doit se faire sans mot de passe, pour des raisons de sécurité.
+Un utilisateur doit être assigné, car l'exécution d'un plugin en mode administrateur doit se faire sans mot de passe, pour des raisons de sécurité.
+//À étoffer... "sans mot de passe pour des raisons de sécurité" ?
 
-Il faut être très vigileant en utilisant le mode administrateur, car les plugins font exactement ce qu'on leur demande de faire, et une erreur peut être vite arrivé.
+Il faut être très vigilant en utilisant le mode administrateur, car les plugins font exactement ce qu'on leur demande de faire, et une erreur peut être vite arrivée.
 
 Nous conseillons de l'utiliser en dernier recours et de bien avoir fait les tests nécessaires avant de le mettre en production.
 
@@ -165,15 +167,13 @@ Nous conseillons de l'utiliser en dernier recours et de bien avoir fait les test
 
 Le mode differencial permet d'économiser de l'espace disque et de l'utilisation réseau.
 
-En effet, pour un plugin, il se peut que son retour soit très souvent le même. Pour éviter, si besoin, de stocker les répétitions, le mode differencial existe.
+En effet, pour un plugin, il se peut que son retour soit très souvent le même. Pour éviter de stocker les répétitions, on peut utiliser le mode differencial.
 
-Prenons l'exemple d'un plugin qui va renvoyer:
+Prenons l'exemple d'un plugin qui va renvoyer toutes les 5 minutes :
 	
 - l'utilisateur connecté
 - l'heure à laquelle le plugin est executé
 - le système d'exploitation
-
-Toutes les 5 minutes.
 
 Exemple d'un retour:
 
@@ -185,7 +185,7 @@ Exemple d'un retour:
 }
 ```
 
-Il est alors interessant de n'avoir l'information qu'uniquement quand un nouvel utilisateur est connecté sur la machine.
+Il est alors intéressant de n'avoir l'information qu'uniquement quand un nouvel utilisateur est connecté sur la machine.
 
 Dans les attributs du plugin, il faut alors ajouter le mode differencial sur l'attribut "user" et "os".
 
@@ -236,8 +236,8 @@ Exemple d'un retour:
 }
 ```
 
-Le mode differencial ne suffirait pas, car les entrées sont trop différentes et inconnus d'avance.
-Il faudra alors utiliser le mode "differencial_all" qui lui va regarder TOUT les attributs, si le résultat du nouveau est différent du résultat de l'ancien, alors le retour sera sauvegardé.  
+Le mode differencial ne suffirait pas, car les entrées sont trop différentes et inconnues à l'avance.
+Il faudra alors utiliser le mode "differencial_all" qui lui va regarder TOUS les attributs : si le résultat du nouveau est différent du résultat de l'ancien, alors le retour sera sauvegardé.  
 
 
 ```json
@@ -265,29 +265,29 @@ Configurer les sauvegardes des résultats
 Rédaction plugins
 -----------------
 
-Les informations retournées par le plugin doivent être sous un format JSON.
-Pour une efficacité optimal, il convient de normaliser les soties de vos plugins. C'est à dire, respecté une convention de nommage définit selon vos principes.
+Les informations retournées par le plugin doivent être au format JSON.
+Pour une efficacité optimale, il convient de normaliser les sorties de vos plugins, c'est-à-dire, respecter une convention de nommage définie selon vos principes.
 
-Chaque plugin doit être mit dans le dossier "plugins" du serveur, qui se chargera de les transmettres aux clients. De plus, une entrée doit être écrite dans le fichier config.json pour avoir les informations nécéssaire au bon déroulement du plugin. 
+Chaque plugin doit être mis dans le dossier "plugins" du serveur, qui se chargera de les transmettre aux clients. De plus, une entrée doit être écrite dans le fichier config.json pour avoir les informations nécéssaires au bon déroulement du plugin. 
 
 ***[Si utilisation de langage de scripts sous Windows](#vialangagenonsupportépardéfaut-et-scripts-windows)***
 
 ### Difference entre AssemblyDLL, DLL classique, shared object et script
 
-Le manageur de plugins de HAL permet de lire différents types de DLL pour les plugins, ce qui en fait un outil extrémement modulable.
+Le manageur de plugins de HAL permet de lire différents types de DLL pour les plugins, ce qui en fait un outil extrêmement modulable.
 
 - Les AssemblyDLL sont les dll générées par la création de bibliothèques .NET, pour Windows et Linux
-- Les DLL "classiques" sont celles générées par des compilateurs types C, C++..., mais uniquement pour Windows. 
+- Les DLL "classiques" sont celles générées par des compilateurs C, C++..., mais uniquement pour Windows. 
 - Les Shared Objects sont comme les DLL classiques, mais uniquement sous Linux.
-- Les scripts peuvent être codé en n'importe quel langage de script (Lua, PHP, Bash, Python, Ruby...). Un fichier source unique doit être fournit par plugin. D'autre interpreteurs peuvent être rajoutés si ceux par défaut ne correspondent pas aux attentes. 
+- Les scripts peuvent être codés avec n'importe quel langage de script (Lua, PHP, Bash, Python, Ruby...). Un fichier source unique doit être fourni par plugin. D'autres interpréteurs peuvent être rajoutés si ceux par défaut ne correspondent pas aux attentes. 
 
-Ces différents format de plugins peuvent être combinés à souhait poour avoir une liste de plugins aussi personalisable que possible.
+Ces différents formats de plugins peuvent être combinés à souhait pour avoir une liste de plugins aussi personnalisable que possible.
 
 ### Rédaction de plugins via langages supportés par défaut
 
 #### Exemple en C/C++ (DLL classique, Shared Object)
 
-Un point d'entrée est obligatoire pour l'execution du plugin en DLL classique et SO. Le retour de ce point d'entrée sera alors sauvegardé par le client. Il doit impérativement être en JSON.
+Un point d'entrée est obligatoire pour l'exécution du plugin en DLL classique et SO. Le retour de ce point d'entrée sera alors sauvegardé par le client. Il doit impérativement être en JSON.
 
 ``` c
 char* run() {
@@ -313,7 +313,7 @@ char *run(void) {
 }
 ```
 
-Il faut impérativement que la variable de retour soit allouée en mémoire (via malloc, calloc...)  
+Il faut **impérativement** que la variable de retour soit allouée en mémoire (via malloc, calloc...)  
 Des fonctions peuvent bien sûr être faites pour clarifier le code.
 
 Compilation en .so sous linux:
@@ -382,7 +382,7 @@ namespace plugin
 }
 ```
 
-Puis build la librairie:
+Puis génération de la bibliothèque (_build library_) :
 
 `dotnet build`
 
@@ -403,7 +403,7 @@ Finalement, copier et renommer si besoin plugin.dll et le mettre ensuite dans le
 
 #### Exemple en GO (Script / DLL classique)
 
-Go est intéprété en tant que langage de script dans HAL. De ce fait, il doit respecter les contraintes des autres langages de script, c'est à dire defaire sortir le JSON sur la sortie standard.
+Go est interprété en tant que langage de script dans HAL. De ce fait, il doit respecter les contraintes des autres langages de script, c'est à dire de faire sortir le JSON sur la sortie standard.
 
 Exemple d'un plugin 
 
@@ -420,7 +420,7 @@ func main() {
 
 ```
 
-Il est aussi possible de faire du Go compilé (sous forme de DLL). L'avantage étant que le client n'est pas obligé de posseder golang. 
+Il est aussi possible de faire du Go compilé (sous forme de DLL). L'avantage étant que le client n'est pas obligé de posséder golang. 
 
 ```go
 package main
@@ -436,7 +436,7 @@ func run() *C.char {
 }
 ```
 
-Il est imépratif d'avoir le commentaire "export run" pour que cela fonctionne. De plus, il faut aussi obligatoirement mettre *C.char comme type de retour.
+Il est impératif d'avoir le commentaire "export run" pour que cela fonctionne. De plus, il faut aussi obligatoirement mettre *C.char comme type de retour.
 
 Compilation: `go build -o testplugin.dll -buildmode=c-shared`
 
@@ -466,15 +466,16 @@ Compilation: `go build -o testplugin.dll -buildmode=c-shared`
 ### Via langage non supporté par défaut (ET scripts Windows)
 #### Ajout d'un interpreteur via fichier de configuration
 
-***Il faut impérativement configurer le chemin des intérpreteurs sur Windows***
+***Il faut impérativement configurer le chemin des interpréteurs sur Windows***
 
-Un langage n'est peut être pas supporté par défaut, ou bien l'interpreteur par défaut d'un certain langage ne vous convients pas, il faudra alors pour cela en ajouter un nouveau pour pouvoir executer le plugin.
+Un langage n'est pas supporté par défaut ? Ou bien l'interpréteur par défaut d'un certain langage ne vous convient pas ?
+Vous pouvez alors en ajouter un nouveau pour pouvoir exécuter le plugin.
 
 Il faudra alors modifier le fichier `server/plugins/config.json` pour y ajouter des attributs JSON.
 
 L'attribut `interpreter` possède une liste de système d'exploitation (`windows` et `linux`)
 
-Liste des clé d'intepréteur par défaut:
+Liste des clés d'intepréteur par défaut:
 
 	- python
 	- ruby
@@ -501,7 +502,7 @@ Liste des clé d'intepréteur par défaut:
 
 Pour ajouter une extension personnalisée, il suffit d'ajouter l'attribut `custom_extensions` dans le fichier de configuration.
 
-Il faut impérativement que la clé soit l'extension du fichier, et la valeur le nom de l'intérpreteur, qui sera utilisé par l'attribut `interpreter`
+Il faut impérativement que la clé soit l'extension du fichier, et la valeur le nom de l'interpréteur, qui sera utilisé par l'attribut `interpreter`
 
 ```json
 {
@@ -527,12 +528,12 @@ Il faut impérativement que la clé soit l'extension du fichier, et la valeur le
   }
 }
 ```
-Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini par défaut, que ce soit via config.json ou les variables d'environnements.
+Ne surtout pas oublier de rajouter un interpréteur, car aucun n'a été défini par défaut, que ce soit via config.json ou les variables d'environnement.
 
 
-#### Ajout d'in interpreteur via variables d'environnements
+#### Ajout d'un interpréteur via variables d'environnement
 
-Il existe aussi la possibilité de configurer une variable d'environnement (en fonction de votre OS), contenant alors le chemin vers l'intepréteur. Il n'est donc pas obligé de modifier le fichier de configuration avec cette méthode.
+Il existe aussi la possibilité de configurer une variable d'environnement (en fonction de votre OS), contenant alors le chemin vers l'interpréteur. Il n'est donc pas obligé de modifier le fichier de configuration avec cette méthode.
 La variable d'environnement doit avoir comme clé le nom en majuscule (ex: PYTHON, RUBY, POWERSHELL...) et comme valeur le chemin vers l'intepréteur
 
 Exemple sous Linux:
@@ -542,7 +543,7 @@ RUBY=/usr/bin/ruby
 BASH=/usr/bin/bash
 ```
 
-Pour linux, des intepréteurs par défaut sont déjà configurés, il n'est pas alors obligé de les spécifier pour les types de scripts supportés, bien que cela soit très recommandés.
+Pour linux, des interpréteurs par défaut sont déjà configurés, il n'est pas alors obligé de les spécifier pour les types de scripts supportés, bien que cela soit très recommandés.
 
 
 Vérification des sorties des plugins 
@@ -550,9 +551,11 @@ Vérification des sorties des plugins 
        
 ### Présentation du plugins_checker 
 
-Un outil a été crée dans le but de vérifier si une collection de plugins renvoient un json valide.
-Pour ça, il faut se rendre dans "plugins_checker" et modifier le fichier "config.json" pour mettre un ou plusieurs chemins de là où se trouve les plugins et le fichier de configuration de ces derniers.
-Il faut impérativement suivre ce schéma:
+//manque un peu d'infos : à quoi ça sert ? où l'installer ???
+
+Un outil a été créé dans le but de vérifier si une collection de plugins renvoie un json valide.
+Pour ça, il faut se rendre dans "plugins_checker" et modifier le fichier "config.json" pour mettre un ou plusieurs chemins indiquant où se trouvent les plugins et le fichier de configuration de ces derniers.
+Il faut impérativement suivre ce schéma :
 
 - dossier
   - config.json
@@ -563,10 +566,10 @@ Il faut impérativement suivre ce schéma:
 ...
 
 
-Le fichier `config.json` est un fichier de configuration normal. Il faut bien mettre `activated` à `true` pour que le plugin soit correctement executé.
+Le fichier `config.json` est un fichier de configuration normal. Il faut bien mettre `activated` à `true` pour que le plugin soit correctement exécuté.
 
-Example:
-Un dossier "test1" contient:
+Exemple :
+Un dossier "test1" contient :
 
 - config.json
 - plugins/
@@ -574,7 +577,7 @@ Un dossier "test1" contient:
   - kernel_version.sh
 
 
-et un autre dossier, test2, contient quand à lui:
+et un autre dossier, test2, contient quant à lui :
 
 - config.json
 - plugins/
@@ -582,7 +585,7 @@ et un autre dossier, test2, contient quand à lui:
   - os_informations.rb 
 
 
-Il faut alors tout simplement modifier le fichier "config.json" de plugins_checker comme suit:
+Il faut alors tout simplement modifier le fichier "config.json" de plugins_checker comme suit :
 ```json
 {
   "paths": [
@@ -592,8 +595,8 @@ Il faut alors tout simplement modifier le fichier "config.json" de plugins_check
 }
 ```
 
-Puis finalement executer le programme.
-Démonstration avec les plugins dans client et client/examples:
+Puis finalement exécuter le programme.
+Démonstration avec les plugins dans client et client/examples :
 
 <a href="https://asciinema.org/a/iidUR3zKPFVWJvNndhzm8RHMV"><img src="https://asciinema.org/a/iidUR3zKPFVWJvNndhzm8RHMV.png" width="836"/></a>
 
@@ -605,8 +608,11 @@ peut signifier plusieurs choses:
 Configurer les sauvegardes des résultats
 -------------------------------------------
 
+//un mot sur le fait qu'il y a déjà une sauvegarde configurée par défaut
+// et que ce paragraphe indique comment en configurer une autre
+
 Le stockage sert a sauvegarder le résultat de chaque plugin pour pouvoir ensuite manipuler ces données.
-Pour séléctionner le stockage voulu, il faut créer un attribut dans le fichier "config.json":
+Pour sélectionner le stockage voulu, il faut créer un attribut dans le fichier "config.json" :
 
 ```json
 {
@@ -629,7 +635,7 @@ NOM_DU_STOCKAGE peut être:
   - "influxdb" (sauvegarde sur une base influxdb)
   - "server" (sauvegarde sur le serveur avec des dossiers et fichiers json sous format hiérarchique)
 
-Attention, si vous utilisez `mangodb`, `influxdb` ou tout autre base de donnée, il faut alors généralement spécifier une connection string:
+Attention, si vous utilisez `mangodb`, `influxdb` ou toute autre base de données, il faut alors généralement spécifier une _connection string_ :
 
 ```json
 {
@@ -645,7 +651,7 @@ Attention, si vous utilisez `mangodb`, `influxdb` ou tout autre base de donnée,
 }
 ```
 
-Il est possible de mettre autant de nom de stockage qui nécessaire. Pour lier les bonnes connectionString aux base de données, il faut alors les mettres dans l'ordre, exemple:
+Il est possible de mettre autant de nom de stockage que nécessaire. Pour lier les bonnes _connectionString_ aux bases de données, il faut alors les mettre dans l'ordre. Par exemple :
 
 ```json
 {
@@ -670,4 +676,4 @@ Il est possible de mettre autant de nom de stockage qui nécessaire. Pour lier l
 Pour rajouter un stockage, il faut alors modifier le code source.
 
 Il faut impérativement créer une classe héritant de IStoragePlugin, et par la suite créer ce dont vous avez besoin.
-Ensuite, il faut modifier le fichier: client/factory/StorageFactory.cs pour y rajouter votre stockage personnalisé. Toutes les informations de comment procéder sont mit en commentaires dans ce fichier.
+Ensuite, il faut modifier le fichier: client/factory/StorageFactory.cs pour y rajouter votre stockage personnalisé. Toutes les informations sur cette procédure sont mises en commentaires dans ce fichier.
