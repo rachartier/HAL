@@ -529,7 +529,6 @@ Il faut impérativement que la clé soit l'extension du fichier, et la valeur le
 ```
 Ne surtout pas oublier de rajouter un intépréteur, car aucun n'a été défini par défaut, que ce soit via config.json ou les variables d'environnements.
 
-
 #### Ajout d'in interpreteur via variables d'environnements
 
 Il existe aussi la possibilité de configurer une variable d'environnement (en fonction de votre OS), contenant alors le chemin vers l'intepréteur. Il n'est donc pas obligé de modifier le fichier de configuration avec cette méthode.
@@ -547,7 +546,6 @@ Pour linux, des intepréteurs par défaut sont déjà configurés, il n'est pas 
 
 Vérification des sorties des plugins 
 ------------------------------------
-       
 ### Présentation du plugins_checker 
 
 Un outil a été crée dans le but de vérifier si une collection de plugins renvoient un json valide.
