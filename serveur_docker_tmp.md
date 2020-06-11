@@ -1,5 +1,13 @@
-# Serveur Docker Documentation
 
+- [Choix Installations](#choix-installations)
+  - [Serveur](#serveur)
+    - [Docker](#docker)
+      - [Exigence](#exigence)
+      - [Installation avec Docker](#installation-avec-docker)
+    - [Installation Manuelle](#installation-manuelle)
+      - [Installation](#installation)
+  - [Client](#client)
+    - [Installation Manuelle](#installation-manuelle-1)
 - [Serveur Docker Documentation](#serveur-docker-documentation)
   - [Docker-Compose du serveur](#docker-compose-du-serveur)
     - [Volumes du serveur](#volumes-du-serveur)
@@ -21,6 +29,58 @@
     - [Grafana et InfluxQL](#grafana-et-influxql)
   - [Tout-en-un](#tout-en-un)
 - [Serveur Installation Manuelle](#serveur-installation-manuelle)
+  - [Installation Manuelle Linux](#installation-manuelle-linux)
+  - [Installation Manuelle Windows](#installation-manuelle-windows)
+- [Client Installation](#client-installation)
+  - [Installation Manuelle Linux](#installation-manuelle-linux-1)
+  - [Installation Manuelle Windows](#installation-manuelle-windows-1)
+
+# Choix Installations
+
+Plusieurs possibilités existe afin d'installer le serveur et le client HAL. Nous recommandons toujours quant c'est possible, l'installation Docker.
+
+## Serveur
+
+### Docker
+
+L'installation Docker du serveur est l'installation recommandé.
+
+#### Exigence
+
+Afin d'installer correctement le serveur vous devrez avoir:
+
+* [Docker](https://docs.docker.com/engine/install/) (v19.0 min)
+* [Docker-Compose](https://docs.docker.com/compose/install/) 
+
+#### Installation avec Docker
+
+L'image docker du serveur est présente sur le docker hub de l'IUT: [https://dockerhub.iut-clermont.uca.fr/ui/library/hal_hal-server_dotnet3.1](https://dockerhub.iut-clermont.uca.fr/ui/library/hal_hal-server_dotnet3.1)
+
+Pour plus d'information sur l'installation du docker du serveur se référer à cette [documentation](#docker-compose-du-serveur).
+
+### Installation Manuelle
+
+L'installation manuelle du serveur est possible de plusieurs façon, soit avec un service/daemon ou bien manuellement et non-automatique.
+
+#### Installation 
+
+Des dossiers sont fournis dans l'onglet release du projet Git, dans ces dossiers zippé on retrouve l'éxécutable du serveur, sous linux il suffira de lancer en ligne de commande le serveur avec la commande `./server` (si vous lancez la commande dans le même dossier) ou bien de configurer le daemon fournis dans les dossiers du projet Git (lien vers daemons).
+
+Pour plus d'information se référer à la [documentation](#serveur-installation-manuelle) un peu plus bas.
+
+## Client
+
+Pas d'installation docker disponible pour le Docker pour le moment, nous n'avons pas trouvé ça utile de fournir un lancement conteneurisé pour le client.
+Uniquement une installation manuelle est fournis dans la documentation.
+
+### Installation Manuelle
+
+Comme pour le serveur, le dossier zippé du client sera disponible dans l'onglet release du projet Git, dedans on retrouvera l'éxécutable du client, sous linux il suffire de lancer en ligne de commande le serveur avec la commande `./client` (si vous lancez la commande dans le même dossier) ou bien de configurer le daemon fournis dans les dossiers du projet Git (lien vers daemons).
+
+Pour plus d'information se référer à la [documentation](#client-installation) un peu plus bas.
+
+
+# Serveur Docker Documentation
 
 ## Docker-Compose du serveur
 
@@ -291,6 +351,8 @@ Voici le processus pour tester l'ensemble en **local** par exemple :
 
 Plusieurs façons existe afin de lancer manuellement le serveur, bien qu'il soit recommandé de l'utiliser via Docker.
 
+## Installation Manuelle Linux
+
 Il existe un service init.d pour le serveur disponible dans les fichiers du projets.
 
 ```yaml
@@ -311,3 +373,47 @@ WantedBy=multi-user.target
 Vous pourrez le modifier à votre guise celon votre utilisation, vous devrez préciser le chemin de l'exécutable via `ExecStart`. Dans le chemin vous devrez exécuter le fichier `server` dans le zip fournis dans la release. Vous préciserez le chemin de la ou vous avez placé le dossier.
 
 Nous vous recommandons de mettre le dossier dans un dossier inaccessible par les utilisateurs et de créer un utilisateur particulier, ici `hal-server`.
+
+Pour lancer le serveur sous linux la commande est `./server`.
+
+## Installation Manuelle Windows
+
+Pour l'installation manuelle windows, même chose à l'exception que pour le moment nous n'avons pas fournis de service Windows (.ini) pour un lancement automatique du service. Vous pouvez cependant le créer pour vous dans la même architecture que le init.d fournis précédement. 
+
+Un dossier .zip est fournis dans l'onglet release du Github, dedans vous trouverez un executable pour windows et vous pourrez le lancer de la même manière que précédement ou bien en double cliquant dessus simplement.
+
+# Client Installation
+
+La seule façon existante d'installer le client et de l'installer manuellement.
+
+## Installation Manuelle Linux
+
+Comme pour le serveur, un deamon init.d est disponible:
+
+```yaml
+[Unit]
+Description=HAL client deamon
+After=network-online.target
+
+[Service]
+Type=simple
+User=hal-client
+Group=hal-client
+ExecStart=
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Vous pouvez le modifier à votre guise, vous devrez spécifié le chemin d'installation que vous aurez choisis pour le client. Vous devrez exécuté l'éxécutable `client` présent dans le zip fournis dans l'onglet release du Github.
+
+Nous vous recommandons de mettre le dossier dans un dossier inaccessible par les utilisateurs et de créer un utilisateur particulier, ici `hal-client`.
+
+
+Pour lancer le client sous linux la commande est `./client`.
+
+## Installation Manuelle Windows
+
+Pour l'installation manuelle windows, même chose à l'exception que pour le moment nous n'avons pas fournis de service Windows (.ini) pour un lancement automatique du service. Vous pouvez cependant le créer pour vous dans la même architecture que le init.d fournis précédement. 
+
+Un dossier .zip est fournis dans l'onglet release du Github, dedans vous trouverez un executable pour windows et vous pourrez le lancer de la même manière que précédement ou bien en double cliquant dessus simplement.
