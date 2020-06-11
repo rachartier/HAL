@@ -20,6 +20,7 @@
       - [Data Source](#data-source)
     - [Grafana et InfluxQL](#grafana-et-influxql)
   - [Tout-en-un](#tout-en-un)
+- [Serveur Installation Manuelle](#serveur-installation-manuelle)
 
 ## Docker-Compose du serveur
 
@@ -145,8 +146,8 @@ Pour plus d'information concernant le endpoint `/write`, la documentation se tro
 
 Si vous voulez tester HAL en utilisant Grafana et InfluxDB avec l'aide de l'API vous devrez:
 
-- Créer la bdd `hal_data` (curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE hal_data")
-- Vérifier qu'elle est bien été ajouté (curl -G http://localhost:8086/query --data-urlencode "q=SHOW DATABASES")
+- Créer la bdd `hal_data` (`curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE hal_data"`)
+- Vérifier qu'elle est bien été ajouté (`curl -G http://localhost:8086/query --data-urlencode "q=SHOW DATABASES"`)
 
 ### InfluxQL
 
@@ -273,3 +274,40 @@ Ici on utilise les résultats du plugins **connected_users**, et bien sur la req
 
 ## Tout-en-un 
 
+Un docker-compose est disponible afin d'utiliser l'ensemble des solutions avec le serveur HAL; soit Grafana, influxDB et HAL.
+La documentation de [Grafana](#grafana) et [influxDB](#influxdb) servent à comprendre comment grafana et influxdb fonctionne au sein du docker-compose. Il suffit de rajouter le serveur HAL afin de le lié à la base et à grafana. Le docker-compose est déjà disponible au sein du projet.
+
+Voici le processus pour tester l'ensemble en **local** par exemple :
+
+- Enlever HAL SERVER du docker-compose (seulement si le test est en local !) et le lancer manuellement.
+- Ecrire la bonne configuration pour la base de donnée influxdb dans le config_local.json
+- Créer la base de donnée 'hal_data' (`curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE hal_data"`)
+- Vérifier que la base ai bien été crée (`curl -G http://localhost:8086/query --data-urlencode "q=SHOW DATABASES"`)
+- Se connecter à Grafana sur 'localhost:3000' en utilisant l'utilisateur administrateur
+- Intérogé la base avec de l'InfluxQL depuis Grafana
+- Crée vos propres dashboard
+  
+# Serveur Installation Manuelle
+
+Plusieurs façons existe afin de lancer manuellement le serveur, bien qu'il soit recommandé de l'utiliser via Docker.
+
+Il existe un service init.d pour le serveur disponible dans les fichiers du projets.
+
+```yaml
+[Unit]
+Description=HAL server deamon
+After=network-online.target
+
+[Service]
+Type=simple
+User=hal-server
+Group=hal-server
+ExecStart=
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Vous pourrez le modifier à votre guise celon votre utilisation, vous devrez préciser le chemin de l'exécutable via `ExecStart`. Dans le chemin vous devrez exécuter le fichier `server` dans le zip fournis dans la release. Vous préciserez le chemin de la ou vous avez placé le dossier.
+
+Nous vous recommandons de mettre le dossier dans un dossier inaccessible par les utilisateurs et de créer un utilisateur particulier, ici `hal-server`.
