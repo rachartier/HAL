@@ -6,7 +6,7 @@ Contents
 --------
 
 - [Intro](#intro)
-	- [Installation](#installation)
+	- [Prérequis](#prérequis)
 	- [QuickStart](#quickstart)
 		- [Utilisation du serveur avec Docker](#utilisation-du-serveur-avec-docker)
 - [Choix Installations](#choix-installations)
@@ -15,7 +15,7 @@ Contents
 			- [Exigence](#exigence)
 			- [Installation avec Docker](#installation-avec-docker)
 		- [Installation Manuelle](#installation-manuelle)
-			- [Installation](#installation-1)
+			- [Installation](#installation)
 	- [Client](#client)
 		- [Installation Manuelle](#installation-manuelle-1)
 - [Serveur Docker Documentation](#serveur-docker-documentation)
@@ -86,15 +86,15 @@ Les plugins sont déposés dans le dossier "plugins", qui est un dossier spécia
 
 HAL est destiné à tout utilisateur voulant superviser les ordinateurs sur un réseau.
 
-Installation
+Prérequis
 ------------
 
 Pour le bon fonctionnement de HAL, il faut impérativement avoir 
 
-*  dotnet core 3.x, (serveur/client)
-*  python3.x (client, si vous souhaitez utiliser des plugins en python)
-*  ruby (client, si vous souhaitez utiliser des plugins en ruby)
-*  golang (client, si vous souhaitez utiliser des plugins en go)
+*  [.NET Core 3.x](https://dotnet.microsoft.com/), (serveur/client)
+*  [Python 3.x](https://www.python.org/downloads/) (client, si vous souhaitez utiliser des plugins en python)
+*  [Ruby](https://www.ruby-lang.org/fr/downloads/) (client, si vous souhaitez utiliser des plugins en ruby)
+*  [Go](https://golang.org/) (client, si vous souhaitez utiliser des plugins en go)
 
 Ou des erreurs peuvent subvenir pendant l'éxecution des plugins.
 
