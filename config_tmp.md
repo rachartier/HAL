@@ -549,11 +549,12 @@ L'attribut `interpreter` possède une liste de système d'exploitation (`windows
 
 Liste des clé d'intepréteur par défaut:
 
-	- python
-	- ruby
-	- powershell
-	- bash
+- python
+- ruby
+- powershell
+- bash
 
+Exemple: 
 ```json
 {
 	"interpreter": {
