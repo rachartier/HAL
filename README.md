@@ -432,11 +432,11 @@ La documentation de [Grafana](#grafana) et [influxDB](#influxdb) servent à comp
 Voici le processus pour tester l'ensemble en **local** par exemple :
 
 - Enlever HAL SERVER du docker-compose (seulement si le test est en local !) et le lancer manuellement.
-- Ecrire la bonne configuration pour la base de donnée influxdb dans le config_local.json
+- Écrire la bonne configuration pour la base de donnée influxdb dans le config_local.json
 - Créer la base de donnée 'hal_data' (`curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE hal_data"`)
 - Vérifier que la base ai bien été crée (`curl -G http://localhost:8086/query --data-urlencode "q=SHOW DATABASES"`)
 - Se connecter à Grafana sur 'localhost:3000' en utilisant l'utilisateur administrateur
-- Intérogé la base avec de l'InfluxQL depuis Grafana
+- Interroger la base avec de l'InfluxQL depuis Grafana
 - Crée vos propres dashboard
   
 # Serveur Installation Manuelle
@@ -449,7 +449,7 @@ Il existe un service init.d pour le serveur disponible dans les fichiers du proj
 
 ```yaml
 [Unit]
-Description=HAL server deamon
+Description=HAL server daemon
 After=network-online.target
 
 [Service]
@@ -462,7 +462,7 @@ ExecStart=
 WantedBy=multi-user.target
 ```
 
-Vous pourrez le modifier à votre guise celon votre utilisation, vous devrez préciser le chemin de l'exécutable via `ExecStart`. Dans le chemin vous devrez exécuter le fichier `server` dans le zip fournis dans la release. Vous préciserez le chemin de la ou vous avez placé le dossier.
+Vous pourrez le modifier à votre guise selon votre utilisation, vous devrez préciser le chemin de l'exécutable via `ExecStart`. Dans le chemin vous devrez exécuter le fichier `server` dans le zip fournis dans la release. Vous préciserez le chemin de la ou vous avez placé le dossier.
 
 Nous vous recommandons de mettre le dossier dans un dossier inaccessible par les utilisateurs et de créer un utilisateur particulier, ici `hal-server`.
 
@@ -480,11 +480,11 @@ La seule façon existante d'installer le client et de l'installer manuellement.
 
 ## Installation Manuelle Linux
 
-Comme pour le serveur, un deamon init.d est disponible:
+Comme pour le serveur, un daemon init.d est disponible:
 
 ```yaml
 [Unit]
-Description=HAL client deamon
+Description=HAL client daemon
 After=network-online.target
 
 [Service]
