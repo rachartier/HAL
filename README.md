@@ -163,7 +163,7 @@ Uniquement une installation manuelle est fournis dans la documentation.
 
 ### Installation Manuelle
 
-Comme pour le serveur, le dossier zippé du client sera disponible dans l'onglet release du projet Git, dedans on retrouvera l'exécutable du client, sous linux il suffire de lancer en ligne de commande le serveur avec la commande `./client` (si vous lancez la commande dans le même dossier) ou bien de configurer le daemon fournis dans les dossiers du projet Git [https://gitlab.iut-clermont.uca.fr/rachartier/hal/-/tree/master/dev/daemon](https://gitlab.iut-clermont.uca.fr/rachartier/hal/-/tree/master/dev/daemon).
+Comme pour le serveur, le dossier zippé du client sera disponible dans l'onglet release du projet Git, dedans on retrouvera l'exécutable du client, sous linux il suffire de lancer en ligne de commande le serveur avec la commande `./client` (si vous lancez la commande dans le même dossier) ou bien de configurer le daemon fournis dans les dossiers du projet Git [https://github.com/rachartier/hal/tree/master/dev/daemon](https://github.com/rachartier/hal/tree/master/dev/daemon).
 
 Pour plus d'information se référer à la [documentation](#client-installation) un peu plus bas.
 
